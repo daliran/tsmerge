@@ -1,3 +1,6 @@
+# --- Local outputs: runs, logs, job records -----------------------------------
+outputs/
+
 # --- Model checkpoints --------------------------------------------------------
 *.pt
 *.pth
@@ -26,6 +29,7 @@ env/
 # Environment variables and secrets
 .env
 .env.*
+!.env.example
 
 # Tool caches
 .pytest_cache/

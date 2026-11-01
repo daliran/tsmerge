@@ -10,12 +10,18 @@ tsmerge is a master's thesis repo (AI Engineering, Unimore) on joint training vs
 ## Rules
 
 - **Nothing is assumed; the user validates every decision.** Present each proposal with the context needed to understand it fully: what it changes, the options, their consequences and trade-offs. Give a recommendation, then wait for the user's decision. When something is ambiguous, ask instead of guessing.
+- **Verify, don't trust memory.** Check facts about external systems (the cluster, libraries, tools) against their official documentation or the system itself, including the user's own statements, and say plainly when something can't be verified.
 - **Plan before acting.** Analyze first, present a plan, and act only once the user approves it. Only minor changes skip this: typos, formatting, or an edit the user has just described exactly.
 - **Small steps, clean commits.** One concept per change; every commit has one clear purpose. No new dependencies and no cross-module refactors unasked.
-- **Humans own git.** Only read-only git (`status`, `diff`, `log`, `show`). Propose commits with the [commit-plan](.claude/skills/commit-plan/SKILL.md) skill, only when asked; the user runs them.
+- **Humans own git.** Only read-only git (`status`, `diff`, `log`, `show`). Propose commits with the [commit-plan](.claude/skills/commit-plan/SKILL.md) skill, only when asked; the user runs them. Before proposing a commit, run `scripts/check.sh` ([CONTRIBUTING.md](CONTRIBUTING.md#checks-before-committing)).
 - **No personal data in committed files:** no personal names, graduation date, links to other repositories, or paths outside the repo. Those live in `CLAUDE.local.md`.
 - **This repo is the source of truth.** Committed files never refer to earlier or external implementations it takes inspiration from; any context on them lives in `CLAUDE.local.md`.
+- **Cluster login nodes are shared.** Run only short, light commands there. Anything long or blocking, Python included, goes through `srun` or `sbatch` ([cluster.md](docs/project/cluster.md), [running.md](docs/project/running.md)).
+- **Code changes only locally**, never on the cluster, wherever the code runs or is debugged.
 - **Sources are read-only:** never edit papers or external repositories used as reference.
 - **US English** in everything written to the repository. Give bash commands, never PowerShell.
+- **Readable Markdown, written for humans.** A blank line between blocks, short paragraphs, one idea per line, and bullet lists for anything that enumerates. Split long sections with headings. When presenting options, give numbers where they exist (counts, percentages, costs) and what each option gains and costs.
 - **Folder `CLAUDE.md` files:** none yet. When a folder first needs rules that only agents need, propose adding one there (starting with `@README.md`).
+- **Document what and why, as you go.** Every script, configuration file and folder says what it does and why it exists: in the folder's README, a decision, or a short comment. Write it together with the change, not afterwards.
+- **Docs follow decisions.** When a decision is made or changed, update every Markdown file it affects in the same step: committed files, untracked docs, and `CLAUDE.local.md`. Never leave a file stating something a decision has changed.
 - **Knowledge is written down.** When the user asks you to remember a rule, write it here or in the README it belongs to (personal or machine-specific context: `CLAUDE.local.md`), never only in session memory, so fresh sessions follow it too.

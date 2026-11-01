@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Runs the repository's checks before every commit; a failure stops the commit.
+# Skip once, only when really needed: git commit --no-verify
+exec "$(git rev-parse --show-toplevel)/scripts/check.sh"

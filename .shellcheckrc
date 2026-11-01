@@ -1,0 +1,3 @@
+# shellcheck settings: resolve "source" paths relative to each script.
+# SCRIPTDIR is shellcheck's keyword for the checked script's folder (man shellcheck).
+source-path=SCRIPTDIR

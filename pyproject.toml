@@ -1,0 +1,31 @@
+[project]
+name = "tsmerge"
+version = "0.1.0"
+description = "Joint training vs. task arithmetic and continual strategies for time-series anomaly detection and forecasting"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "numpy",
+    "torch==2.5.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "ruff",
+]
+
+[tool.uv]
+# No importable package yet: uv only manages the environment.
+package = false
+# Always use a uv-managed Python, never the system one, so every machine runs the same build.
+python-preference = "only-managed"
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu121" }
+
+# PyTorch 2.5.1 with CUDA 12.1: same build as the legacy implementation.
+[[tool.uv.index]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true

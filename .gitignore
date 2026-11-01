@@ -1,0 +1,47 @@
+# --- Model checkpoints --------------------------------------------------------
+*.pt
+*.pth
+*.ckpt
+
+# --- Claude Code: personal, machine-specific files ----------------------------
+CLAUDE.local.md
+.claude/settings.local.json
+
+# --- Python -------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.so
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments (uv creates .venv/)
+.venv/
+venv/
+env/
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# --- Editors and OS -----------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini

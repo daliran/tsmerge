@@ -1,0 +1,10 @@
+# Store text files with LF in the repository and check them out with LF on every OS
+* text=auto eol=lf
+
+# Scripts that run on Linux must always be LF
+*.sh     text eol=lf
+*.sbatch text eol=lf
+
+# Binary files that get committed: never touch line endings
+*.pdf     binary
+*.png     binary

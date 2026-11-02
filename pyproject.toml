@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "numpy",
-    "torch==2.5.1",
+    "torch==2.14.1",
 ]
 
 [dependency-groups]
@@ -22,10 +22,10 @@ package = false
 python-preference = "only-managed"
 
 [tool.uv.sources]
-torch = { index = "pytorch-cu121" }
+torch = { index = "pytorch-cu126" }
 
-# PyTorch wheels built for CUDA 12.1.
+# PyTorch wheels built for CUDA 12.6 (PD-001).
 [[tool.uv.index]]
-name = "pytorch-cu121"
-url = "https://download.pytorch.org/whl/cu121"
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
 explicit = true

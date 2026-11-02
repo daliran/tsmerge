@@ -34,6 +34,8 @@ Option A:
 - the build runs as a Slurm step on `all_serial` (`srun`): still the login nodes and their local `/tmp` (as PD-005 needs), but scheduled, and free;
 - rule in [running.md](../running.md#the-cycle): don't rebuild while jobs run or wait.
 
+**Verified** (2026-11-02): `setup_remote.sh` built the environment as an `srun` step on `all_serial`, including the rebuild for PyTorch 2.14.1; the jobs submitted afterwards passed the lock-hash check and completed.
+
 ## Consequences
 
 - After changing dependencies, rerun `setup_remote.sh` before submitting; queued jobs with the old lockfile will refuse to start.

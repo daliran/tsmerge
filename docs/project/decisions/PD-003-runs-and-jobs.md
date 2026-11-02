@@ -2,9 +2,9 @@
 
 - **Status:** proposed
 - **Date:** 2026-11-01
-- **Decided by:** the author (to be reviewed together with the cluster scripts)
+- **Decided by:** the author (to be accepted once the run-related questions are settled)
 
-## Context
+## Problem
 
 Runs happen locally and on the Unimore cluster ([running.md](../running.md)). Their outputs must be:
 
@@ -20,7 +20,7 @@ Two known pitfalls to avoid:
 
 ## Options
 
-### A — one run per job, run id generated locally (recommended)
+### A — one run per job, run id generated locally
 
 - Every run is independent: one failure never affects another run.
 - The id is unique however runs are launched.
@@ -35,34 +35,38 @@ Two known pitfalls to avoid:
 
 Option A.
 
-**Concepts:**
+### Concepts
 
-- **Experiment:** a named study (lowercase letters, digits, `-`, `_`). It groups runs.
+- **Experiment:** a named study (lowercase letters, digits, `-`, `_`). It groups runs. How experiments get ids and link to research questions is open: [PQ-003](../questions/PQ-003-experiment-ids.md).
 - **Run:** one execution of one configuration, one seed included.
 - **Job:** one Slurm submission. One job runs exactly one run.
-- **Sweep:** a set of runs, each still one job (or one task of a Slurm job array). Its id is recorded in each run's `run.json`.
+- **Sweep:** a set of runs, each still one job (or one task of a Slurm job array), grouped by a sweep id ([PD-009](PD-009-run-records.md)).
 
-**Run id:** `<YYYYMMDD-HHMMSS>-<4 hex>`, e.g. `20261102-141503-a3f9`.
+### Run id
+
+`<YYYYMMDD-HHMMSS>-<4 hex>`, e.g. `20261102-141503-a3f9`.
 
 - Generated locally at submit time, never from the Slurm job id.
 - The same id names the run folder, the line in `outputs/jobs.log`, and the wandb run if wandb is added later.
-- Configuration lives in files, never in folder names.
+- A run folder is never reused ([PD-010](PD-010-safe-submissions.md)).
 
-**Run folder**, the same locally and on the cluster:
+### Run folder
+
+The same locally and on the cluster:
 
 ```
 <runs root>/<experiment>/<run id>/
-├─ run.json      what, where, when: run id, experiment, command, git commit, uncommitted
-│                changes (yes/no), uv.lock hash, host, GPU, driver, Python and PyTorch
-│                versions, Slurm job id, start and end, status, exit code
-├─ code/         frozen copy of the code this run used, with patch.diff (cluster runs only)
+├─ run.json      how the run was launched and how it went (PD-009, PD-006)
+├─ config.json   what the run computed with (PD-009)
+├─ code/         frozen copy of the code this run used (cluster runs only; not pulled)
+├─ provenance/   uncommitted changes: patch.diff, git-status.txt (PD-007; pulled)
 ├─ slurm.out     the job's log (cluster runs only)
 ├─ results/      small result files (json, csv)
-├─ checkpoints/  model weights
+├─ checkpoints/  model weights (pulled only on request)
 └─ wandb/        reserved for wandb's local files, if wandb is added
 ```
 
-**Roots:**
+### Roots
 
 | Where | Path |
 |---|---|
@@ -72,14 +76,16 @@ Option A.
 | Cluster environment | `/homes/<user>/tsmerge/venv/` |
 | Cluster per-job temporary files | `/work/<account>/<user>/tsmerge/tmp/<job id>/`, deleted at job end |
 
-**Pull:** cluster runs are copied into `outputs/runs/` with the same paths, without `code/`. Checkpoints only on request.
-
-**Environment check:** a job refuses to start if the cluster environment was built from a different `uv.lock` than the run's frozen code.
-
-**Code changes:** only locally, never on the cluster, wherever a run is executed or debugged.
+- **Pull:** cluster runs are copied into `outputs/runs/` with the same paths, without `code/`; checkpoints only on request.
+- **Code changes:** only locally, never on the cluster, wherever a run is executed or debugged.
 
 ## Consequences
 
-- Sweeps are many runs. A `sweep` id in `run.json` groups them; job arrays come later if the overhead matters.
+- How runs end, what they record, how they keep their provenance and how submissions stay safe are separate decisions: [PD-006](PD-006-run-endings.md), [PD-007](PD-007-run-provenance.md), [PD-009](PD-009-run-records.md), [PD-010](PD-010-safe-submissions.md).
 - wandb is not used for now. If it's added, it plugs in without changing the layout: project `tsmerge`, group = experiment, run id = our run id, files in `wandb/`.
-- Personal values (account, user, paths) come from the local `.env`, never from committed files.
+- Personal values (account, user, paths) come from the local `.env` ([PD-014](PD-014-personal-values.md)).
+
+## Revisit if
+
+- one run per job proves too costly for short runs (see [PD-023](PD-023-durations-and-budget.md)): then allow several runs per job, each keeping its own folder;
+- runs need to span several jobs (see [PD-021](PD-021-runs-and-their-inputs.md)).

@@ -3,6 +3,8 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
+- **History:**
+  - 2026-11-02: excluded list reviewed after the upgrade to torch 2.14.1 + CUDA 12.6 (PD-001): same kernels (`sm_50` to `sm_90`), so it is unchanged.
 
 ## Context
 
@@ -43,5 +45,11 @@
 ## Consequences
 
 - No job can run on Blackwell by accident, and a hardware change on the cluster is noticed at the next submission instead of never.
-- Changing the allowed GPUs is a commit to `defaults.sh`, together with the decision behind it (PQ-002, PD-001).
-- When PyTorch is upgraded ([PQ-001](../questions/PQ-001-upgrade-pytorch-cuda-12-6.md)), the excluded list must be reviewed.
+- Changing the allowed GPUs is a commit to `defaults.sh`, together with the decision behind it (PD-027, PD-001).
+- When PyTorch is upgraded ([PD-001](PD-001-python-and-pytorch.md)), the excluded list must be reviewed.
+
+## Revisit if
+
+- PyTorch is upgraded ([PD-001](PD-001-python-and-pytorch.md)): review the excluded list;
+- the drift check reports new GPU models;
+- the GPU pool is reconsidered ([PD-027](PD-027-gpu-pool.md)).

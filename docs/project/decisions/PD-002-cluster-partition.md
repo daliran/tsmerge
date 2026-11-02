@@ -15,7 +15,7 @@ The Unimore AImageLab-HPC Slurm cluster has three GPU partitions ([documentation
 | `boost_usr_prod` | the high-end nodes only | 54: 4 A40, 36 L40S, 14 RTX PRO 6000 | 24 h | billed |
 
 - The documentation's own advice is: "When in doubt, use `all_usr_prod`".
-- In the author's understanding of the cluster's internal rules, `boost_usr_prod` is meant for projects that really need high-memory GPUs, so that those GPUs stay available to the people who need them. This rule is not stated on the documentation site.
+- In the author's understanding of the cluster's internal rules, `boost_usr_prod` is meant for projects that really need high-memory GPUs, so that those GPUs stay available to the people who need them. This rule is not stated on the documentation site; it was later confirmed by the cluster itself (see Consequences).
 - This project's models don't need high GPU memory.
 - Some work needs no GPU, or very little: data preparation, result aggregation, quick checks.
 - The login nodes are shared by every user.
@@ -52,6 +52,12 @@ Option C.
 
 - **`all_usr_prod` also contains the high-end nodes**, so jobs can still land on them unless the GPU constraint excludes them:
   - Blackwell is always excluded ([PD-001](PD-001-python-and-pytorch.md));
-  - whether to also exclude L40S and A40 is open: [PQ-002](../questions/PQ-002-exclude-high-end-gpus.md).
+  - L40S and A40 stay allowed, as part of a mixed list ([PD-027](PD-027-gpu-pool.md)).
+- **The memory rule is real** (found 2026-11-02, not on the documentation site): on `all_usr_prod`, a job whose GPU list asks for more than 24 GB of GPU memory is refused and sent to `boost_usr_prod`. This confirms the author's understanding of the internal rules behind this decision.
 - **Light GPU work on `all_serial` must request the P100** (`--constraint=gpu_P100_16G`). The P100 node's driver is not verified yet.
 - **Personal values are not part of this decision.** The Slurm account and personal paths stay out of committed files.
+
+## Revisit if
+
+- the cluster's rules for `boost_usr_prod` change, or a model needs more GPU memory than `all_usr_prod`'s older GPUs offer;
+- the `all_serial` GPUs become unusable for light work, or light work needs a GPU too often.

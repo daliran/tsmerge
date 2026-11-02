@@ -45,3 +45,8 @@ Option B.
 - A rebuild takes a few minutes longer for the downloads.
 - The file-count limit of `/homes` stays a hypothesis until the HPC helpdesk confirms it; [cluster.md](../cluster.md#observed-behavior) records the observation.
 - Other things in the cluster home add to the file count and are not managed by this repository (VS Code's server, other projects, other caches): see [cluster.md](../cluster.md#observed-behavior).
+
+## Revisit if
+
+- the HPC helpdesk confirms or rules out the file-count limit on `/homes`;
+- rebuilds become frequent enough that downloading 2.5 GB each time hurts.

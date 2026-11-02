@@ -51,19 +51,46 @@ send_code() {
     | rsync -az --from0 --files-from=- --ignore-missing-args "$REPO_ROOT/" "$CLUSTER_HOST:$dest/"
 }
 
-# The allowed GPU features, joined for --constraint.
+# Every difference between the working tree and HEAD, as one binary-safe patch: edits,
+# deletions and new (untracked, not ignored) files. It uses a temporary copy of the index,
+# so the real staging area is never touched.
+working_tree_patch() {
+  local index status=0
+  index=$(mktemp)
+  cp "$(git -C "$REPO_ROOT" rev-parse --git-path index)" "$index" 2>/dev/null || true
+  GIT_INDEX_FILE=$index git -C "$REPO_ROOT" add -A || status=$?
+  [[ $status -ne 0 ]] || GIT_INDEX_FILE=$index git -C "$REPO_ROOT" diff --cached --binary HEAD || status=$?
+  rm -f "$index"
+  return "$status"
+}
+
+# The GPU features for --constraint: the allowed list, or the subset of it given in
+# CLUSTER_GPU_SUBSET for one submission (e.g. one GPU family for a comparable sweep, PD-027).
 gpu_constraint() {
+  local features=("${CLUSTER_GPU_FEATURES[@]}") feature
+  if [[ -n ${CLUSTER_GPU_SUBSET:-} ]]; then
+    read -r -a features <<<"$CLUSTER_GPU_SUBSET"
+    for feature in "${features[@]}"; do
+      [[ " ${CLUSTER_GPU_FEATURES[*]} " == *" $feature "* ]] \
+        || die "CLUSTER_GPU_SUBSET: $feature is not an allowed GPU model (defaults.sh)"
+    done
+  fi
   local IFS='|'
-  echo "${CLUSTER_GPU_FEATURES[*]}"
+  echo "${features[*]}"
 }
 
 # Compare the two lists in defaults.sh with the partition's actual GPU models.
 # An allowed model that is gone is an error. A model in neither list is new: it is
-# reported, so the lists (and PD-001, PQ-002) get reviewed.
+# reported, so the lists (and PD-001, PD-027) get reviewed.
 check_gpu_features() {
   local available feature missing=() new=()
   local known=" ${CLUSTER_GPU_FEATURES[*]} ${CLUSTER_GPU_EXCLUDED[*]} "
-  available=$(remote "sinfo -p $(q "$CLUSTER_PARTITION") -h -o %f" | tr ',' '\n' | grep '^gpu_' | sort -u)
+  local listing
+  listing=$(remote "sinfo -p $(q "$CLUSTER_PARTITION") -h -o %f") \
+    || die "could not read the GPU models of $CLUSTER_PARTITION from the cluster (sinfo failed)"
+  available=$(tr ',' '\n' <<<"$listing" | grep '^gpu_' | sort -u || true)
+  [[ -n $available ]] \
+    || die "no GPU models found in partition $CLUSTER_PARTITION: check its name in defaults.sh"
   for feature in "${CLUSTER_GPU_FEATURES[@]}"; do
     grep -qx "$feature" <<<"$available" || missing+=("$feature")
   done
@@ -72,7 +99,7 @@ check_gpu_features() {
   done <<<"$available"
   if [[ ${#new[@]} -gt 0 ]]; then
     echo "warning: new GPU models in $CLUSTER_PARTITION, neither allowed nor excluded: ${new[*]}" >&2
-    echo "         not used until added to scripts/cluster/defaults.sh (review PD-001 and PQ-002)" >&2
+    echo "         not used until added to scripts/cluster/defaults.sh (review PD-001 and PD-027)" >&2
   fi
   [[ ${#missing[@]} -eq 0 ]] \
     || die "allowed GPU models no longer in $CLUSTER_PARTITION: ${missing[*]}: update scripts/cluster/defaults.sh"

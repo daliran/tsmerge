@@ -36,7 +36,7 @@ _session() {
   fi
   if [[ -n ${CLUSTER_HOST:-} ]]; then
     if ssh -O check "$CLUSTER_HOST" 2>/dev/null; then
-      echo "cluster: connected ($CLUSTER_HOST; the connection lasts 8 h, then rerun this script)"
+      echo "cluster: connected ($CLUSTER_HOST; it stays open until 8 h without use or a network drop, then rerun this script)"
     else
       echo "cluster: NOT connected"
     fi

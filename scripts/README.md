@@ -6,6 +6,7 @@ Operational scripts, run from the repository root on your machine (a WSL shell o
 |---|---|
 | [start-session.sh](start-session.sh) | Unlocks everything a working session needs, asking each password once |
 | [check.sh](check.sh) | Runs every check a commit must pass (also run by the pre-commit hook) |
+| [runs_summary.py](runs_summary.py) | Lists the pulled runs: status, duration, share of the time limit, estimated cost (`uv run --locked python scripts/runs_summary.py`) |
 | [cluster/](cluster/README.md) | Runs experiments on the Unimore AImageLab-HPC cluster |
 
 Personal values (SSH keys, cluster account, paths) come from the git-ignored `.env` at the repository root. Its template is `.env.example`.
@@ -20,7 +21,7 @@ Personal values (SSH keys, cluster account, paths) come from the git-ignored `.e
 2. Opens the shared connection to the cluster (`ssh -fN ailb`), asking for the password only if no connection is open.
 3. Checks GitHub and the cluster, and prints what is unlocked.
 
-**When:** after every restart of WSL or the machine, and every 8 hours for the cluster connection. It is safe to rerun.
+**When:** after every restart of WSL or the machine, and when the cluster connection has closed (8 hours without use, or a network drop). It is safe to rerun.
 
 Setting it up (the `~/.bashrc` line, `.env`) is described in [setup.md](../docs/project/setup.md#unlock-everything-once-per-session).
 

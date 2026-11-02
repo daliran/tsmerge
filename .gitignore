@@ -1,6 +1,9 @@
 # --- Everything generated locally: runs, quick tries, job records, review reports -----
 outputs/
 
+# --- Papers (PD-034): the PDFs stay local; their distillation notes are committed ------
+papers/
+
 # --- Datasets (PD-020): the local data folder, and data files anywhere -------------
 data/
 *.parquet

@@ -3,7 +3,7 @@
 What this repository's machinery does, why each piece exists, and where to read more. Read it top to bottom once; afterwards, the [inventory](#every-file-in-the-repository) at the end says what any file is for.
 
 - **This page is a map, not the reference:** each part links to the doc that holds the details, and to the decision (`PD-NNN`) that explains why.
-- Nothing here is about the research itself: that lives in the domain area, still to be written.
+- Nothing here is about the research itself: that lives in the [domain area](../domain/README.md).
 
 ![The repository's folders, what each holds, and where to start reading](diagrams/repository-map.png)
 
@@ -122,7 +122,15 @@ Reference: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 - `CLAUDE.md`: the rules AI agents follow in this repository.
 - `.claude/`: two skills (commit plans; expert reviews by a panel of independent reviewers), their agents, and a guard hook that keeps review agents off the cluster and read-only ([PD-011](decisions/PD-011-expert-review-guard.md), [PD-019](decisions/PD-019-expert-reviews.md)). Details: [.claude/README.md](../../.claude/README.md).
 
-## 10. On your machine only (git-ignored)
+## 10. The research: papers and their notes
+
+- `docs/domain/references.bib`: the bibliography, one entry per paper, keyed by bibkey (`ilharco2023editing`).
+- `docs/domain/literature/`: one verified distillation note per paper, the source of truth for what it says.
+- The PDFs themselves stay local, in the git-ignored `papers/` folder: the repository is public, and most papers can't be redistributed ([PD-034](decisions/PD-034-literature.md)).
+
+Reference: [docs/domain/README.md](../domain/README.md).
+
+## 11. On your machine only (git-ignored)
 
 | Path | Holds |
 |---|---|
@@ -130,7 +138,9 @@ Reference: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 | `outputs/scratch/` | outputs of quick tries and debug sessions |
 | `outputs/jobs.log` | one line per submitted cluster job |
 | `outputs/expert-reviews/` | expert-review reports, and the guard's log |
+| `outputs/pages/` | papers' pages rendered as images |
 | `data/` | datasets ([PD-020](decisions/PD-020-dataset-location.md)) |
+| `papers/` | the papers' PDFs, named by bibkey ([PD-034](decisions/PD-034-literature.md)) |
 | `.env` | your personal values |
 | `.venv/` | the Python environment |
 | `CLAUDE.local.md` | personal context for AI agents |
@@ -169,6 +179,7 @@ Every tracked file that isn't a doc, decision, question or diagram, with what it
 | `scripts/run_local.sh` | a recorded local run |
 | `scripts/check.sh` | every check a commit must pass |
 | `scripts/render_diagrams.sh` | renders the diagrams (`--check`: only checks them) |
+| `scripts/render_pages.sh` | renders a paper's pages to images, for its distillation note |
 | `scripts/runs_summary.py` | status, duration, time-limit use and cost of the runs in `outputs/runs/` |
 | `scripts/start-session.sh` | unlocks SSH keys and the cluster connection once per session |
 | `scripts/cluster/setup_remote.sh` | builds the cluster environment |
@@ -208,3 +219,4 @@ Every tracked file that isn't a doc, decision, question or diagram, with what it
 | `.claude/skills/expert-review/scripts/check_citations.py` | review check: every finding's quoted line exists |
 | `.claude/skills/expert-review/scripts/save_report.py` | saves the aggregator's report to its file |
 | `docs/project/diagrams/rendered.sha256` | the hash of each diagram source at its last render |
+| `docs/domain/references.bib` | the bibliography of the papers the project reads |

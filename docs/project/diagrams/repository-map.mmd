@@ -19,6 +19,12 @@ flowchart LR
     diagrams["diagrams/<br/>these pictures"]
   end
 
+  subgraph domain["docs/domain/: the research"]
+    direction TB
+    bib["references.bib<br/>the bibliography"]
+    literature["literature/<br/>one verified note per paper"]
+  end
+
   subgraph code["Code"]
     direction TB
     pkg["tsmerge/<br/>experiment code"]
@@ -39,10 +45,12 @@ flowchart LR
     direction TB
     outputs["outputs/<br/>runs, quick tries, reviews"]
     data["data/<br/>datasets"]
+    papers["papers/<br/>PDFs, by bibkey"]
     env[".env, CLAUDE.local.md<br/>personal values"]
   end
 
   start ~~~ docs
-  docs ~~~ code
+  docs ~~~ domain
+  domain ~~~ code
   code ~~~ tooling
   tooling ~~~ local

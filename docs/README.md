@@ -23,3 +23,4 @@ Knowledge flows one way: sources → literature notes → concepts → questions
 *Source: [project/diagrams/repository-map.mmd](project/diagrams/repository-map.mmd)*
 
 - [project/](project/README.md): how the repository works (setup, the Unimore cluster, running), with its decisions and open questions.
+- [domain/](domain/README.md): what the research is about: the papers and their distillation notes, and later the research questions, experiments and claims.

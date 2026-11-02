@@ -7,6 +7,7 @@ Operational scripts, run from the repository root on your machine (a WSL shell o
 | [start-session.sh](start-session.sh) | Unlocks everything a working session needs, asking each password once |
 | [check.sh](check.sh) | Runs every check a commit must pass (also run by the pre-commit hook) |
 | [runs_summary.py](runs_summary.py) | Lists the pulled runs: status, duration, share of the time limit, estimated cost (`uv run --locked python scripts/runs_summary.py`) |
+| [render_diagrams.sh](render_diagrams.sh) | Renders the Mermaid diagrams of `docs/project/diagrams/` to PNG with Docker; `--check` only checks they are up to date ([diagrams README](../docs/project/diagrams/README.md)) |
 | [cluster/](cluster/README.md) | Runs experiments on the Unimore AImageLab-HPC cluster |
 
 Personal values (SSH keys, cluster account, paths) come from the git-ignored `.env` at the repository root. Its template is `.env.example`.
@@ -29,4 +30,4 @@ Setting it up (the `~/.bashrc` line, `.env`) is described in [setup.md](../docs/
 
 **Why:** one place for the checks every commit must pass, so the list never exists in two copies.
 
-**What it does:** runs ruff (lint and format), shellcheck and pytest, reports each, and fails if any fails. The pre-commit hook in `.githooks/` runs it on every commit. Details: [CONTRIBUTING.md](../CONTRIBUTING.md#checks-before-committing).
+**What it does:** checks `uv.lock`, runs ruff (lint and format), shellcheck and pytest, checks the diagrams are rendered, reports each, and fails if any fails. The pre-commit hook in `.githooks/` runs it on every commit. Details: [CONTRIBUTING.md](../CONTRIBUTING.md#checks-before-committing).

@@ -28,6 +28,7 @@ step "ruff lint" uv run --locked ruff check .
 step "ruff format" uv run --locked ruff format --check .
 step "shellcheck" shellcheck -x scripts/*.sh scripts/cluster/*.sh scripts/cluster/job.sbatch .githooks/pre-commit .githooks/commit-msg
 step "pytest" pytest_or_none
+step "diagrams rendered" scripts/render_diagrams.sh --check
 
 if [[ ${#failed[@]} -gt 0 ]]; then
   echo "FAILED: ${failed[*]}" >&2

@@ -1,6 +1,6 @@
 # Setup
 
-How to prepare a local machine to work on this repository: base tools, git, SSH (GitHub and the Unimore AImageLab-HPC cluster), Python, the GPU. Facts about the cluster are in [cluster.md](cluster.md); daily use in [running.md](running.md).
+How to prepare a local machine to work on this repository: base tools, git, SSH (GitHub and the Unimore AImageLab-HPC cluster), Python, the GPU, and optionally Docker for the diagrams. Facts about the cluster are in [cluster.md](cluster.md); daily use in [running.md](running.md).
 
 Everything here works on **native Linux** and on **WSL2 on Windows**. Where the two differ, both are given; the differences are summed up in [Native Linux or WSL2](#native-linux-or-wsl2).
 
@@ -315,6 +315,28 @@ Prepares your account on the Unimore cluster ([cluster.md](cluster.md)) to run t
 
 What each script does: [scripts/cluster/README.md](../../scripts/cluster/README.md).
 
+## 8. Diagrams (optional)
+
+Only needed to change or add the diagrams in [docs/project/diagrams/](diagrams/README.md): reading the docs and committing other changes work without it. The diagrams are rendered by a pinned Docker image, `minlag/mermaid-cli` (about 1 GB), that bundles everything the renderer needs ([PD-028](decisions/PD-028-diagrams.md)).
+
+| | Native Linux | WSL2 on Windows |
+|---|---|---|
+| **Install Docker** | Docker Engine, from Docker's apt repository ([official steps](https://docs.docker.com/engine/install/ubuntu/)) | Docker Desktop on **Windows** ([official steps](https://docs.docker.com/desktop/features/wsl/)); never Docker Engine inside the WSL distro as well, the two conflict |
+| **Use it without sudo** | `sudo usermod -aG docker $USER`, then log out and back in | nothing to do |
+| **Connect it** | nothing to do | Docker Desktop → *Settings* → *Resources* → *WSL integration*: turn on this distro, then *Apply & restart* |
+
+- **The `docker` group grants root-level privileges** to its members (Docker's own warning): add only your own user.
+- **WSL2:** Docker Desktop needs WSL 2.1.5 or newer, ideally the latest (`wsl --update` from Windows). Docker Desktop must be running whenever you render.
+
+Check it, and download the image once:
+
+```bash
+docker run --rm hello-world
+scripts/render_diagrams.sh --all
+```
+
+The first render downloads the image; later renders take a few seconds per diagram.
+
 ## Native Linux or WSL2
 
 | | Native Linux | WSL2 on Windows |
@@ -324,6 +346,7 @@ What each script does: [scripts/cluster/README.md](../../scripts/cluster/README.
 | NVIDIA driver | Linux driver | Windows driver only |
 | SSH keys and config | `~/.ssh/` | WSL's `~/.ssh/`; keys copied from Windows, not used from `/mnt/c` |
 | Editor | any | VS Code with the WSL extension |
+| Docker (diagrams only) | Docker Engine | Docker Desktop on Windows, with WSL integration |
 
 ## Troubleshooting
 
@@ -336,5 +359,4 @@ What each script does: [scripts/cluster/README.md](../../scripts/cluster/README.
 - **`torch.cuda.is_available()` is `False` but `nvidia-smi` works:** the driver is probably older than the CUDA version of the PyTorch build. Update the driver; don't change the PyTorch build without a decision.
 - **`nvidia-smi` not found in WSL:** update the Windows NVIDIA driver and WSL (`wsl --update` in PowerShell), then restart WSL (`wsl --shutdown`).
 - **`uv: command not found`:** open a new shell, or run `source ~/.local/bin/env`.
-
-> **Status:** `uv sync` works. There are no tests yet, so `uv run pytest` reports that no tests ran.
+- **`render_diagrams.sh` says Docker isn't available:** on WSL2, start Docker Desktop and check that this distro is turned on under *Resources* → *WSL integration*; on native Linux, check `systemctl status docker` and that you are in the `docker` group (`groups`).

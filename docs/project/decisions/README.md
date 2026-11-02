@@ -21,7 +21,7 @@ Research decisions (methods, datasets, metrics) belong to the domain area. They 
 - **When the choice itself is reversed,** write a new decision that supersedes it, and change the old one's status line to `superseded by PD-NNN`, so both the old reasons and the new ones stay readable.
 - **A decision that no longer holds** is either kept, with its status (`superseded by PD-NNN` or `rejected`) and a line saying why, or deleted. Keep it when its reasons are still worth knowing (e.g. it's likely to be proposed again); delete it when nothing depends on it and the new decision already explains the change. Either way, its id is never reused.
 - **Docs follow decisions.** When a decision is accepted, updated or superseded, in the same step:
-  - update every Markdown file it affects;
+  - update every Markdown file it affects, and every diagram ([diagrams](../diagrams/README.md));
   - close the [questions](../questions/README.md) it answers: their content moves into the decision, and the question files are deleted.
 - **Short and readable:** about one screen, one idea per line, lists as bullets. Link to details instead of restating them.
 
@@ -100,3 +100,4 @@ What we chose, and why. How it was verified, if it was.
 | [PD-025](PD-025-run-safety.md) | Runs keep their provenance and results safe: pushed commits, no requeue, local backup | accepted | 2026-11-02 |
 | [PD-026](PD-026-results-format.md) | Every run writes its metrics to `results/metrics.json`, in one fixed format | accepted | 2026-11-02 |
 | [PD-027](PD-027-gpu-pool.md) | Runs may use every allowed GPU; numerics are made explicit, not left to the hardware | accepted | 2026-11-02 |
+| [PD-028](PD-028-diagrams.md) | Diagrams: Mermaid sources, committed PNG images, rendered with Docker | accepted | 2026-11-02 |

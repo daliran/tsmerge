@@ -30,6 +30,7 @@ It runs:
 - `uv run --locked ruff check .`: Python lint;
 - `uv run --locked ruff format --check .`: Python formatting (fix with `uv run ruff format .`);
 - `shellcheck`: the shell scripts and git hooks (settings in `.shellcheckrc`);
+- `scripts/render_diagrams.sh --check`: every diagram's PNG matches its current source ([diagrams](docs/project/diagrams/README.md); no Docker needed);
 - `uv run --locked pytest`: the tests ("no tests found" passes while there are none).
 
 `--locked` makes every step fail instead of silently rewriting `uv.lock` when it doesn't match `pyproject.toml`.

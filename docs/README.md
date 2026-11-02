@@ -10,8 +10,8 @@ Every experiment answers a question, every result supports or refutes a claim, a
 |---|---|
 | Question | `PQ-NNN` (project), `DQ-NNN` (domain) |
 | Decision | `PD-NNN` (project), `DD-NNN` (domain) |
-| Experiment | `E###` |
-| Claim | `C###` |
+| Experiment | to be defined: [PQ-003](project/questions/PQ-003-experiment-ids.md) |
+| Claim | to be defined, with the domain docs |
 | Paper | bibkey |
 
 Knowledge flows one way: sources → literature notes → concepts → questions → experiments → results → claims → thesis. Later layers link to earlier ones and never restate them.

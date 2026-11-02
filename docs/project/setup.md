@@ -147,7 +147,7 @@ Host ailb
 ```
 
 - `IdentitiesOnly yes` makes ssh offer each host only its own key.
-- The `Control*` lines open one connection to the cluster and reuse it for 8 hours, so the compute scripts authenticate once instead of on every command.
+- The `Control*` lines open one connection to the cluster and reuse it until it has gone unused for 8 hours (or the network drops), so the compute scripts authenticate once instead of on every command.
 
 Make the permissions strict, or ssh refuses the files:
 
@@ -186,7 +186,7 @@ It is safe to rerun: whatever is already unlocked is skipped.
 **How long a session lasts:**
 
 - the keys stay unlocked until WSL or the machine restarts (on WSL2, WSL also stops by itself some time after every terminal and VS Code window is closed);
-- the cluster connection lasts 8 hours (`ControlPersist`); after that, rerun the script.
+- the cluster connection stays open until it has gone unused for 8 hours (`ControlPersist`), or until the network drops; after that, rerun the script.
 
 **Why it matters beyond convenience:** the cluster scripts run ssh non-interactively, where nobody can type a password. Without an unlocked key and an open connection they fail with `Permission denied`. Check the loaded keys with `ssh-add -l`, and the cluster connection with `ssh -O check ailb`.
 
@@ -248,7 +248,7 @@ uv python pin 3.12            # pin a project to a version (writes .python-versi
 uv self update                # update uv itself
 ```
 
-You rarely need `uv python install` by hand: `uv sync` downloads the version the repository pins the first time. The cluster uses uv the same way, so local and cluster runs use the same Python build regardless of each machine's system Python.
+You rarely need `uv python install` by hand: `uv sync` downloads the version the repository pins the first time. This repository pins an exact version, **3.12.16** (`.python-version`), so every machine runs the identical build ([PD-001](decisions/PD-001-python-and-pytorch.md)). The repository's own tooling uses the same Python: scripts run with `uv run`, and the expert-review guard hook uses the project environment's Python (`.venv/bin/python`), so `uv sync` must have been run. The cluster uses uv the same way, so local and cluster runs use the same Python build regardless of each machine's system Python.
 
 ## 5. GPU and CUDA (optional)
 
@@ -300,9 +300,10 @@ Prepares your account on the Unimore cluster ([cluster.md](cluster.md)) to run t
 
    It:
 
-   - creates the project's folders in your cluster home and work areas;
+   - creates the project's folders in your cluster home and work areas, including the `data/` folder for datasets;
    - sets the cluster's uv to the same version as yours, so both read `uv.lock` the same way;
-   - copies the code and builds the Python environment from `uv.lock` (a few minutes, about 2.5 GB of downloads; nothing runs on a GPU);
+   - copies the code and builds the Python environment from `uv.lock`, as a Slurm step on the free `all_serial` partition, not directly on the shared login node (a few minutes, about 2.5 GB of downloads when packages change; no GPU);
+   - refuses a `uv.lock` that doesn't match `pyproject.toml`, and while it builds, jobs refuse to start ([PD-008](decisions/PD-008-environment-integrity.md));
    - downloads into a temporary cache on the login node's local disk, deleted at the end, so no cache files pile up in your cluster home ([PD-005](decisions/PD-005-uv-cache-on-the-cluster.md)).
 
    Rerun it whenever `uv.lock` or your uv version changes: jobs refuse to run against an outdated environment.

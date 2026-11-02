@@ -6,6 +6,7 @@ tsmerge is a master's thesis repo (AI Engineering, Unimore) on joint training vs
 
 - [README.md](README.md), then the `README.md` of every folder you work in: they describe what the folder holds and how it is used.
 - `CLAUDE.local.md` (git-ignored, if present): personal and machine-specific context.
+- [docs/project/decisions/README.md](docs/project/decisions/README.md): why things are the way they are. Read the relevant decision before changing what it covers.
 
 ## Rules
 
@@ -23,5 +24,7 @@ tsmerge is a master's thesis repo (AI Engineering, Unimore) on joint training vs
 - **Readable Markdown, written for humans.** A blank line between blocks, short paragraphs, one idea per line, and bullet lists for anything that enumerates. Split long sections with headings. When presenting options, give numbers where they exist (counts, percentages, costs) and what each option gains and costs.
 - **Folder `CLAUDE.md` files:** none yet. When a folder first needs rules that only agents need, propose adding one there (starting with `@README.md`).
 - **Document what and why, as you go.** Every script, configuration file and folder says what it does and why it exists: in the folder's README, a decision, or a short comment. Write it together with the change, not afterwards.
+- **Record problems with their solutions.** When a problem is found (a review, a failed run, a bug), write down the problem, why it mattered and how it was solved, in a decision or the relevant doc; what isn't solved yet becomes an open question. Never leave it only in the conversation.
+- **Docs are the reference; decisions explain why.** Every operational fact lives in a project doc or folder README, which may link to the decision behind it. A decision is history and rationale, never the only place a fact is written.
 - **Docs follow decisions.** When a decision is made or changed, update every Markdown file it affects in the same step: committed files, untracked docs, and `CLAUDE.local.md`. Never leave a file stating something a decision has changed.
 - **Knowledge is written down.** When the user asks you to remember a rule, write it here or in the README it belongs to (personal or machine-specific context: `CLAUDE.local.md`), never only in session memory, so fresh sessions follow it too.

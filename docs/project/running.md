@@ -25,11 +25,11 @@ outputs/runs/<experiment>/<run id>/ ◀── pull.sh ── /work/…/runs/<exp
 outputs/jobs.log   one line per submitted job: job id, run id, experiment, date, command
 ```
 
-The run folder layout and the reasons behind it: [PD-003](decisions/PD-003-runs-and-jobs.md).
+The run folder layout, and what each run records: [runs.md](runs.md).
 
 ## Start each session
 
-After WSL or the machine restarts, and every 8 hours for the cluster connection:
+After WSL or the machine restarts, or when the cluster connection has closed (8 hours without use, or a network drop):
 
 ```bash
 scripts/start-session.sh
@@ -51,6 +51,21 @@ uv run python scripts/cluster/hello.py
 - **WSL2:** the GPU's memory is shared with Windows apps; check `nvidia-smi` before a long local run ([setup.md](setup.md#5-gpu-and-cuda-optional)).
 - There is no local equivalent of `submit.sh` yet (run folder, `run.json`): it will come with the first real experiment.
 
+## Datasets
+
+Datasets live outside the code ([PD-020](decisions/PD-020-dataset-location.md)):
+
+- **locally:** in `data/` at the repository root (git-ignored), or wherever `DATA_DIR` in `.env` points;
+- **on the cluster:** in the work area's `data/` folder; jobs find it as `DATA_DIR`.
+
+Upload a dataset once, preferably as a few large files:
+
+```bash
+rsync -az --partial data/<dataset>/ ailb:/work/<project account>/<username>/tsmerge/data/<dataset>/
+```
+
+`--partial` makes an interrupted upload resume instead of restarting. Large copies go through the login node: the cluster's data-transfer node isn't reachable from outside the Unimore network ([PD-024](decisions/PD-024-large-transfers.md)).
+
 ## Running on the cluster
 
 ### Where jobs run
@@ -61,7 +76,9 @@ uv run python scripts/cluster/hello.py
 | CPU-only or very light GPU work (data preparation, aggregating results) | `all_serial`, free, through `srun` or `sbatch` | [PD-002](decisions/PD-002-cluster-partition.md) |
 | Never | `boost_usr_prod` | reserved for projects that need high-memory GPUs ([PD-002](decisions/PD-002-cluster-partition.md)) |
 
-- **GPU models:** jobs run only on the models allowed in `scripts/cluster/defaults.sh`; Blackwell is always excluded, because this PyTorch build can't run on it ([PD-004](decisions/PD-004-gpu-allow-list.md)). Whether to also exclude L40S and A40 is open ([PQ-002](questions/PQ-002-exclude-high-end-gpus.md)).
+- **CPU-only jobs** (data preparation, aggregating results): `CLUSTER_PROFILE=cpu scripts/cluster/submit.sh …`. No GPU is requested or checked, and the job runs on `all_serial` (free, at most 4 hours), with the same run folder and records as GPU runs. For heavy or long CPU work, add `CLUSTER_CPU_PARTITION=all_usr_prod` (billed, up to 24 hours). Why: [PD-022](decisions/PD-022-cpu-jobs.md).
+
+- **GPU models:** jobs run only on the models allowed in `scripts/cluster/defaults.sh`; Blackwell is always excluded, because this PyTorch build can't run on it ([PD-004](decisions/PD-004-gpu-allow-list.md)). All other models are allowed, high-memory ones included as part of the mixed list ([PD-027](decisions/PD-027-gpu-pool.md)). To compare runs on identical hardware, narrow the list for a sweep to one family of at most 24 GB, e.g. `CLUSTER_GPU_SUBSET="gpu_2080_11G gpu_2080Ti_11G" scripts/cluster/submit.sh …` (only allowed models are accepted).
 - **Every Slurm option** (account, partition, GPUs, time limit, …) is preset: you pass only the experiment name and the command. Defaults and how to override them: [scripts/cluster/README.md](../../scripts/cluster/README.md#commands).
 
 ### The cycle
@@ -74,13 +91,47 @@ scripts/cluster/submit.sh hello python scripts/cluster/hello.py
 scripts/cluster/status.sh            # your queue
 scripts/cluster/status.sh 123456     # one job: state, exit code, elapsed time, node
 
+scripts/cluster/logs.sh 123456       # the end of the job's output, while it runs
 scripts/cluster/pull.sh hello        # bring the experiment's runs back into outputs/runs/
 ```
 
 - `submit.sh` returns at once: the job runs on its own, even if you close your machine.
+- **Don't edit files during the few seconds a submission takes:** the run records the working tree as it was when the submission started.
+- **If a submission fails** (for example `sbatch` rejects an option, or the budget is spent), `submit.sh` says which step failed and removes the half-created run folder, so no run is left marked "submitted" without a job.
 - Before submitting, it checks the GPU lists against the cluster, and warns if a GPU model appeared or disappeared ([PD-004](decisions/PD-004-gpu-allow-list.md)).
 - Each run's `run.json` records what ran, where and how it ended; `slurm.out` holds the job's output.
-- After a change to `uv.lock` or to your uv version, rerun `scripts/cluster/setup_remote.sh` first: jobs refuse to run against an outdated environment.
+- **How a run ended** is always recorded in `run.json`'s `status` (`completed`, `failed`, `timeout`, `canceled`, `stopped`; meanings in [runs.md](runs.md#how-a-run-ended-status)). A run gets its time limit **minus 2 minutes**, and `sacct` shows runs stopped at the limit as `FAILED`: trust `run.json`.
+- **Sweeps:** give the runs of one comparison the same sweep id, so they can be grouped later: `SWEEP=<id> scripts/cluster/submit.sh …`. It's recorded in each run's `run.json`.
+- **Runs that use earlier runs** (e.g. merging fine-tuned checkpoints): list them with `INPUTS="<experiment>/<run id> …" scripts/cluster/submit.sh …`. They are recorded in `run.json`, and the program finds them under `RUNS_ROOT` ([runs.md](runs.md#what-a-job-provides)).
+- **What each run records** (`run.json`, `config.json`), its folder layout and where runs live: [runs.md](runs.md).
+- After a change to `uv.lock` or to your uv version, rerun `scripts/cluster/setup_remote.sh` first: jobs refuse to run against an outdated environment, or while a rebuild is in progress.
+- **Don't rebuild the environment while jobs are running or queued:** there is one environment, rebuilt in place. Running jobs could load a mix of old and new packages, and queued jobs submitted with the old `uv.lock` will refuse to start.
+- **Uncommitted changes:** `submit.sh` warns, and the run records them in `provenance/patch.diff`, so it can still be rebuilt exactly. For results you'll report, prefer submitting from a clean tree.
+
+### Rebuilding a run's code
+
+A run's `run.json` names its commit; uncommitted changes, new files included, are in its `provenance/patch.diff`. To see exactly the code a run executed:
+
+```bash
+git worktree add /tmp/run-code <git_commit from run.json>
+git -C /tmp/run-code apply --binary outputs/runs/<experiment>/<run id>/provenance/patch.diff
+```
+
+The second line is needed only when the run's `git_dirty` is `true`. Remove the folder afterwards with `git worktree remove /tmp/run-code`.
+
+## Durations and budget
+
+After pulling, see how long runs took, how close they came to their time limit, and roughly what they cost:
+
+```bash
+uv run --locked python scripts/runs_summary.py            # all pulled runs
+uv run --locked python scripts/runs_summary.py <experiment>
+```
+
+- **Choosing `CLUSTER_TIME`:** take the durations of similar runs, add a margin, and remember a run gets its limit minus 2 minutes. A run that hits its limit restarts from scratch.
+- **Cost:** the `stdh` column estimates the standard hours billed (one GPU-hour costs at least 6; `all_serial` is free). The official figure is `susage` on the cluster.
+
+Why: [PD-023](decisions/PD-023-durations-and-budget.md).
 
 ## Interactive work and debugging on the cluster
 
@@ -105,3 +156,13 @@ Most debugging happens locally. When it must happen on the cluster:
 
 - **Pull regularly:** at least at the end of each working day, `scripts/cluster/pull.sh`. Checkpoints only when needed: `pull.sh --checkpoints <experiment>`.
 - **Mind the account's expiry:** check with `sexpiration` on the cluster; when it ends, the work folder is deleted at once ([cluster.md](cluster.md#storage)).
+- **Back up your results:** after pulling, copy `outputs/` to a second place (another drive, a cloud-synced folder). It's git-ignored and exists only on this machine:
+
+  ```bash
+  rsync -a --exclude 'checkpoints/' outputs/ <backup folder>/tsmerge-outputs/
+  ```
+
+  Drop `--exclude 'checkpoints/'` to include model weights.
+- **Push before submitting runs you'll report:** a run records its commit; an unpushed commit that is later amended or rebased disappears. `submit.sh` warns about unpushed commits.
+
+Why: [PD-025](decisions/PD-025-run-safety.md).

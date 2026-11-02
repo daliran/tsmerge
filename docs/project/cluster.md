@@ -191,7 +191,7 @@ Every job needs at least `--account=<project account>` and `--partition=…`; se
 Seen on this cluster in practice, but not in its documentation:
 
 - `--exclude` is rejected: use `--constraint`.
-- An explicit `sbatch --export=VAR=value` gets the job cancelled within seconds, with no log. Pass variables as an environment prefix instead: `VAR=value sbatch …`.
+- An explicit `sbatch --export=VAR=value` gets the job canceled within seconds, with no log. Pass variables as an environment prefix instead: `VAR=value sbatch …`.
 - Node-local `/tmp` can fill up: point `TMPDIR` to a per-job folder under `/work`.
 - The folder of a job's log file must exist before submitting.
 - **`/homes` seems to limit the number of files, not only their size.** With about 186,000 files in a home using 25 of 100 GB, creating more files failed with `Disk quota exceeded` (2026-11-01). `squota` shows a "chunks" count with no limit, and the documentation states none: the limit and its value are unconfirmed. Keep the home lean:
@@ -199,4 +199,8 @@ Seen on this cluster in practice, but not in its documentation:
   - `uv cache prune` removes uv cache entries nothing uses anymore;
   - VS Code's *Remote-SSH* server (`~/.vscode-server`) keeps a copy per VS Code version, tens of thousands of files: old versions can be removed while VS Code isn't connected;
   - count files with `find ~ | wc -l`, or per folder with `find <folder> | wc -l`.
+- **On `all_usr_prod`, a job asking for more than 24 GB of GPU memory is refused:** "Jobs requiring > 24G VRAM must be run on the 'boost_usr_prod' partition" (2026-11-02). The cluster derives the memory from `--constraint`, taking the smallest GPU in the list: a list of only L40S or A40 (45 GB) is refused, a mixed list including smaller GPUs is accepted. When submitting, it also prints the minimum it deduced ("you need at least 8GB of VRAM") and may suggest more GPU models.
+- **Jobs are not requeued** (`JobRequeue = 0`), and there is no preemption; Slurm waits 90 seconds between its stop signal and the hard kill (`KillWait`) (2026-11-02).
+- **Node feature tags don't always match the hardware:** node `germano`, tagged `gpu_2080_11G`, reports an RTX 2080 Ti (2026-11-02).
+- **The data-transfer node (`ailb-data`) isn't reachable from outside the Unimore network:** its SSH port doesn't answer, and the login nodes refuse to forward connections to it (2026-11-02). From outside, large copies go through the login nodes.
 - **The login node's `/tmp` is a local disk** (71 GB free on 2026-11-01), not visible from compute nodes: fine for temporary files of commands run on the login node, never for files a job must read.

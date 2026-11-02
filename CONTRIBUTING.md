@@ -26,12 +26,15 @@ scripts/check.sh
 
 It runs:
 
-- `uv run ruff check .`: Python lint;
-- `uv run ruff format --check .`: Python formatting (fix with `uv run ruff format .`);
+- `uv lock --check`: `uv.lock` matches `pyproject.toml` (after changing dependencies, run `uv lock` and commit both files together);
+- `uv run --locked ruff check .`: Python lint;
+- `uv run --locked ruff format --check .`: Python formatting (fix with `uv run ruff format .`);
 - `shellcheck`: the shell scripts and git hooks (settings in `.shellcheckrc`);
-- `uv run pytest`: the tests ("no tests found" passes while there are none).
+- `uv run --locked pytest`: the tests ("no tests found" passes while there are none).
 
-`ruff` and `pytest` come with the project's environment (`uv sync`); `shellcheck` is a system package ([setup.md](docs/project/setup.md#1-base-tools)).
+`--locked` makes every step fail instead of silently rewriting `uv.lock` when it doesn't match `pyproject.toml`.
+
+The ruff rules are explicit in `pyproject.toml` (`E, W, F, I, UP, B, SIM, RUF`, line length 88), so a ruff upgrade can't change what is checked ([PD-012](docs/project/decisions/PD-012-code-checks.md)). `ruff` and `pytest` come with the project's environment (`uv sync`); `shellcheck` is a system package ([setup.md](docs/project/setup.md#1-base-tools)).
 
 ### Git hooks: the checks run by themselves
 
@@ -62,3 +65,7 @@ Commits follow [Conventional Commits](https://www.conventionalcommits.org/):
 - Mention the ids a change adds or answers when they fit, e.g. `docs(decisions): add cluster partition decision (PD-002)`.
 
 The full rules and examples are in the [commit-plan](.claude/skills/commit-plan/SKILL.md) skill.
+
+## In-depth reviews
+
+For a review from several expert viewpoints (Python, ML engineering, HPC/Slurm, reproducibility, research), run `/expert-review` in Claude Code. It writes a verified report to `artifacts/expert-reviews/` (git-ignored) and never touches the cluster. See [.claude/README.md](.claude/README.md).

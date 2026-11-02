@@ -14,7 +14,7 @@ How a change gets into this repository: decisions, git, checks and commit messag
 - The default branch is `main`.
 - Small steps: each commit has one clear purpose.
 - Never commit `outputs/` (everything generated locally: runs, job records, review reports), `.env` (personal values), checkpoints (`*.pt`, `*.pth`, `*.ckpt`) or files over ~5 MB.
-- No personal data in committed files: personal names, dates or local paths stay in the git-ignored `CLAUDE.local.md`.
+- No personal data in committed files: personal names, dates or local paths stay in the git-ignored `CLAUDE.local.md`. Authors' names in bibliographic content are the one exception ([PD-034](docs/project/decisions/PD-034-literature.md)).
 
 ## Adding a file
 

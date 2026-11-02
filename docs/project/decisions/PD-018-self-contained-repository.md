@@ -3,6 +3,8 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
+- **History:**
+  - 2026-11-02: authors' names are allowed in bibliographic content (the bibliography, the paper notes, the thesis text), since citing a paper names its authors; the hygiene check skips those paths for names only ([PD-034](PD-034-literature.md)).
 
 ## Problem
 
@@ -24,7 +26,7 @@
 
 Option A ([CLAUDE.md](../../../CLAUDE.md)):
 
-- committed files contain no personal names, no graduation date, no links to other repositories, no paths outside the repository; people are "the user" (agent rules) or "the author" (records);
+- committed files contain no personal names (except authors' names in bibliographic content, [PD-034](PD-034-literature.md)), no graduation date, no links to other repositories, no paths outside the repository; people are "the user" (agent rules) or "the author" (records);
 - committed files never refer to earlier or external implementations: every choice is justified on its own merits;
 - personal and machine-specific context lives in `CLAUDE.local.md` (git-ignored), which agents read automatically; personal values the scripts need live in `.env` ([PD-014](PD-014-personal-values.md));
 - the expert review's hygiene check scans for personal data ([PD-011](PD-011-expert-review-guard.md)); your names and identifiers go in `PRIVATE_PATTERNS` in `.env`.

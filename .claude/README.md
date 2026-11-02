@@ -36,7 +36,7 @@ Mechanical steps of the skill, run by the orchestrating session, never by the re
 
 | Script (`skills/expert-review/scripts/`) | What it does | Why |
 |---|---|---|
-| [check_hygiene.py](skills/expert-review/scripts/check_hygiene.py) | Checks every file git would commit for personal data (`PRIVATE_PATTERNS` in `.env`), secrets, broken links, unknown ids, and UK spellings | Things with right or wrong answers are checked by a script, not by opinion |
+| [check_hygiene.py](skills/expert-review/scripts/check_hygiene.py) | Checks every file git would commit for personal data (`PRIVATE_PATTERNS` in `.env`; not applied to bibliographic content, where authors' names belong), secrets, broken links, unknown ids, and UK spellings | Things with right or wrong answers are checked by a script, not by opinion |
 | [check_citations.py](skills/expert-review/scripts/check_citations.py) | Checks that each finding's file, line and quoted text exist | Reviewers' findings are verified against the files before anyone trusts them |
 | [save_report.py](skills/expert-review/scripts/save_report.py) | Saves the aggregator's report, returned as text, to `report.md` | Subagents can't write report files themselves |
 

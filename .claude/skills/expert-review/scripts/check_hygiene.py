@@ -4,8 +4,9 @@ answers.
 usage: python3 check_hygiene.py <run dir>
 
 Checks every file git would commit (tracked, plus untracked files not ignored) for:
-- personal data: the patterns in PRIVATE_PATTERNS (from the git-ignored .env), and
-  absolute paths of a personal machine;
+- personal data: the patterns in PRIVATE_PATTERNS (from the git-ignored .env), except in
+  bibliographic content, where authors' names belong (PD-034); and absolute paths of a
+  personal machine, everywhere;
 - likely secrets;
 - Markdown links whose file or heading doesn't exist;
 - decision and question ids (PD-, PQ-, DD-, DQ-) with no matching file, and files
@@ -54,6 +55,10 @@ ID_FOLDERS = {
     "DD": "docs/domain/decisions",
     "DQ": "docs/domain/questions",
 }
+
+
+# Bibliographic content may name authors (PD-034): PRIVATE_PATTERNS isn't applied here.
+BIBLIOGRAPHIC = ("docs/domain/references.bib", "docs/domain/literature/", "thesis/")
 
 
 def committable() -> list[Path]:
@@ -141,7 +146,7 @@ def main() -> None:
             continue
         own_source = file.resolve() == Path(__file__).resolve()
         for n, line in enumerate(text.splitlines(), 1):
-            if private and private.search(line):
+            if private and not rel.startswith(BIBLIOGRAPHIC) and private.search(line):
                 issues["Personal data"].append(f"`{rel}:{n}`: matches PRIVATE_PATTERNS")
             if LOCAL_PATHS.search(line) and not own_source:
                 issues["Personal data"].append(f"`{rel}:{n}`: absolute personal path")

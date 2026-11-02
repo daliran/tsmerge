@@ -16,8 +16,7 @@ are not inspected. Exit code 2 blocks the call and shows the message to the agen
 the input can't be parsed, the hook blocks (it fails closed).
 
 Every call it checks for those subagents is logged, allowed or blocked, one line each,
-in
-outputs/expert-reviews/guard.log: an audit trail, and proof that the hook runs.
+in outputs/expert-reviews/guard.log: an audit trail, and proof that the hook runs.
 """
 
 import json

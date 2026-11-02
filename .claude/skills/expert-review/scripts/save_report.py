@@ -3,12 +3,10 @@
 usage: python3 save_report.py <run dir> <aggregator output file>
 
 The harness doesn't let subagents write report files, so the aggregator returns the
-report
-as text. Its output file (the path the Agent tool gives when the aggregator is launched)
-is a JSONL transcript. This script takes the last assistant text (or tool-call input,
-such
-as the hand-back message) containing the report's title, and writes it from the title
-onward, without passing it through the orchestrator's context.
+report as text. Its output file (the path the Agent tool gives when the aggregator is
+launched) is a JSONL transcript. This script takes the last assistant text (or tool-call
+input, such as the hand-back message) containing the report's title, and writes it from
+the title onward, without passing it through the orchestrator's context.
 """
 
 import json

@@ -8,6 +8,7 @@ This folder is only about the machinery. What the research is about will live in
 
 | File | Concern | When you read it |
 |---|---|---|
+| [overview.md](overview.md) | A guided tour: how the pieces fit together, why each exists, and every file in the repository | first, to understand the repository; whenever a file's purpose is unclear |
 | [setup.md](setup.md) | One-time setup: your machine (Linux or WSL2: tools, git, SSH, Python with uv, GPU) and your cluster account | once per machine or account |
 | [cluster.md](cluster.md) | Reference facts about the Unimore AImageLab-HPC cluster: access, partitions, GPUs, accounts, storage, rules | when you need a fact |
 | [running.md](running.md) | Daily operation: running locally and on the cluster, debugging, getting results back | every working day |

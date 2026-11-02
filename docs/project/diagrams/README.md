@@ -12,13 +12,13 @@ Why this format and renderer: [PD-028](../decisions/PD-028-diagrams.md).
 
 | Diagram | What it shows | Shown in |
 |---|---|---|
-| [repository-map](repository-map.mmd) | The repository's folders, what each holds, and where to start reading | [docs/README.md](../../README.md#contents) |
-| [machines-and-storage](machines-and-storage.mmd) | Your machine and the cluster: partitions, storage areas, and which script moves what where | [running.md](../running.md#the-model-local-first) |
-| [local-run](local-run.mmd) | A recorded local run with `run_local.sh`, and how a quick try or a debug session differs | [running.md](../running.md#running-locally) |
-| [cluster-run](cluster-run.mmd) | One cluster run, from `submit.sh` to the pulled results, with how its end is recorded | [running.md](../running.md#the-cycle) |
+| [repository-map](repository-map.mmd) | The repository's folders, what each holds, and where to start reading | [docs/README.md](../../README.md#contents), [overview.md](../overview.md) |
+| [machines-and-storage](machines-and-storage.mmd) | Your machine and the cluster: partitions, storage areas, and which script moves what where | [running.md](../running.md#the-model-local-first), [overview.md](../overview.md) |
+| [local-run](local-run.mmd) | A recorded local run with `run_local.sh`, and how a quick try or a debug session differs | [running.md](../running.md#running-locally), [overview.md](../overview.md) |
+| [cluster-run](cluster-run.mmd) | One cluster run, from `submit.sh` to the pulled results, with how its end is recorded | [running.md](../running.md#the-cycle), [overview.md](../overview.md) |
 | [environment-build](environment-build.mmd) | How `setup_remote.sh` builds the cluster environment, and how every job checks it | [running.md](../running.md#the-cluster-environment) |
-| [run-statuses](run-statuses.mmd) | The statuses in `run.json`, and what moves a run from one to the next | [runs.md](../runs.md#how-a-run-ended-status) |
-| [questions-and-decisions](questions-and-decisions.mmd) | How a question becomes a decision, and how a decision changes over time | [decisions/README.md](../decisions/README.md#rules) |
+| [run-statuses](run-statuses.mmd) | The statuses in `run.json`, and what moves a run from one to the next | [runs.md](../runs.md#how-a-run-ended-status), [overview.md](../overview.md) |
+| [questions-and-decisions](questions-and-decisions.mmd) | How a question becomes a decision, and how a decision changes over time | [decisions/README.md](../decisions/README.md#rules), [overview.md](../overview.md) |
 | [expert-review](expert-review.mmd) | The expert-review skill: reviewers, mechanical checks, verification, the guard | [.claude/README.md](../../../.claude/README.md#the-expert-review-in-short) |
 
 ## Keeping them accurate

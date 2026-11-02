@@ -30,6 +30,16 @@ Invoked with `/<name>`.
 
 The guard inspects command text: it catches mistakes, but it is not a security boundary. The agents' instructions forbid the same things. Its behavior is tested in `tests/test_expert_review_guard.py`.
 
+## The expert review's scripts
+
+Mechanical steps of the skill, run by the orchestrating session, never by the review agents:
+
+| Script (`skills/expert-review/scripts/`) | What it does | Why |
+|---|---|---|
+| [check_hygiene.py](skills/expert-review/scripts/check_hygiene.py) | Checks every file git would commit for personal data (`PRIVATE_PATTERNS` in `.env`), secrets, broken links, unknown ids, and UK spellings | Things with right or wrong answers are checked by a script, not by opinion |
+| [check_citations.py](skills/expert-review/scripts/check_citations.py) | Checks that each finding's file, line and quoted text exist | Reviewers' findings are verified against the files before anyone trusts them |
+| [save_report.py](skills/expert-review/scripts/save_report.py) | Saves the aggregator's report, returned as text, to `report.md` | Subagents can't write report files themselves |
+
 ## The expert review in short
 
 ![The expert review: independent reviewers, mechanical checks, one verifier, guarded by the hook](../docs/project/diagrams/expert-review.png)

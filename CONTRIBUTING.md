@@ -16,6 +16,10 @@ How a change gets into this repository: decisions, git, checks and commit messag
 - Never commit `outputs/` (everything generated locally: runs, job records, review reports), `.env` (personal values), checkpoints (`*.pt`, `*.pth`, `*.ckpt`) or files over ~5 MB.
 - No personal data in committed files: personal names, dates or local paths stay in the git-ignored `CLAUDE.local.md`.
 
+## Adding a file
+
+Every file the repository tracks, except docs, is listed with a one-line purpose in the inventory of [overview.md](docs/project/overview.md#every-file-in-the-repository); a test fails if one is missing. Add the line in the same commit as the file, together with its folder's README.
+
 ## Checks before committing
 
 One script runs every check; all must pass:

@@ -54,7 +54,13 @@ htmlcov/
 .ipynb_checkpoints/
 
 # --- Editors and OS -----------------------------------------------------------
-.vscode/
+# VS Code: only the shared tasks, debug configurations, extensions and settings are
+# committed (PD-031); everything else in .vscode/ stays personal.
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea/
 *.swp
 .DS_Store

@@ -1,3 +1,6 @@
 # shellcheck settings: resolve "source" paths relative to each script.
 # SCRIPTDIR is shellcheck's keyword for the checked script's folder (man shellcheck).
 source-path=SCRIPTDIR
+# Follow sourced files (the same as `shellcheck -x`), so the command line, scripts/check.sh
+# and the VS Code extension all check the same way.
+external-sources=true

@@ -1,0 +1,117 @@
+{
+  // Tasks (Terminal > Run Task…): each one runs a repository script, with the same
+  // arguments as on the command line (docs/project/running.md, PD-031).
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run locally (recorded run)",
+      "type": "shell",
+      "command": "scripts/run_local.sh ${input:experiment} python -m ${input:module} ${input:args}",
+      "problemMatcher": []
+    },
+    {
+      "label": "Cluster: submit",
+      "type": "shell",
+      "command": "CLUSTER_PROFILE=${input:profile} scripts/cluster/submit.sh ${input:experiment} python -m ${input:module} ${input:args}",
+      "problemMatcher": []
+    },
+    {
+      "label": "Cluster: status",
+      "type": "shell",
+      "command": "scripts/cluster/status.sh ${input:jobIdOptional}",
+      "problemMatcher": []
+    },
+    {
+      "label": "Cluster: logs",
+      "type": "shell",
+      "command": "scripts/cluster/logs.sh ${input:jobId}",
+      "problemMatcher": []
+    },
+    {
+      "label": "Cluster: pull",
+      "type": "shell",
+      "command": "scripts/cluster/pull.sh ${input:pullTarget}",
+      "problemMatcher": []
+    },
+    {
+      "label": "Cluster: set up the environment",
+      "type": "shell",
+      "command": "scripts/cluster/setup_remote.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "Start session (unlock SSH and the cluster)",
+      "type": "shell",
+      "command": "scripts/start-session.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "Check (before committing)",
+      "type": "shell",
+      "command": "scripts/check.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "Render diagrams",
+      "type": "shell",
+      "command": "scripts/render_diagrams.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "Runs summary",
+      "type": "shell",
+      "command": "uv run --locked python scripts/runs_summary.py ${input:experimentOptional}",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "experiment",
+      "type": "promptString",
+      "description": "Experiment name (lowercase letters, digits, '-', '_')",
+      "default": "hello"
+    },
+    {
+      "id": "experimentOptional",
+      "type": "promptString",
+      "description": "Experiment (empty: all)",
+      "default": ""
+    },
+    {
+      "id": "module",
+      "type": "promptString",
+      "description": "Module to run",
+      "default": "tsmerge.hello"
+    },
+    {
+      "id": "args",
+      "type": "promptString",
+      "description": "Arguments (may be empty)",
+      "default": ""
+    },
+    {
+      "id": "profile",
+      "type": "pickString",
+      "description": "Job profile",
+      "options": ["gpu", "cpu"],
+      "default": "gpu"
+    },
+    {
+      "id": "jobId",
+      "type": "promptString",
+      "description": "Job id (from submit's output or outputs/jobs.log)"
+    },
+    {
+      "id": "jobIdOptional",
+      "type": "promptString",
+      "description": "Job id (empty: your whole queue)",
+      "default": ""
+    },
+    {
+      "id": "pullTarget",
+      "type": "promptString",
+      "description": "Experiment or <experiment>/<run id> (empty: everything)",
+      "default": ""
+    }
+  ]
+}

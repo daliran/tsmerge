@@ -1,0 +1,43 @@
+{
+  // Debug configurations (PD-031). Both run from the working tree, so breakpoints work;
+  // they are quick tries, not recorded runs: outputs go to outputs/scratch/.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug a module",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "${input:module}",
+      "args": "${input:args}",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      // A file inside tsmerge/ imports the package, so the repository root goes on
+      // the import path, as `python -m` does.
+      "name": "Debug current file",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceFolder}" },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ],
+  "inputs": [
+    {
+      "id": "module",
+      "type": "promptString",
+      "description": "Module to debug",
+      "default": "tsmerge.hello"
+    },
+    {
+      "id": "args",
+      "type": "promptString",
+      "description": "Arguments (may be empty)",
+      "default": ""
+    }
+  ]
+}

@@ -26,7 +26,8 @@ pytest_or_none() {
 step "uv.lock up to date" uv lock --check
 step "ruff lint" uv run --locked ruff check .
 step "ruff format" uv run --locked ruff format --check .
-step "shellcheck" shellcheck -x scripts/*.sh scripts/cluster/*.sh scripts/cluster/job.sbatch .githooks/pre-commit .githooks/commit-msg
+# Options (e.g. following sourced files) come from .shellcheckrc, as in the editor.
+step "shellcheck" shellcheck scripts/*.sh scripts/cluster/*.sh scripts/cluster/job.sbatch .githooks/pre-commit .githooks/commit-msg
 step "pytest" pytest_or_none
 step "diagrams rendered" scripts/render_diagrams.sh --check
 

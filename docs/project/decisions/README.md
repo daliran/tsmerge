@@ -110,3 +110,4 @@ What we chose, and why. How it was verified, if it was.
 | [PD-031](PD-031-vs-code.md) | Shared VS Code tasks, debug configurations, extensions and settings | accepted | 2026-11-02 |
 | [PD-032](PD-032-experiment-ids.md) | Experiments are named `e<NNN>-<slug>`, and each has a short doc | accepted | 2026-11-02 |
 | [PD-033](PD-033-training-curves.md) | Training curves go in the run folder (`results/history.jsonl`); no wandb for now | accepted | 2026-11-02 |
+| [PD-034](PD-034-literature.md) | Papers: bibkeys, PDFs kept local, verified distillation notes as the source of truth | accepted | 2026-11-02 |

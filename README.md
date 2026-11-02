@@ -11,6 +11,7 @@ Master's thesis project for the degree in Artificial Intelligence Engineering at
 | understand how the knowledge is organized | [docs/README.md](docs/README.md) |
 | set up your machine and cluster account | [docs/project/setup.md](docs/project/setup.md) |
 | run things locally or on the Unimore cluster | [docs/project/running.md](docs/project/running.md) |
+| find the experiment code | [tsmerge/](tsmerge/README.md) |
 | contribute (decisions, git, checks, commits) | [CONTRIBUTING.md](CONTRIBUTING.md) |
 
 AI agents follow [CLAUDE.md](CLAUDE.md).

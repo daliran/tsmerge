@@ -1,6 +1,6 @@
 # Setup
 
-How to prepare a local machine to work on this repository: base tools, git, SSH (GitHub and the Unimore AImageLab-HPC cluster), Python, the GPU, and optionally Docker for the diagrams. Facts about the cluster are in [cluster.md](cluster.md); daily use in [running.md](running.md).
+How to prepare a local machine to work on this repository: base tools, git, SSH (GitHub and the Unimore AImageLab-HPC cluster), Python, the GPU, optionally Docker for the diagrams, and VS Code. Facts about the cluster are in [cluster.md](cluster.md); daily use in [running.md](running.md).
 
 Everything here works on **native Linux** and on **WSL2 on Windows**. Where the two differ, both are given; the differences are summed up in [Native Linux or WSL2](#native-linux-or-wsl2).
 
@@ -190,7 +190,7 @@ It is safe to rerun: whatever is already unlocked is skipped.
 
 **Why it matters beyond convenience:** the cluster scripts run ssh non-interactively, where nobody can type a password. Without an unlocked key and an open connection they fail with `Permission denied`. Check the loaded keys with `ssh-add -l`, and the cluster connection with `ssh -O check ailb`.
 
-**Optional:** to run the script whenever VS Code opens the repository, add a task with `"runOptions": { "runOn": "folderOpen" }` to `.vscode/tasks.json` (VS Code asks once to allow automatic tasks). It then prompts on every folder open, even when you only read code.
+**From VS Code:** the task *Start session (unlock SSH and the cluster)* runs the same script. To run it whenever VS Code opens the repository, add `"runOptions": { "runOn": "folderOpen" }` to that task in your copy of `.vscode/tasks.json` (VS Code asks once to allow automatic tasks); it then prompts on every folder open, even when you only read code.
 
 ### Check
 
@@ -271,11 +271,13 @@ Clone it over SSH, create the environment and check it:
 git clone git@github.com:<owner>/tsmerge.git
 cd tsmerge
 uv sync
-uv run pytest
+uv run --locked pytest
 uv run python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
+scripts/run_local.sh hello python -m tsmerge.hello
 ```
 
-The last command prints `True` when PyTorch sees the GPU.
+- The `torch` line prints `True` when PyTorch sees the GPU.
+- The last line is a complete recorded run: it should end with `completed (exit code 0)`, and its folder appears in `outputs/runs/hello/` ([running.md](running.md#running-locally)).
 
 - Turn on the repository's git hooks, which run the checks on every commit ([CONTRIBUTING.md](../../CONTRIBUTING.md#git-hooks-the-checks-run-by-themselves)):
 
@@ -285,6 +287,7 @@ The last command prints `True` when PyTorch sees the GPU.
 
 - An existing clone made over HTTPS can switch to SSH: `git remote set-url origin git@github.com:<owner>/tsmerge.git`.
 - **WSL2:** clone into the WSL filesystem (e.g. under `~`), **not** under `/mnt/c` or `/mnt/d`: the Windows drives are much slower for git, uv and rsync. To edit in VS Code on Windows, install the *WSL* extension and run `code .` from the repo in a WSL shell.
+- **VS Code:** set it up as in [step 9](#9-vs-code).
 
 ## 7. The cluster (once per account)
 
@@ -292,7 +295,13 @@ Prepares your account on the Unimore cluster ([cluster.md](cluster.md)) to run t
 
 1. **Personal values:** copy `.env.example` to `.env` (git-ignored) and fill it in: your SSH keys, the Slurm account (`susage` on the cluster lists yours), and your home and work folders on the cluster.
 2. **Open the session:** `scripts/start-session.sh`.
-3. **Prepare the cluster:**
+3. **Install uv on the cluster**, once per account (a few seconds, on the login node; same installer as on your machine, [step 4](#4-python-with-uv)):
+
+   ```bash
+   ssh ailb 'curl -LsSf https://astral.sh/uv/install.sh | sh'
+   ```
+
+4. **Prepare the cluster:**
 
    ```bash
    scripts/cluster/setup_remote.sh
@@ -307,10 +316,10 @@ Prepares your account on the Unimore cluster ([cluster.md](cluster.md)) to run t
    - downloads into a temporary cache on the login node's local disk, deleted at the end, so no cache files pile up in your cluster home ([PD-005](decisions/PD-005-uv-cache-on-the-cluster.md)).
 
    Rerun it whenever `uv.lock` or your uv version changes: jobs refuse to run against an outdated environment.
-4. **Check:** submit the smoke test, as in [running.md](running.md#the-cycle):
+5. **Check:** submit the smoke test, as in [running.md](running.md#the-cycle):
 
    ```bash
-   scripts/cluster/submit.sh hello python scripts/cluster/hello.py
+   scripts/cluster/submit.sh hello python -m tsmerge.hello
    ```
 
 What each script does: [scripts/cluster/README.md](../../scripts/cluster/README.md).
@@ -337,6 +346,47 @@ scripts/render_diagrams.sh --all
 
 The first render downloads the image; later renders take a few seconds per diagram.
 
+## 9. VS Code
+
+The repository's editor settings, tasks and debug configurations are in `.vscode/` ([PD-031](decisions/PD-031-vs-code.md)). They make the editor check code exactly as `scripts/check.sh` and the git hooks do.
+
+### Install the extensions
+
+Open the repository (on WSL2: from a WSL shell, `code .`), open the Extensions view, and type `@recommended`.
+
+| Extension | What it's for | Needed |
+|---|---|---|
+| **Python** (`ms-python.python`) and **Pylance** (installed with it) | the interpreter, tests, code navigation | yes |
+| **Python Debugger** (`ms-python.debugpy`) | the debug configurations | yes |
+| **Ruff** (`charliermarsh.ruff`) | formatting and lint warnings, as in the checks | yes |
+| **ShellCheck** (`timonwong.shellcheck`) | shell-script warnings as you type | when editing `scripts/` |
+| **Markdown Mermaid** (`bierner.markdown-mermaid`) | diagrams in the Markdown preview | when editing diagrams |
+| **WSL** (`ms-vscode-remote.remote-wsl`) | opens the repository inside WSL | on WSL2 |
+| **Remote - SSH** (`ms-vscode-remote.remote-ssh`) | debugging on the cluster ([running.md](running.md#interactive-work-and-debugging-on-the-cluster)) | when needed |
+
+- **WSL2:** extensions must be installed *in WSL*, not only on Windows: click *Install in WSL: <distro>*. Extensions installed only on Windows don't see the repository, and VS Code underlines settings it doesn't know (e.g. `"type": "debugpy"`).
+- **Black** (`ms-python.black-formatter`) isn't needed and is marked unwanted: Ruff is the formatter here. If you have it for other projects, it stays inactive in this repository.
+
+### What is already configured
+
+Nothing to set by hand: `.vscode/settings.json` holds it.
+
+| Setting | Effect |
+|---|---|
+| Interpreter: `.venv/bin/python` | everything uses the project's environment (`uv sync` first) |
+| Ruff from `.venv` (`ruff.importStrategy`) | the same Ruff version as the checks, pinned by `uv.lock`, not the extension's bundled copy |
+| `pyproject.toml` wins (`ruff.configurationPreference`) | personal editor settings can't change the project's rules |
+| Format and sort imports on save | files are already clean when the pre-commit hook checks them |
+| ShellCheck: `/usr/bin/shellcheck` | the same ShellCheck as the checks ([step 1](#1-base-tools)), with the same options from `.shellcheckrc` |
+| pytest in the Testing view, LF line endings | as on the command line, and as in `.gitattributes` |
+
+### Check it
+
+1. **Interpreter:** the status bar (bottom right) shows Python 3.12.16 from `.venv`. If not: *Python: Select Interpreter* → `.venv/bin/python`.
+2. **Ruff:** *View* → *Output* → *Ruff*: the log names the `ruff` inside `.venv`.
+3. **Formatting:** add extra spaces to a line in a `.py` file and save: they disappear.
+4. **Tasks and debugging:** *Terminal* → *Run Task…* → *Run locally (recorded run)*, and *Run and Debug* → *Debug a module*, both with the default `tsmerge.hello` ([running.md](running.md#from-vs-code)).
+
 ## Native Linux or WSL2
 
 | | Native Linux | WSL2 on Windows |
@@ -345,7 +395,7 @@ The first render downloads the image; later renders take a few seconds per diagr
 | Where to clone | anywhere | the WSL filesystem, not `/mnt/c` or `/mnt/d` |
 | NVIDIA driver | Linux driver | Windows driver only |
 | SSH keys and config | `~/.ssh/` | WSL's `~/.ssh/`; keys copied from Windows, not used from `/mnt/c` |
-| Editor | any | VS Code with the WSL extension |
+| Editor | any (VS Code: [step 9](#9-vs-code)) | VS Code with the WSL extension, other extensions installed in WSL |
 | Docker (diagrams only) | Docker Engine | Docker Desktop on Windows, with WSL integration |
 
 ## Troubleshooting

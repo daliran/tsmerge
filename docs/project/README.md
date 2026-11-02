@@ -11,7 +11,7 @@ This folder is only about the machinery. What the research is about will live in
 | [setup.md](setup.md) | One-time setup: your machine (Linux or WSL2: tools, git, SSH, Python with uv, GPU) and your cluster account | once per machine or account |
 | [cluster.md](cluster.md) | Reference facts about the Unimore AImageLab-HPC cluster: access, partitions, GPUs, accounts, storage, rules | when you need a fact |
 | [running.md](running.md) | Daily operation: running locally and on the cluster, debugging, getting results back | every working day |
-| [runs.md](runs.md) | What a run is: concepts, run ids, folder layout, what `run.json` and `config.json` record, statuses, provenance | when reading or analyzing runs |
+| [runs.md](runs.md) | What a run is: concepts, experiment names, run ids, folder layout, what each record holds (`run.json`, `config.json`, metrics, curves), statuses, provenance | when reading or analyzing runs |
 | [diagrams/](diagrams/README.md) | The diagrams shown in these docs: Mermaid sources, rendered images, how to change them | when changing a diagram |
 | [decisions/](decisions/README.md) | Project decisions (`PD-NNN`): template, rules, index | before changing how things work |
 | [questions/](questions/README.md) | Open project questions (`PQ-NNN`): template, rules, index. The goal is zero: answered questions become decisions or docs | when something isn't decided yet |

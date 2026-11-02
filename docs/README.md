@@ -10,12 +10,16 @@ Every experiment answers a question, every result supports or refutes a claim, a
 |---|---|
 | Question | `PQ-NNN` (project), `DQ-NNN` (domain) |
 | Decision | `PD-NNN` (project), `DD-NNN` (domain) |
-| Experiment | to be defined: [PQ-003](project/questions/PQ-003-experiment-ids.md) |
+| Experiment | `eNNN-<slug>`, e.g. `e001-joint-vs-merge` ([PD-032](project/decisions/PD-032-experiment-ids.md)) |
 | Claim | to be defined, with the domain docs |
 | Paper | bibkey |
 
 Knowledge flows one way: sources → literature notes → concepts → questions → experiments → results → claims → thesis. Later layers link to earlier ones and never restate them.
 
 ## Contents
+
+![The repository's folders, what each holds, and where to start reading](project/diagrams/repository-map.png)
+
+*Source: [project/diagrams/repository-map.mmd](project/diagrams/repository-map.mmd)*
 
 - [project/](project/README.md): how the repository works (setup, the Unimore cluster, running), with its decisions and open questions.

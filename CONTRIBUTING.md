@@ -13,7 +13,7 @@ How a change gets into this repository: decisions, git, checks and commit messag
 - People run every git command that changes the repository (`add`, `commit`, `push`, branches). AI agents only read (`git status`, `git diff`, `git log`) and propose commits with the [commit-plan](.claude/skills/commit-plan/SKILL.md) skill: the messages and the exact commands to run.
 - The default branch is `main`.
 - Small steps: each commit has one clear purpose.
-- Never commit `outputs/` (local runs and job records), `.env` (personal values), checkpoints (`*.pt`, `*.pth`, `*.ckpt`) or files over ~5 MB.
+- Never commit `outputs/` (everything generated locally: runs, job records, review reports), `.env` (personal values), checkpoints (`*.pt`, `*.pth`, `*.ckpt`) or files over ~5 MB.
 - No personal data in committed files: personal names, dates or local paths stay in the git-ignored `CLAUDE.local.md`.
 
 ## Checks before committing
@@ -34,6 +34,8 @@ It runs:
 - `uv run --locked pytest`: the tests ("no tests found" passes while there are none).
 
 `--locked` makes every step fail instead of silently rewriting `uv.lock` when it doesn't match `pyproject.toml`.
+
+In VS Code, the shared settings run the same Ruff (the one in `.venv`) with the same rules, formatting and sorting imports on save, so files are already clean when the hook checks them ([PD-031](docs/project/decisions/PD-031-vs-code.md)).
 
 The ruff rules are explicit in `pyproject.toml` (`E, W, F, I, UP, B, SIM, RUF`, line length 88), so a ruff upgrade can't change what is checked ([PD-012](docs/project/decisions/PD-012-code-checks.md)). `ruff` and `pytest` come with the project's environment (`uv sync`); `shellcheck` is a system package ([setup.md](docs/project/setup.md#1-base-tools)).
 
@@ -69,4 +71,4 @@ The full rules and examples are in the [commit-plan](.claude/skills/commit-plan/
 
 ## In-depth reviews
 
-For a review from several expert viewpoints (Python, ML engineering, HPC/Slurm, reproducibility, research), run `/expert-review` in Claude Code. It writes a verified report to `artifacts/expert-reviews/` (git-ignored) and never touches the cluster. See [.claude/README.md](.claude/README.md).
+For a review from several expert viewpoints (Python, ML engineering, HPC/Slurm, reproducibility, research), run `/expert-review` in Claude Code. It writes a verified report to `outputs/expert-reviews/` (git-ignored) and never touches the cluster. See [.claude/README.md](.claude/README.md).

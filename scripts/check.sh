@@ -15,13 +15,17 @@ step() {
 
 # pytest exits with 5 when it finds no tests: not a failure while there are none.
 pytest_or_none() {
-  uv run pytest -q
+  uv run --locked pytest -q
   local status=$?
   [[ $status -eq 0 || $status -eq 5 ]]
 }
 
-step "ruff lint" uv run ruff check .
-step "ruff format" uv run ruff format --check .
+# uv.lock must match pyproject.toml. Plain `uv run` would silently rewrite uv.lock when they
+# differ, so this check fails loudly instead, and every other step runs with --locked,
+# which never changes the lockfile.
+step "uv.lock up to date" uv lock --check
+step "ruff lint" uv run --locked ruff check .
+step "ruff format" uv run --locked ruff format --check .
 step "shellcheck" shellcheck -x scripts/*.sh scripts/cluster/*.sh scripts/cluster/job.sbatch .githooks/pre-commit .githooks/commit-msg
 step "pytest" pytest_or_none
 

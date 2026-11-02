@@ -29,3 +29,14 @@ torch = { index = "pytorch-cu126" }
 name = "pytorch-cu126"
 url = "https://download.pytorch.org/whl/cu126"
 explicit = true
+
+[tool.pytest.ini_options]
+# Tests live in tests/ and import nothing from the repository: they run scripts as
+# subprocesses, the way they run for real.
+testpaths = ["tests"]
+
+[tool.ruff.lint]
+# An explicit rule set, so a ruff upgrade can't change what is checked (PD-012):
+# E/W pycodestyle errors and warnings, F pyflakes, I import order, UP modern syntax,
+# B likely bugs, SIM simplifications, RUF ruff's own rules. Line length: ruff's default (88).
+select = ["E", "W", "F", "I", "UP", "B", "SIM", "RUF"]

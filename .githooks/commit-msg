@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Rejects a commit message whose subject doesn't follow Conventional Commits
-# (docs/project/workflow.md#commit-messages). Skip once: git commit --no-verify
+# (CONTRIBUTING.md#commit-messages). Skip once: git commit --no-verify
 set -euo pipefail
 
 # The subject is the first line that is neither empty nor a comment.

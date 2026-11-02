@@ -12,6 +12,7 @@ This folder is only about the machinery. What the research is about will live in
 | [cluster.md](cluster.md) | Reference facts about the Unimore AImageLab-HPC cluster: access, partitions, GPUs, accounts, storage, rules | when you need a fact |
 | [running.md](running.md) | Daily operation: running locally and on the cluster, debugging, getting results back | every working day |
 | [runs.md](runs.md) | What a run is: concepts, run ids, folder layout, what `run.json` and `config.json` record, statuses, provenance | when reading or analyzing runs |
+| [diagrams/](diagrams/README.md) | The diagrams shown in these docs: Mermaid sources, rendered images, how to change them | when changing a diagram |
 | [decisions/](decisions/README.md) | Project decisions (`PD-NNN`): template, rules, index | before changing how things work |
 | [questions/](questions/README.md) | Open project questions (`PQ-NNN`): template, rules, index. The goal is zero: answered questions become decisions or docs | when something isn't decided yet |
 
@@ -22,5 +23,4 @@ How to change the repository (git, checks, commit messages) is in the root [CONT
 Written when first needed:
 
 - **conventions.md:** code style, naming, config files, tests and their markers.
-- **results-format.md:** what a run folder holds; what goes into `results/`.
 - **learning-log.md:** one entry per implementation step: concept, code, gotchas.

@@ -131,6 +131,7 @@ The A40, L40S and RTX PRO 6000 nodes are also in `boost_usr_prod`. The login nod
 | node-local `/tmp` | per-job scratch | varies | cleared at job end |
 
 - Members of a project use `/work/<project account>/<username>`.
+- What this project keeps where, and which script moves it: [running.md](running.md#the-model-local-first).
 - There are no `$HOME` or `$WORK` variables for these: use absolute paths.
 - Check quotas with `squota`. Don't run `du` on `/work`.
 - Prefer a few large files (tar, HDF5, …), and at most about 10,000 files per folder.

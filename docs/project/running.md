@@ -15,15 +15,11 @@ How to run things day to day: on your machine, and on the Unimore cluster.
 - Each cluster run gets a **frozen copy** of the code it was submitted with, so you can keep editing, or submit other versions, while it waits in the queue.
 - Results come back to your machine with `pull.sh`. Cluster storage is not backed up, and is deleted when access ends ([cluster.md](cluster.md#storage)).
 
-```
-your machine                                  cluster
-────────────                                  ───────
-working tree ──── submit.sh ────────────────▶ /work/…/runs/<experiment>/<run id>/code/  (frozen copy)
-                                              /homes/…/tsmerge/code/   (mirror of the latest submit)
-                                              /homes/…/tsmerge/venv/   (environment, from uv.lock)
-outputs/runs/<experiment>/<run id>/ ◀── pull.sh ── /work/…/runs/<experiment>/<run id>/
-outputs/jobs.log   one line per submitted job: job id, run id, experiment, date, command
-```
+![Your machine and the cluster: where code, environments, runs and data live, and which script moves them](diagrams/machines-and-storage.png)
+
+*Source: [diagrams/machines-and-storage.mmd](diagrams/machines-and-storage.mmd)*
+
+- `outputs/jobs.log` on your machine gets one line per submitted job: job id, run id, experiment, date, command.
 
 The run folder layout, and what each run records: [runs.md](runs.md).
 
@@ -82,6 +78,10 @@ rsync -az --partial data/<dataset>/ ailb:/work/<project account>/<username>/tsme
 - **Every Slurm option** (account, partition, GPUs, time limit, …) is preset: you pass only the experiment name and the command. Defaults and how to override them: [scripts/cluster/README.md](../../scripts/cluster/README.md#commands).
 
 ### The cycle
+
+![One cluster run, from submit.sh to the pulled results](diagrams/cluster-run.png)
+
+*Source: [diagrams/cluster-run.mmd](diagrams/cluster-run.mmd)*
 
 ```bash
 scripts/cluster/submit.sh hello python scripts/cluster/hello.py

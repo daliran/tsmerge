@@ -3,6 +3,8 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
+- **History:**
+  - 2026-11-02: `run.json` gains `launcher` (`cluster` or `local`) and is also written by `run_local.sh` ([PD-029](PD-029-local-runs.md)); `config.json` is written with the helper in `tsmerge/run.py` ([PD-030](PD-030-experiment-code.md)).
 
 ## Problem
 
@@ -45,7 +47,7 @@ Option A.
 ## Consequences
 
 - Results are compared by reading files, never by parsing commands or folder names.
-- The code that writes `config.json` comes with the first experiment; until then, only `run.json` exists.
+- `config.json` is written with `run.write_config()` ([tsmerge/run.py](../../../tsmerge/run.py)), as `tsmerge/hello.py` shows.
 - Datasets come from `DATA_DIR` ([PD-020](PD-020-dataset-location.md)); `config.json` records which ones and their checksums.
 - `run.json` also lists the earlier runs a run reads, in `inputs` ([PD-021](PD-021-runs-and-their-inputs.md)).
 

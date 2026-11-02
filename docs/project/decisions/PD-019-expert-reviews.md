@@ -3,6 +3,8 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
+- **History:**
+  - 2026-11-02: reports moved from `artifacts/expert-reviews/` to `outputs/expert-reviews/`: in an ML project "artifacts" suggests model files, and `outputs/` already holds everything generated locally.
 
 ## Problem
 
@@ -33,7 +35,7 @@ Option A, as the `/expert-review` skill ([.claude/README.md](../../../.claude/RE
 - each reviewer works independently and must cite `path:line` with a quoted line;
 - scripts check every citation and the repository's hygiene (personal data, secrets, links, ids, US English);
 - one aggregator verifies every finding against the files, merges duplicates, and ranks by verified impact, never by how many roles raised a point;
-- the report goes to `artifacts/expert-reviews/` (git-ignored);
+- the report goes to `outputs/expert-reviews/` (git-ignored);
 - **launched manually only** (`/expert-review`): it starts about 6 agents;
 - **read-only, never the cluster:** checks that need the cluster are listed as proposed checks, for the user to approve ([PD-011](PD-011-expert-review-guard.md));
 - after a review, its open points become questions and its solved points become decisions or docs ([PD-016](PD-016-project-docs.md)).

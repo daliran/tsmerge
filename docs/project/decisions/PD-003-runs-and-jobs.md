@@ -1,8 +1,11 @@
 # PD-003 — Experiments, runs and jobs: one run per job, one folder per run
 
-- **Status:** proposed
+- **Status:** accepted
 - **Date:** 2026-11-01
-- **Decided by:** the author (to be accepted once the run-related questions are settled)
+- **Decided by:** the author
+- **History:**
+  - 2026-11-01: proposed.
+  - 2026-11-02: accepted, once the run-related questions were settled; the same layout now also holds local runs ([PD-029](PD-029-local-runs.md)), and the log is `output.log` everywhere.
 
 ## Problem
 
@@ -37,7 +40,7 @@ Option A.
 
 ### Concepts
 
-- **Experiment:** a named study (lowercase letters, digits, `-`, `_`). It groups runs. How experiments get ids and link to research questions is open: [PQ-003](../questions/PQ-003-experiment-ids.md).
+- **Experiment:** a named study (lowercase letters, digits, `-`, `_`). It groups runs. Experiment names and ids: [PD-032](PD-032-experiment-ids.md).
 - **Run:** one execution of one configuration, one seed included.
 - **Job:** one Slurm submission. One job runs exactly one run.
 - **Sweep:** a set of runs, each still one job (or one task of a Slurm job array), grouped by a sweep id ([PD-009](PD-009-run-records.md)).
@@ -46,7 +49,7 @@ Option A.
 
 `<YYYYMMDD-HHMMSS>-<4 hex>`, e.g. `20261102-141503-a3f9`.
 
-- Generated locally at submit time, never from the Slurm job id.
+- Generated on your machine when the run is launched, never from the Slurm job id.
 - The same id names the run folder, the line in `outputs/jobs.log`, and the wandb run if wandb is added later.
 - A run folder is never reused ([PD-010](PD-010-safe-submissions.md)).
 
@@ -58,9 +61,10 @@ The same locally and on the cluster:
 <runs root>/<experiment>/<run id>/
 ├─ run.json      how the run was launched and how it went (PD-009, PD-006)
 ├─ config.json   what the run computed with (PD-009)
-├─ code/         frozen copy of the code this run used (cluster runs only; not pulled)
-├─ provenance/   uncommitted changes: patch.diff, git-status.txt (PD-007; pulled)
-├─ slurm.out     the job's log (cluster runs only)
+├─ code/         frozen copy of the code the run executes (kept on the cluster, not pulled;
+│                deleted at the end of local runs, PD-029)
+├─ provenance/   uncommitted changes: patch.diff, git-status.txt (PD-007)
+├─ output.log    everything the command printed
 ├─ results/      small result files (json, csv)
 ├─ checkpoints/  model weights (pulled only on request)
 └─ wandb/        reserved for wandb's local files, if wandb is added
@@ -82,7 +86,7 @@ The same locally and on the cluster:
 ## Consequences
 
 - How runs end, what they record, how they keep their provenance and how submissions stay safe are separate decisions: [PD-006](PD-006-run-endings.md), [PD-007](PD-007-run-provenance.md), [PD-009](PD-009-run-records.md), [PD-010](PD-010-safe-submissions.md).
-- wandb is not used for now. If it's added, it plugs in without changing the layout: project `tsmerge`, group = experiment, run id = our run id, files in `wandb/`.
+- wandb is not used for now; curves go in `results/history.jsonl` ([PD-033](PD-033-training-curves.md)). If it's added, it plugs in without changing the layout: project `tsmerge`, group = experiment, run id = our run id, files in `wandb/`.
 - Personal values (account, user, paths) come from the local `.env` ([PD-014](PD-014-personal-values.md)).
 
 ## Revisit if

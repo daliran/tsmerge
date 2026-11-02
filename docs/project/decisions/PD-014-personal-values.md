@@ -3,6 +3,8 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
+- **History:**
+  - 2026-11-02: `DATA_DIR`, optional, joined the personal values: where your datasets live locally (PD-020).
 
 ## Problem
 
@@ -24,7 +26,7 @@
 
 Option A:
 
-- **`.env`** (git-ignored): personal values only: `SSH_KEYS`, `CLUSTER_HOST`, `CLUSTER_ACCOUNT`, `CLUSTER_HOME_DIR`, `CLUSTER_WORK_DIR`, `PRIVATE_PATTERNS`;
+- **`.env`** (git-ignored): personal values only: `SSH_KEYS`, `CLUSTER_HOST`, `CLUSTER_ACCOUNT`, `CLUSTER_HOME_DIR`, `CLUSTER_WORK_DIR`, `PRIVATE_PATTERNS`, and optionally `DATA_DIR` ([PD-020](PD-020-dataset-location.md));
 - **[.env.example](../../../.env.example)** (committed): the same keys with placeholders, as the template;
 - **project settings are never in `.env`:** they live in committed files, e.g. [defaults.sh](../../../scripts/cluster/defaults.sh) ([PD-013](PD-013-default-job-resources.md)).
 

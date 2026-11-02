@@ -10,6 +10,10 @@ Research decisions (methods, datasets, metrics) belong to the domain area. They 
 
 ## Rules
 
+![How a question becomes a decision, and how a decision changes over time](../diagrams/questions-and-decisions.png)
+
+*Source: [../diagrams/questions-and-decisions.mmd](../diagrams/questions-and-decisions.mmd)*
+
 - **One file per decision:** `PD-NNN-short-slug.md`, e.g. `PD-001-python-and-pytorch.md`.
 - **Stable ids:**
   - an id and its file name never change;
@@ -75,7 +79,7 @@ What we chose, and why. How it was verified, if it was.
 |---|---|---|---|
 | [PD-001](PD-001-python-and-pytorch.md) | Python 3.12.16 and PyTorch 2.14.1 with CUDA 12.6, managed by uv everywhere | accepted | 2026-11-01 |
 | [PD-002](PD-002-cluster-partition.md) | Cluster partitions: `all_usr_prod` for GPU work, `all_serial` for light work, never `boost_usr_prod` | accepted | 2026-11-01 |
-| [PD-003](PD-003-runs-and-jobs.md) | Experiments, runs and jobs: one run per job, one folder per run | proposed | 2026-11-01 |
+| [PD-003](PD-003-runs-and-jobs.md) | Experiments, runs and jobs: one run per job, one folder per run | accepted | 2026-11-01 |
 | [PD-004](PD-004-gpu-allow-list.md) | GPU models: a committed allow-list, checked at submit time and in the job | accepted | 2026-11-01 |
 | [PD-005](PD-005-uv-cache-on-the-cluster.md) | On the cluster, uv's cache is temporary, on the login node's local disk | accepted | 2026-11-01 |
 | [PD-006](PD-006-run-endings.md) | Every run records how it ended | accepted | 2026-11-01 |
@@ -101,3 +105,8 @@ What we chose, and why. How it was verified, if it was.
 | [PD-026](PD-026-results-format.md) | Every run writes its metrics to `results/metrics.json`, in one fixed format | accepted | 2026-11-02 |
 | [PD-027](PD-027-gpu-pool.md) | Runs may use every allowed GPU; numerics are made explicit, not left to the hardware | accepted | 2026-11-02 |
 | [PD-028](PD-028-diagrams.md) | Diagrams: Mermaid sources, committed PNG images, rendered with Docker | accepted | 2026-11-02 |
+| [PD-029](PD-029-local-runs.md) | Local runs are recorded like cluster runs, from a frozen copy of the code | accepted | 2026-11-02 |
+| [PD-030](PD-030-experiment-code.md) | Experiment code in a `tsmerge/` package, run as modules, not installed; a shared run helper | accepted | 2026-11-02 |
+| [PD-031](PD-031-vs-code.md) | Shared VS Code tasks, debug configurations, extensions and settings | accepted | 2026-11-02 |
+| [PD-032](PD-032-experiment-ids.md) | Experiments are named `e<NNN>-<slug>`, and each has a short doc | accepted | 2026-11-02 |
+| [PD-033](PD-033-training-curves.md) | Training curves go in the run folder (`results/history.jsonl`); no wandb for now | accepted | 2026-11-02 |

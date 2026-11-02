@@ -3,6 +3,8 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
+- **History:**
+  - 2026-11-02: the job's log renamed from `slurm.out` to `output.log`, the same name as local runs ([PD-029](PD-029-local-runs.md)); local runs record their endings too (`completed`, `failed`, `canceled`).
 
 ## Problem
 
@@ -34,7 +36,7 @@ Option A ([job.sbatch](../../../scripts/cluster/job.sbatch)):
 - the signal handler asks Slurm for the time left: 3 minutes or less → `timeout`, more → `canceled`, no answer → `stopped`; it stops the command and exits;
 - an exit handler writes the end record in every case: status, exit code, end time;
 - statuses: `completed`, `failed`, `timeout`, `canceled`, `stopped` (meanings in [runs.md](../runs.md#how-a-run-ended-status));
-- jobs run Python unbuffered (`PYTHONUNBUFFERED=1`), so `slurm.out` is complete.
+- jobs run Python unbuffered (`PYTHONUNBUFFERED=1`), so `output.log` is complete.
 
 **Verified:** locally, six endings simulated (success, failure, timeout, cancel, unknown, environment mismatch); on the cluster, a 4-minute job was stopped at 2 minutes and recorded `timeout` (2026-11-01).
 

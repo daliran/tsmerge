@@ -4,6 +4,8 @@
 - **Date:** 2026-11-02
 - **Decided by:** the author
 - **Answers:** question PQ-009 (opened 2026-11-01, raised by the first expert review, item L25)
+- **History:**
+  - 2026-11-02: values during training (curves) get their own file, `results/history.jsonl` ([PD-033](PD-033-training-curves.md)), as foreseen below; `metrics.json` keeps the final values, written with `run.write_metrics()`.
 
 ## Problem
 

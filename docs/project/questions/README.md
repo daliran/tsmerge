@@ -59,6 +59,8 @@ By id.
 
 | Id | Question | Status | Opened |
 |---|---|---|---|
-| [PQ-003](PQ-003-experiment-ids.md) | How are experiments identified, and linked to the research questions they answer? | open | 2026-11-01 |
+| [PQ-012](PQ-012-home-file-limit.md) | Does the cluster's `/homes` limit the number of files? | open | 2026-11-02 |
+| [PQ-013](PQ-013-p100-driver.md) | Can the P100 GPUs on `all_serial` run this project's PyTorch? | open | 2026-11-02 |
+| [PQ-014](PQ-014-compute-node-internet.md) | Can the cluster's compute nodes reach the internet? | open | 2026-11-02 |
 
-**Highest id used:** PQ-010. The next question takes the number after it, even if earlier questions have been closed and deleted.
+**Highest id used:** PQ-014. The next question takes the number after it, even if earlier questions have been closed and deleted.

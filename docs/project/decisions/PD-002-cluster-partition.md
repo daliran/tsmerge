@@ -54,7 +54,7 @@ Option C.
   - Blackwell is always excluded ([PD-001](PD-001-python-and-pytorch.md));
   - L40S and A40 stay allowed, as part of a mixed list ([PD-027](PD-027-gpu-pool.md)).
 - **The memory rule is real** (found 2026-11-02, not on the documentation site): on `all_usr_prod`, a job whose GPU list asks for more than 24 GB of GPU memory is refused and sent to `boost_usr_prod`. This confirms the author's understanding of the internal rules behind this decision.
-- **Light GPU work on `all_serial` must request the P100** (`--constraint=gpu_P100_16G`). The P100 node's driver is not verified yet.
+- **Light GPU work on `all_serial` must request the P100** (`--constraint=gpu_P100_16G`). The P100 node's driver is not verified yet ([PQ-013](../questions/PQ-013-p100-driver.md)).
 - **Personal values are not part of this decision.** The Slurm account and personal paths stay out of committed files.
 
 ## Revisit if

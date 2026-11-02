@@ -3,6 +3,9 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
+- **History:**
+  - 2026-11-02: the guard missed `logs.sh` (it connects to the cluster); it now blocks it, and the new `run_local.sh` and `render_diagrams.sh`, which write files.
+  - 2026-11-02: the review folder, where the guard allows writes and keeps its log, moved to `outputs/expert-reviews/` (see PD-019).
 
 ## Problem
 
@@ -32,13 +35,13 @@ The `/expert-review` skill ([.claude/README.md](../../../.claude/README.md)) run
 Option A ([expert_review_guard.py](../../../.claude/hooks/expert_review_guard.py)):
 
 - registered in `.claude/settings.json`, run with the project environment's Python (uv's 3.12.16, the fastest launcher); for any caller other than `expert-reviewer` and `expert-review-aggregator`, it allows everything;
-- it checks **what each part of a command runs**, not every word: it blocks `ssh`, `rsync`, `scp`, Slurm commands and any cluster script under any path; it allows reading and checking them (`grep`, `cat`, `shellcheck`, `bash -n`);
-- it blocks Write/Edit calls outside `artifacts/expert-reviews/`;
+- it checks **what each part of a command runs**, not every word: it blocks `ssh`, `rsync`, `scp`, Slurm commands, any cluster script, and the scripts that write outside the review folder (`run_local.sh`, `render_diagrams.sh`), under any path; it allows reading and checking them (`grep`, `cat`, `shellcheck`, `bash -n`);
+- it blocks Write/Edit calls outside `outputs/expert-reviews/`;
 - it fails closed: unreadable input is blocked;
-- every call it checks is logged to `artifacts/expert-reviews/guard.log` (git-ignored): an audit trail, and proof it runs;
+- every call it checks is logged to `outputs/expert-reviews/guard.log` (git-ignored): an audit trail, and proof it runs;
 - the aggregator returns the report as text; `save_report.py` writes it unchanged.
 
-**Verified:** 25 tests (`tests/test_expert_review_guard.py`); live, a review agent's call appeared in the log (2026-11-01).
+**Verified:** 25 tests at the time (`tests/test_expert_review_guard.py`, 28 since the 2026-11-02 additions); live, a review agent's call appeared in the log (2026-11-01).
 
 ## Consequences
 

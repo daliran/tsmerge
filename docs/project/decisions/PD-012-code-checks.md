@@ -3,6 +3,8 @@
 - **Status:** accepted
 - **Date:** 2026-11-02
 - **Decided by:** the author
+- **History:**
+  - 2026-11-02: `check.sh` also checks that the diagrams' images match their sources (PD-028); ShellCheck's options moved to `.shellcheckrc`, shared with the VS Code extension (PD-031).
 
 ## Problem
 
@@ -30,6 +32,7 @@ Option A:
   - ruff lint and format, with `uv run --locked`, which never rewrites the lockfile;
   - shellcheck on every shell script and hook (settings in `.shellcheckrc`);
   - pytest (`tests/`; "no tests found" passes);
+  - the diagrams' images match their sources ([PD-028](PD-028-diagrams.md));
 - **[.githooks/](../../../.githooks/README.md)**: `pre-commit` runs `check.sh`; `commit-msg` enforces Conventional Commits; enabled once per clone with `git config core.hooksPath .githooks`;
 - **ruff rules are explicit** in `pyproject.toml`: `E, W, F, I, UP, B, SIM, RUF`, line length 88 (ruff's default);
 - tests run scripts the way they really run (as subprocesses, or loaded from their file).

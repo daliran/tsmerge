@@ -34,7 +34,7 @@ Option A:
 
 - Programs read datasets from `DATA_DIR`, never from a path inside the code.
 - Large uploads go through the login node, as resumable copies ([PD-024](PD-024-large-transfers.md)).
-- Documented in [runs.md](../runs.md#what-a-job-provides) and [running.md](../running.md#datasets).
+- Documented in [runs.md](../runs.md#what-a-run-provides) and [running.md](../running.md#datasets).
 
 ## Revisit if
 

@@ -1,4 +1,5 @@
-"""Summarize the pulled runs: status, duration, share of the time limit, estimated cost.
+"""Summarize the runs in outputs/runs/ (local and pulled): status, duration, share of
+the time limit, estimated cost.
 
 usage: uv run --locked python scripts/runs_summary.py [<experiment>]
 
@@ -7,7 +8,7 @@ limits (how close runs come to theirs) and, secondarily, for the budget (PD-023)
 
 The cost estimates the cluster's billing (docs/project/cluster.md): standard hours =
 max(CPUs x 0.39, memory GB x 0.06, GPUs x 6.0) x elapsed hours. Memory defaults to
-3 GB per CPU, so CPUs or GPUs decide. `all_serial` is free.
+3 GB per CPU, so CPUs or GPUs decide. `all_serial` and local runs are free.
 """
 
 import json
@@ -40,7 +41,7 @@ def elapsed_hours(run: dict) -> float | None:
 
 def standard_hours(run: dict, elapsed: float) -> float:
     slurm = run.get("slurm") or {}
-    if slurm.get("partition") == "all_serial":
+    if run.get("launcher") == "local" or slurm.get("partition") == "all_serial":
         return 0.0
     cpus = int(slurm.get("cpus_per_task") or 0)
     # Runs recorded before the "slurm" section existed: count the GPUs the run saw.

@@ -5,8 +5,9 @@ Operational scripts, run from the repository root on your machine (a WSL shell o
 | Script | What it does |
 |---|---|
 | [start-session.sh](start-session.sh) | Unlocks everything a working session needs, asking each password once |
+| [run_local.sh](run_local.sh) | Runs a command as a recorded local run: run folder, `run.json`, provenance and `output.log` in `outputs/runs/` ([running.md](../docs/project/running.md#running-locally)) |
 | [check.sh](check.sh) | Runs every check a commit must pass (also run by the pre-commit hook) |
-| [runs_summary.py](runs_summary.py) | Lists the pulled runs: status, duration, share of the time limit, estimated cost (`uv run --locked python scripts/runs_summary.py`) |
+| [runs_summary.py](runs_summary.py) | Lists the runs in `outputs/runs/`, local and pulled: status, duration, share of the time limit, estimated cost (`uv run --locked python scripts/runs_summary.py`) |
 | [render_diagrams.sh](render_diagrams.sh) | Renders the Mermaid diagrams of `docs/project/diagrams/` to PNG with Docker; `--check` only checks they are up to date ([diagrams README](../docs/project/diagrams/README.md)) |
 | [cluster/](cluster/README.md) | Runs experiments on the Unimore AImageLab-HPC cluster |
 

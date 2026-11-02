@@ -1,6 +1,17 @@
 # --- Local outputs: runs, logs, job records -----------------------------------
 outputs/
 
+# --- Generated reports (expert reviews), never documentation ----------------------
+artifacts/
+
+# --- Datasets (PD-020): the local data folder, and data files anywhere -------------
+data/
+*.parquet
+*.npz
+*.h5
+*.hdf5
+*.safetensors
+
 # --- Model checkpoints --------------------------------------------------------
 *.pt
 *.pth

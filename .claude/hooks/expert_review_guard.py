@@ -5,9 +5,10 @@ Registered in .claude/settings.json for every tool call, it acts only when the c
 an expert-review subagent (the `agent_type` field of the hook input); for anyone else it
 allows everything. For those subagents it blocks:
 - shell commands that run a cluster or network program (ssh, rsync, Slurm, ...) or a
-  cluster script (scripts/cluster/*.sh, scripts/start-session.sh, job.sbatch), under
-  any path or through an interpreter;
-- Write/Edit tool calls outside artifacts/expert-reviews/.
+  cluster script (scripts/cluster/*.sh, scripts/start-session.sh, job.sbatch), or a
+  script that writes outside the review folder (scripts/run_local.sh,
+  scripts/render_diagrams.sh), under any path or through an interpreter;
+- Write/Edit tool calls outside outputs/expert-reviews/.
 
 Reading or checking those scripts (grep, cat, shellcheck, bash -n) stays allowed: only
 what a command *runs* is checked, not every word in it. Shell redirections (`> file`)
@@ -16,7 +17,7 @@ the input can't be parsed, the hook blocks (it fails closed).
 
 Every call it checks for those subagents is logged, allowed or blocked, one line each,
 in
-artifacts/expert-reviews/guard.log: an audit trail, and proof that the hook runs.
+outputs/expert-reviews/guard.log: an audit trail, and proof that the hook runs.
 """
 
 import json
@@ -28,10 +29,10 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 GUARDED_AGENTS = {"expert-reviewer", "expert-review-aggregator"}
-ALLOWED_WRITE_ROOT = "artifacts/expert-reviews/"
+ALLOWED_WRITE_ROOT = "outputs/expert-reviews/"
 # One line per checked call (git-ignored): EXPERT_REVIEW_GUARD_LOG overrides it, for
 # tests.
-GUARD_LOG = "artifacts/expert-reviews/guard.log"
+GUARD_LOG = "outputs/expert-reviews/guard.log"
 
 NETWORK = {"ssh", "scp", "sftp", "rsync"}
 SLURM = {
@@ -58,9 +59,14 @@ CLUSTER_SCRIPTS = {
     "setup_remote.sh",
     "pull.sh",
     "status.sh",
+    "logs.sh",
     "common.sh",
     "job.sbatch",
     "start-session.sh",
+    # Not cluster scripts, but they write outside the review folder (run folders,
+    # rendered images) or start Docker: just as off-limits for a read-only review.
+    "run_local.sh",
+    "render_diagrams.sh",
 }
 # Programs that run another program given as an argument.
 LAUNCHERS = {

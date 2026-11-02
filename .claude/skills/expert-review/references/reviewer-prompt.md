@@ -32,7 +32,7 @@ An accepted decision is a deliberate choice: don't report it as a problem unless
 
 - **You may** read any file, search the repository, and run **local, read-only checks** on it: `scripts/check.sh`, `bash -n`, `shellcheck`, `uv run --frozen ruff check`, `uv run --frozen python -c "…"` to inspect something, `git log` and other read-only git commands.
 - **You may** read official documentation on the web to verify a fact (Python, PyTorch, Slurm, uv, the cluster's documentation site).
-- **You must never contact the cluster:** no `ssh`, `scp`, `rsync`, `sbatch`, `srun`, `squeue` or other Slurm command, and never run anything in `scripts/cluster/` or `scripts/start-session.sh` (reading or checking them is fine). If a point can only be checked on the cluster, write it under **Proposed checks**, with the exact command; a human decides whether to run it.
+- **You must never contact the cluster:** no `ssh`, `scp`, `rsync`, `sbatch`, `srun`, `squeue` or other Slurm command, and never run anything in `scripts/cluster/` or `scripts/start-session.sh`, nor `scripts/run_local.sh` or `scripts/render_diagrams.sh`, which write files (reading or checking them is fine). If a point can only be checked on the cluster, write it under **Proposed checks**, with the exact command; a human decides whether to run it.
 - **You must never change the repository:** no edits, no new files, no git writes, no `uv sync`, `uv lock` or installs, no training or long runs. The only file you write is your findings file: `{output_path}`.
 - **Never guess.** Report what you can show with a quote. When you suspect something you can't show, say so with `Confidence: Low`, or ask it as a question in the suggestion.
 

@@ -1,8 +1,5 @@
-# --- Local outputs: runs, logs, job records -----------------------------------
+# --- Everything generated locally: runs, quick tries, job records, review reports -----
 outputs/
-
-# --- Generated reports (expert reviews), never documentation ----------------------
-artifacts/
 
 # --- Datasets (PD-020): the local data folder, and data files anywhere -------------
 data/

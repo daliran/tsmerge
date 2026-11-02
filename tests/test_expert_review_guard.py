@@ -67,6 +67,9 @@ def write(path: str, agent: str | None = REVIEWER) -> dict:
         "echo ok; ssh ailb hostname",
         "echo $(ssh ailb hostname)",
         "timeout 10 ssh ailb true",
+        "scripts/cluster/logs.sh 123",
+        "scripts/run_local.sh hello python -m tsmerge.hello",
+        "scripts/render_diagrams.sh --all",
     ],
 )
 def test_blocks_cluster_commands_for_reviewers(command):
@@ -99,7 +102,7 @@ def test_aggregator_is_guarded_too():
 
 
 def test_writes_only_under_the_review_folder():
-    assert run_guard(write(str(REPO / "artifacts/expert-reviews/x/roles/a.md"))) == 0
+    assert run_guard(write(str(REPO / "outputs/expert-reviews/x/roles/a.md"))) == 0
     assert run_guard(write(str(REPO / "scripts/check.sh"))) == 2
     assert run_guard(write("/tmp/elsewhere.md")) == 2
 

@@ -99,14 +99,14 @@ fi
 
 export VIRTUAL_ENV="$venv"
 export PATH="$venv/bin:$PATH"
-# What the command can rely on (docs/project/runs.md#what-a-job-provides):
+# What the command can rely on (docs/project/runs.md#what-a-run-provides):
 #   RUN_DIR    this run's folder: write results/ and checkpoints/ here
 #   DATA_DIR   the datasets folder (PD-020)
 #   RUNS_ROOT  the root of all runs, to read other runs' outputs listed in "inputs" (PD-021)
 export RUN_DIR="$run_dir"
 export DATA_DIR="$work_dir/data"
 export RUNS_ROOT="$work_dir/runs"
-# Python buffers output written to a file: unbuffered, slurm.out shows progress as it
+# Python buffers output written to a file: unbuffered, output.log shows progress as it
 # happens, and the last lines aren't lost when the job is stopped.
 export PYTHONUNBUFFERED=1
 cd "$run_dir/code"

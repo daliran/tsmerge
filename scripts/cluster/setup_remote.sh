@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Prepare the cluster: create the folders and build the Python environment from uv.lock.
-# Run once, and again whenever uv.lock changes.
+# Run once, and again whenever uv.lock or your uv version changes.
 # usage: scripts/cluster/setup_remote.sh
 # shellcheck source=common.sh
 source "$(dirname "$0")/common.sh"

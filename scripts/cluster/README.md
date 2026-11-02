@@ -1,6 +1,6 @@
 # Cluster scripts
 
-Scripts that run experiments on the Unimore AImageLab-HPC Slurm cluster, from your machine. The cluster's facts and rules are in [cluster.md](../../docs/project/cluster.md); how we work with it, in [running.md](../../docs/project/running.md). The layout of runs is [PD-003](../../docs/project/decisions/PD-003-runs-and-jobs.md).
+Scripts that run experiments on the Unimore AImageLab-HPC Slurm cluster, from your machine. Local recorded runs use `scripts/run_local.sh` instead. The cluster's facts and rules are in [cluster.md](../../docs/project/cluster.md); how we work with it, in [running.md](../../docs/project/running.md). What a run is and records: [runs.md](../../docs/project/runs.md).
 
 **Before using them:**
 
@@ -20,7 +20,7 @@ Scripts that run experiments on the Unimore AImageLab-HPC Slurm cluster, from yo
 Example:
 
 ```bash
-scripts/cluster/submit.sh hello python scripts/cluster/hello.py
+scripts/cluster/submit.sh hello python -m tsmerge.hello
 scripts/cluster/status.sh <job id>
 scripts/cluster/pull.sh hello
 ```
@@ -46,7 +46,7 @@ scripts/cluster/pull.sh hello
 | `--signal` | warn the job script 2 minutes before the time limit | `defaults.sh` |
 | memory | not set: the cluster's default (3 GB per CPU, 18 GB) | — |
 | `--job-name` | the experiment name | `submit.sh` |
-| `--output` | `<run folder>/slurm.out` | `submit.sh` |
+| `--output` | `<run folder>/output.log`, the same name as for local runs | `submit.sh` |
 
 ## Files, and why each exists
 
@@ -57,9 +57,8 @@ scripts/cluster/pull.sh hello
 | `setup_remote.sh` | Folders, the cluster's uv version, the environment (built as a Slurm step on `all_serial`, with a temporary cache on the login node's local disk; the lock hash is removed during the build) | The cluster runs the same Python, PyTorch and uv as your machine (PD-001); no cache files pile up in the home, which seems to limit the number of files (PD-005) |
 | `submit.sh` | Creates the run id and its folder (never reusing an existing one), freezes the code, records uncommitted changes in `provenance/` (warning when there are any), writes `run.json`, submits; on failure, removes the half-created folder | Every run is traceable to its exact code (PD-007), and no run can overwrite another (PD-010) |
 | `job.sbatch` | The generic job: temporary folder, environment check, GPU check, runs the command, records the outcome | The same steps for every run; the experiment itself lives in the command |
-| `run_info.py` | Adds host, GPU model and capability, driver, Python/PyTorch/CUDA/cuDNN versions, start, end, exit code and status to `run.json` | Every run records where and how it ran, and how it ended |
+| `run_info.py` | Adds host, GPU model and capability, driver, Python/PyTorch/CUDA/cuDNN versions, start, end, exit code and status to `run.json` | Every run records where and how it ran, and how it ended; local runs use it too (`scripts/run_local.sh`) |
 | `check_gpu.py` | Stops the job if the node's GPU can't run the installed PyTorch | A clear failure in seconds instead of a cryptic CUDA error (PD-004) |
-| `hello.py` | Prints what PyTorch sees and runs one CUDA operation | The smoke test for a new setup |
 | `pull.sh`, `status.sh`, `logs.sh` | Bring runs back (skipping each run's own `code/`, and `checkpoints/` unless asked); show jobs | Cluster storage is not backed up and is deleted when access ends |
 
 ## What each job does, in order
@@ -69,7 +68,7 @@ scripts/cluster/pull.sh hello
 3. Checks that the cluster environment was built from the same `uv.lock` as the run's frozen code. If not, it stops and asks you to rerun `setup_remote.sh`.
 4. Records the start in `run.json`.
 5. Checks the GPU (`check_gpu.py`), for GPU jobs.
-6. Runs the command from the run's frozen code, with `RUN_DIR`, `DATA_DIR` and `RUNS_ROOT` set ([runs.md](../../docs/project/runs.md#what-a-job-provides)) and Python's output unbuffered (so `slurm.out` is up to date), and waits for it.
+6. Runs the command from the run's frozen code, with `RUN_DIR`, `DATA_DIR` and `RUNS_ROOT` set ([runs.md](../../docs/project/runs.md#what-a-run-provides)) and Python's output unbuffered (so `output.log` is up to date), and waits for it.
 7. On any ending, records the status (`completed`, `failed`, `timeout`, `canceled` or `stopped`), the exit code and the end time in `run.json`. The statuses are explained in [runs.md](../../docs/project/runs.md#how-a-run-ended-status).
 
 ## Rules

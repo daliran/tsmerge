@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Submit one run to the cluster: freeze the code in a new run folder, then sbatch it.
 # usage: scripts/cluster/submit.sh <experiment> <command> [args...]
-#   e.g. scripts/cluster/submit.sh hello python scripts/cluster/hello.py
+#   e.g. scripts/cluster/submit.sh hello python -m tsmerge.hello
 # Optional, for one submission:
 #   SWEEP=<id>             group this run with others of the same sweep (recorded in run.json)
 #   INPUTS="<exp>/<run id> ..."  the earlier runs whose outputs this run reads (recorded in
@@ -139,6 +139,7 @@ env = os.environ
 print(json.dumps({
     "run_id": env["RUN_ID"],
     "experiment": env["EXPERIMENT"],
+    "launcher": "cluster",
     "sweep": env["SWEEP_ID"] or None,
     "inputs": env["INPUT_RUNS"].split(),
     "command": sys.argv[1:],
@@ -171,7 +172,7 @@ step="submitting the job (sbatch)"
 job_id=$(remote "cd $(q "$run_dir") && sbatch --parsable \
   $(q --job-name="$experiment" --account="$CLUSTER_ACCOUNT" --partition="$partition" \
       --nodes="$CLUSTER_NODES" --ntasks="$CLUSTER_NTASKS" --cpus-per-task="$CLUSTER_CPUS" \
-      --time="$CLUSTER_TIME" --signal="$CLUSTER_SIGNAL" --output="$run_dir/slurm.out") \
+      --time="$CLUSTER_TIME" --signal="$CLUSTER_SIGNAL" --output="$run_dir/output.log") \
   $([[ $CLUSTER_REQUEUE == true ]] && echo --requeue || echo --no-requeue) \
   $gpu_quoted \
   $extra_quoted \

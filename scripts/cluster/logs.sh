@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Show the end of a job's output (its run's slurm.out), to follow a job while it runs.
+# Show the end of a job's output (its run's output.log), to follow a job while it runs.
 # usage: scripts/cluster/logs.sh <job id> [lines]   (default: the last 50 lines)
 # The job is looked up in outputs/jobs.log, which submit.sh writes on this machine.
 # shellcheck source=common.sh
@@ -19,7 +19,7 @@ record=$(awk -F'\t' -v id="$job_id" '$1 == id { print $2 "\t" $3 }' "$REPO_ROOT/
 run_id=${record%%$'\t'*}
 experiment=${record#*$'\t'}
 
-log="$CLUSTER_WORK_DIR/runs/$experiment/$run_id/slurm.out"
-echo "== $experiment/$run_id (job $job_id): last $lines lines of slurm.out"
+log="$CLUSTER_WORK_DIR/runs/$experiment/$run_id/output.log"
+echo "== $experiment/$run_id (job $job_id): last $lines lines of output.log"
 remote "tail -n $(q "$lines") $(q "$log") 2>/dev/null" \
   || echo "(no output yet: the job may still be waiting in the queue; see scripts/cluster/status.sh $job_id)"

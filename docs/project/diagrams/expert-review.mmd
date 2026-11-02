@@ -1,0 +1,32 @@
+%% The expert-review skill: independent reviewers, mechanical checks, one verifier.
+%% Shown in .claude/README.md.
+flowchart LR
+  user(["You: /expert-review [scope]"])
+
+  subgraph find["1. Find, in parallel, independently"]
+    direction TB
+    r1["Python expert"]
+    r2["ML engineer"]
+    r3["HPC engineer"]
+    r4["Reproducibility"]
+    r5["Researcher"]
+  end
+
+  subgraph check["2. Check, mechanically"]
+    direction TB
+    hygiene["Hygiene script<br/>personal data, secrets, links, ids"]
+    citations["Citation script<br/>every quoted line exists"]
+  end
+
+  verify["3. Verify: the aggregator<br/>checks every finding in the files,<br/>merges duplicates, drops what doesn't hold"]
+  report(["4. Report, for you<br/>outputs/expert-reviews/&lt;date&gt;-&lt;scope&gt;/report.md"])
+  guard{{"Guard hook<br/>blocks the cluster and<br/>writes outside the review folder"}}
+
+  user --> find
+  user --> hygiene
+  find --> citations
+  hygiene --> verify
+  citations --> verify
+  verify --> report
+  guard -. "watches every call of" .-> find
+  guard -. "and of" .-> verify

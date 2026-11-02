@@ -28,7 +28,7 @@ sequenceDiagram
     Job->>Job: status: completed, or failed
   else 2 minutes before the time limit, or scancel
     Slurm->>Job: TERM signal
-    Job->>Job: stop the command, status: timeout, or canceled
+    Job->>Job: stop the command, status: timeout, canceled, or stopped
   end
   Job->>Job: record end time and exit code in run.json
 

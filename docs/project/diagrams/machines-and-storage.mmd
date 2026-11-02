@@ -8,7 +8,7 @@ flowchart LR
     dataL["data/<br/>datasets, git-ignored"]
   end
 
-  subgraph homes["Cluster: /homes/&lt;user&gt;/tsmerge<br/>100 GB, limited number of files"]
+  subgraph homes["Cluster: /homes/&lt;user&gt;/tsmerge<br/>100 GB, file-count limit suspected (PQ-012)"]
     direction TB
     venvC["venv/<br/>built from uv.lock"]
     mirror["code/<br/>latest submitted code"]
@@ -27,7 +27,7 @@ flowchart LR
   end
 
   subgraph back["Your machine"]
-    outL["outputs/runs/<br/>pulled runs, git-ignored"]
+    outL["outputs/runs/<br/>local and pulled runs, git-ignored"]
   end
 
   tree -- "setup_remote.sh" --> venvC
@@ -37,3 +37,4 @@ flowchart LR
   homes -. "environment" .-> compute
   work -. "run folder, data" .-> compute
   runs -- "pull.sh" --> outL
+  tree -- "run_local.sh" --> outL

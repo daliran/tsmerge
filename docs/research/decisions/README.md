@@ -4,7 +4,7 @@ Decisions about the research and its documentation: methods, datasets, metrics, 
 
 Technical and organizational decisions (the repository, the environment, the cluster) are [engineering decisions](../../engineering/decisions/README.md) (`ED-`).
 
-**Decisions are history and rationale, not the documentation.** How things work is described in the research docs ([literature](../literature/README.md), [knowledge](../knowledge/README.md), [method](../method/README.md), this area's READMEs), which link here for the *why*.
+**Decisions are rationale, not the documentation.** How things work is described in the research docs ([literature](../literature/README.md), [knowledge](../knowledge/README.md), [method](../method/README.md), this area's READMEs), which link here for the *why*.
 
 ## Rules
 

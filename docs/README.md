@@ -4,14 +4,14 @@ Everything we write lives here. External sources (papers) are kept apart and nev
 
 ## Knowledge first
 
-Every experiment answers a question, every result supports or refutes a claim, and every structural change has a decision. Each has a stable, grep-able id: never changed, never reused.
+Every experiment answers a question, every result supports or refutes a claim, and every lasting choice has a decision. Each has a stable, grep-able id: never changed, never reused, even after its file is deleted. Ids are unique per area and type: engineering questions (`EQ-`), engineering decisions (`ED-`), research questions (`RQ-`), research decisions (`RD-`) and experiments (`e`) each count on their own.
 
 | Type | Id |
 |---|---|
 | Question | `EQ-NNNN` (engineering), `RQ-NNNN` (research) |
 | Decision | `ED-NNNN` (engineering), `RD-NNNN` (research) |
 | Experiment | `eNNNN-<slug>`, e.g. `e0001-joint-vs-merge` ([ED-0032](engineering/decisions/ED-0032-experiment-ids.md)) |
-| Claim | to be defined, with the domain docs |
+| Claim | to be defined, with the method docs |
 | Paper | bibkey |
 
 Knowledge flows one way: sources → literature notes → concepts → questions → experiments → results → claims → thesis. Later layers link to earlier ones and never restate them.
@@ -23,7 +23,7 @@ Knowledge flows one way: sources → literature notes → concepts → questions
 *Source: [assets/repository-map.mmd](assets/repository-map.mmd)*
 
 - [engineering/](engineering/README.md): all the technical work around the research: setup, the environment, the Unimore cluster, running and recording runs, checks and tooling, with its decisions (`ED-`) and open questions (`EQ-`).
-- [research/](research/README.md): the research itself: [literature/](research/literature/README.md) (what others published: paper notes and the bibliography), [knowledge/](research/knowledge/README.md) (general theory, one concept per doc) and [method/](research/method/README.md) (everything specific to this work: questions, decisions, protocol, experiments, findings), with its decisions (`RD-`) and questions (`RQ-`).
+- [research/](research/README.md): the research itself: [literature/](research/literature/README.md) (what others published: paper notes and the bibliography), [knowledge/](research/knowledge/README.md) (general theory, one concept per doc) and [method/](research/method/README.md) (everything specific to this work: protocol, experiments, findings), with its [decisions](research/decisions/README.md) (`RD-`) and [questions](research/questions/README.md) (`RQ-`).
 
 ## Assets
 

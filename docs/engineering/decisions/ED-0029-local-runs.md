@@ -31,7 +31,7 @@
 - **Execution: option 3,** a frozen copy deleted at the end: local and pulled run folders look the same.
 - **The environment is checked first** (`uv sync --locked`), as cluster jobs check theirs ([ED-0008](ED-0008-environment-integrity.md)).
 - **A script started directly** (quick tries, the debugger) is not a recorded run: its outputs go to `outputs/scratch/`, overwritten each time ([ED-0030](ED-0030-experiment-code.md)).
-- **The log has one name everywhere:** `output.log`, for local and cluster runs (cluster runs wrote `slurm.out` before 2026-11-02).
+- **The log has one name everywhere:** `output.log`, for local and cluster runs.
 
 **Verified** (2026-11-02): a completed, a failed (exit code 3) and a Ctrl-C run recorded `completed`, `failed` and `canceled`, with the code copy removed; covered by `tests/test_run_local.py`. The same day, a cluster run (job 178372) wrote `output.log` and `launcher: cluster`, so pulled and local runs have the same files.
 

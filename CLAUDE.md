@@ -6,7 +6,7 @@ tsmerge is a master's thesis repo (AI Engineering, Unimore) on joint training vs
 
 - [README.md](README.md), then the `README.md` of every folder you work in: they describe what the folder holds and how it is used.
 - `CLAUDE.local.md` (git-ignored, if present): personal and machine-specific context.
-- [docs/engineering/decisions/README.md](docs/engineering/decisions/README.md): why things are the way they are. Read the relevant decision before changing what it covers.
+- [docs/engineering/decisions/README.md](docs/engineering/decisions/README.md) and [docs/research/decisions/README.md](docs/research/decisions/README.md): why things are the way they are. Read the relevant decision before changing what it covers.
 
 ## Rules
 
@@ -24,8 +24,9 @@ tsmerge is a master's thesis repo (AI Engineering, Unimore) on joint training vs
 - **Readable Markdown, written for humans.** A blank line between blocks, short paragraphs, one idea per line, and bullet lists for anything that enumerates. Split long sections with headings. When presenting options, give numbers where they exist (counts, percentages, costs) and what each option gains and costs.
 - **Folder `CLAUDE.md` files:** none yet. When a folder first needs rules that only agents need, propose adding one there (starting with `@README.md`).
 - **Document what and why, as you go.** Every script, configuration file and folder says what it does and why it exists: in the folder's README, a decision, or a short comment. Write it together with the change, not afterwards; a new file also gets its line in the inventory of [docs/engineering/overview.md](docs/engineering/overview.md#every-file-in-the-repository) (a test checks it).
-- **Record problems with their solutions.** When a problem is found (a review, a failed run, a bug), write down the problem, why it mattered and how it was solved, in a decision or the relevant doc; what isn't solved yet becomes an open question. Never leave it only in the conversation.
+- **Record problems with their solutions.** When a problem is found (a review, a failed run, a bug), write down the problem, why it mattered and how it was solved, in a decision (its Problem section) or as the rule in the relevant doc, not as a dated incident note; what isn't solved yet becomes an open question. Never leave it only in the conversation.
 - **Docs are the reference; decisions explain why.** Every operational fact lives in an engineering or research doc, or a folder README, which may link to the decision behind it. A decision is history and rationale, never the only place a fact is written.
+- **Describe the present.** Committed files say how things are now: no old paths, names or ids, no "was", "moved from" or dated change logs; the past lives in git history and commit messages. A decision may note a change of its choice (what changed and why), never a move or a rename ([decisions README](docs/engineering/decisions/README.md#rules)). Deleted decisions and questions keep their ids reserved.
 - **Docs follow decisions.** When a decision is made or changed, update every Markdown file it affects in the same step: committed files, untracked docs, and `CLAUDE.local.md`. Never leave a file stating something a decision has changed.
 - **Diagrams follow the docs.** Every time you update the docs, check whether the pictures that illustrate them still match: each doc folder keeps its pictures, and what generates them, in an `assets/` folder beside it ([docs/README.md](docs/README.md#assets)). If not, update the `.mmd` sources or drawing scripts and regenerate the images (`scripts/render_diagrams.sh` for diagrams) in the same step.
 - **Knowledge is written down.** When the user asks you to remember a rule, write it here or in the README it belongs to (personal or machine-specific context: `CLAUDE.local.md`), never only in session memory, so fresh sessions follow it too.

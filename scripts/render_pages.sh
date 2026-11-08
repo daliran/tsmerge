@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Render a paper's pages to PNG images, so its distillation note can be written and
-# verified from the pages themselves, equations and tables included (ED-0034).
+# verified from the pages themselves, equations and tables included (RD-0001).
 # usage: scripts/render_pages.sh [--scale S] <bibkey> [output folder]
 #   reads docs/research/literature/papers/<bibkey>.pdf; writes p01.png, p02.png, … (default: outputs/pages/<bibkey>/)
 #   --scale: resolution factor (default 2.2: subscripts and small table cells stay legible;
@@ -19,7 +19,7 @@ fi
 key=$1
 pdf="docs/research/literature/papers/$key.pdf"
 out=${2:-outputs/pages/$key}
-[[ -f $pdf ]] || { echo "error: $pdf not found (the git-ignored papers/ folder beside the notes holds the PDFs, ED-0034)" >&2; exit 1; }
+[[ -f $pdf ]] || { echo "error: $pdf not found (the git-ignored papers/ folder beside the notes holds the PDFs, RD-0001)" >&2; exit 1; }
 mkdir -p "$out"
 
 uv run --quiet --no-project --with pypdfium2 --with pillow python - "$pdf" "$out" "$scale" <<'PY'

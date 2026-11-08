@@ -4,7 +4,7 @@ Open technical and organizational questions: what we don't know or haven't decid
 
 **The goal is zero open questions.** A question exists only while something is undecided: once answered, its content moves into a decision or a doc, and the question file is deleted.
 
-Research questions belong to the research area. They get `RQ-` ids, in [docs/research/method/](../../research/method/README.md), in their own folder created with the first one.
+Research questions belong to the research area: [docs/research/questions/](../../research/questions/README.md), with `RQ-` ids.
 
 ## Rules
 

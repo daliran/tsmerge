@@ -4,9 +4,6 @@
 - **Date:** 2026-11-02
 - **Decided by:** the author
 - **Answers:** question EQ-0003 (opened 2026-11-01, raised by the first expert review)
-- **History:**
-  - 2026-11-09: experiment ids have 4 digits, `e<NNNN>-<slug>` ([ED-0037](ED-0037-four-digit-ids.md)). Was: `e<NNN>-<slug>`.
-  - 2026-11-08: the research area is `docs/research/`; experiment docs and research questions (`RQ-`) live in its `method/` folder ([ED-0036](ED-0036-research-docs.md)). Was: the domain area, with `DQ-` ids.
 
 ## Problem
 
@@ -17,7 +14,7 @@
 
 - **A. The id is part of the name,** e.g. `e0001-joint-vs-merge`: grep-able in folders, `outputs/jobs.log` and `run.json`; runs sort by id. The id format is fixed now.
 - **B. A separate `experiment_id` field** in `config.json`, with free names: shorter names, but the link exists only inside files.
-- **C. Decide with the domain docs and the first real experiment:** fits a structure not known yet, but leaves the question open.
+- **C. Decide with the research docs and the first real experiment:** fits a structure not known yet, but leaves the question open.
 
 ## Decision
 
@@ -30,7 +27,7 @@ Option A:
 ## Consequences
 
 - Runs of an experiment are found by name everywhere: `outputs/runs/e0001-…/`, `run.json`'s `experiment`, `outputs/jobs.log`.
-- Research questions get `RQ-` ids in [docs/research/method/](../../research/method/README.md); each experiment doc links its questions.
+- Research questions get `RQ-` ids in [docs/research/questions/](../../research/questions/README.md); each experiment doc links its questions.
 - Documented in [runs.md](../runs.md#concepts).
 
 ## Revisit if

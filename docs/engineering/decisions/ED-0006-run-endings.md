@@ -3,8 +3,6 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
-- **History:**
-  - 2026-11-02: the job's log renamed from `slurm.out` to `output.log`, the same name as local runs ([ED-0029](ED-0029-local-runs.md)); local runs record their endings too (`completed`, `failed`, `canceled`).
 
 ## Problem
 

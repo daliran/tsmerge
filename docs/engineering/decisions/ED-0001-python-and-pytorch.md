@@ -4,9 +4,6 @@
 - **Date:** 2026-11-01
 - **Decided by:** the author
 - **Answers:** question EQ-0001 (opened 2026-11-01: upgrade from torch 2.5.1 + CUDA 12.1?)
-- **History:**
-  - 2026-11-01: torch 2.5.1 + CUDA 12.1 chosen; the upgrade deferred to a question.
-  - 2026-11-02: upgraded to 2.14.1 + CUDA 12.6, after testing it locally and on the cluster; exact Python pin and tooling Python added after the first expert review.
 
 ## Problem
 

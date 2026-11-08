@@ -1,14 +1,14 @@
 # Literature
 
-One distillation note per paper. **The notes are the source of truth for what a paper says:** the PDFs stay local and uncommitted, so a note must hold everything this project needs from its paper, checked against it ([ED-0034](../../engineering/decisions/ED-0034-literature.md)).
+One distillation note per paper. **The notes are the source of truth for what a paper says:** the PDFs stay local and uncommitted, so a note must hold everything this project needs from its paper, checked against it ([RD-0001](../decisions/RD-0001-literature.md)).
 
 ## Rules
 
 - **One file per paper:** `<bibkey>.md`, with the paper's entry in [references.bib](references.bib) and its PDF in the git-ignored `papers/<bibkey>.pdf` here, beside the notes. Each entry's `title` names the paper, so a PDF is identified by its file name alone.
 - **Everything is traceable:** every equation, number and claim carries the page it comes from (`p. 4`, `Table 2, p. 7`). What isn't in the paper isn't in the note; our own comments are marked as such (**Our reading:**).
 - **Pages are the PDF's own pages,** counted from 1 (the `pNN.png` of `render_pages.sh`), which may differ from the number printed on the page.
-- **Equations in LaTeX, numbers exactly as printed:** results we may compare against are copied as tables, with their units and settings.
-- **Read from the page images,** not from extracted text, so equations and tables come through correctly: `scripts/render_pages.sh <bibkey>` writes one PNG per page to `outputs/pages/<bibkey>/`. The default resolution (scale 2.2) keeps subscripts and small table cells legible; for a page that is still hard to read, render again with `--scale 3` into another folder. (The first notes were read at scale 1.6, which proved too small for some cells: their writers rendered zoomed copies.)
+- **Equations in LaTeX, numbers exactly as printed:** results we may compare against are copied as tables, with their units and settings. Use only macros GitHub's math renderer allows: `\mathrm{dist}`, not `\operatorname{dist}`, which GitHub shows as an error box.
+- **Read from the page images,** not from extracted text, so equations and tables come through correctly: `scripts/render_pages.sh <bibkey>` writes one PNG per page to `outputs/pages/<bibkey>/`. The default resolution (scale 2.2) keeps subscripts and small table cells legible; for a page that is still hard to read, render again with `--scale 3` into another folder.
 - **Verified before done:** after the note is written, an independent agent reads the paper and the note and lists every claim it can't find in the paper, or finds stated differently. The note is fixed, and only then marked `verified`, with the date.
 - **A paper's own code link** (from the paper itself) belongs in its note's header: it's part of the bibliographic record, not a link to another project of ours.
 - **Public code can be a reference too** (e.g. a benchmark library): a `@software` entry pinned to a commit, and a note that lists what to check in the code, with where each question came from; items are checked, with `file:line`, when an experiment needs them.

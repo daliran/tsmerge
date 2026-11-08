@@ -37,7 +37,7 @@ Option A:
 ## Consequences
 
 - Each fact has one home; other files link to it.
-- Decisions are updated in place when new information emerges, with a dated History line; a reversed choice gets a new, superseding decision ([decisions README](README.md)).
+- Decisions describe the present: they're updated in place when new information emerges or the choice changes, and deleted when they no longer hold ([decisions README](README.md)).
 
 ## Revisit if
 

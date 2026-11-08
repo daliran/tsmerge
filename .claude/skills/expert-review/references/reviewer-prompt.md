@@ -24,7 +24,7 @@ Judge the files against the repository's own rules, in this order:
 
 1. `CLAUDE.md` and `CONTRIBUTING.md`;
 2. the README of every folder you review;
-3. the decisions in `docs/engineering/decisions/` (`ED-NNNN`) and the open questions in `docs/engineering/questions/` (`EQ-NNNN`).
+3. the decisions in `docs/engineering/decisions/` (`ED-NNNN`) and `docs/research/decisions/` (`RD-NNNN`), and the open questions in `docs/engineering/questions/` (`EQ-NNNN`).
 
 An accepted decision is a deliberate choice: don't report it as a problem unless the files contradict it or you have new evidence. An open question is already known: don't report it as new.
 

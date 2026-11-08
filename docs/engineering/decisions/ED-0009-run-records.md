@@ -3,8 +3,6 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
-- **History:**
-  - 2026-11-02: `run.json` gains `launcher` (`cluster` or `local`) and is also written by `run_local.sh` ([ED-0029](ED-0029-local-runs.md)); `config.json` is written with the helper in `tsmerge/run.py` ([ED-0030](ED-0030-experiment-code.md)).
 
 ## Problem
 

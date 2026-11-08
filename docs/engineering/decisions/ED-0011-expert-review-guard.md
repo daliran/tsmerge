@@ -3,9 +3,6 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
-- **History:**
-  - 2026-11-02: the guard missed `logs.sh` (it connects to the cluster); it now blocks it, and the new `run_local.sh` and `render_diagrams.sh`, which write files.
-  - 2026-11-02: the review folder, where the guard allows writes and keeps its log, moved to `outputs/expert-reviews/` (see ED-0019).
 
 ## Problem
 

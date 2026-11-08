@@ -50,8 +50,8 @@ UK = re.compile(
 ID_FOLDERS = {
     "ED": "docs/engineering/decisions",
     "EQ": "docs/engineering/questions",
-    "RD": "docs/research/method/decisions",
-    "RQ": "docs/research/method/questions",
+    "RD": "docs/research/decisions",
+    "RQ": "docs/research/questions",
 }
 
 
@@ -66,10 +66,11 @@ def committable() -> list[Path]:
     return [REPO / p for p in out.splitlines() if (REPO / p).is_file()]
 
 
-def highest_question_ids() -> dict[str, int]:
-    """The "highest id used" recorded in each questions index, e.g. {"EQ": 14}."""
+def highest_ids() -> dict[str, int]:
+    """The "highest id used" recorded in each decisions and questions index,
+    e.g. {"ED": 37, "EQ": 14}."""
     found = {}
-    for prefix in ("EQ", "RQ"):
+    for prefix in ID_FOLDERS:
         index = REPO / ID_FOLDERS[prefix] / "README.md"
         if index.is_file():
             m = re.search(
@@ -80,14 +81,15 @@ def highest_question_ids() -> dict[str, int]:
     return found
 
 
-HIGHEST_QUESTIONS = highest_question_ids()
+HIGHEST = highest_ids()
 
 
-def is_closed_question(question_id: str) -> bool:
-    """Closed questions are deleted (ED-0016), but their ids, up to the highest id used,
-    remain valid in history (e.g. a decision's "Answers:" line)."""
-    prefix, number = question_id[:2], int(question_id[3:])
-    return prefix in HIGHEST_QUESTIONS and number <= HIGHEST_QUESTIONS[prefix]
+def is_reserved(item_id: str) -> bool:
+    """Closed questions and deleted decisions have no file (ED-0016), but their ids,
+    up to the highest id used, stay reserved and valid where they're mentioned (e.g. a
+    decision's "Answers:" line)."""
+    prefix, number = item_id[:2], int(item_id[3:])
+    return prefix in HIGHEST and number <= HIGHEST[prefix]
 
 
 def anchors(md: Path) -> set[str]:
@@ -143,8 +145,8 @@ def main() -> None:
                 issues["Links"].append(f"`{rel}`: missing heading `{target}{anchor}`")
         for m in ID.finditer(prose):
             folder = REPO / ID_FOLDERS[m.group(1)[:2]]
-            if is_closed_question(m.group(1)):
-                continue  # answered and deleted: its id stays valid history
+            if is_reserved(m.group(1)):
+                continue  # closed or deleted: its id stays reserved
             if not list(folder.glob(f"{m.group(1)}-*.md")):
                 issues["Ids"].append(
                     f"`{rel}`: `{m.group(1)}` has no file in "

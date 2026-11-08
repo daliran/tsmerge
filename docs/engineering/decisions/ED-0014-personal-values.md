@@ -3,8 +3,6 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
-- **History:**
-  - 2026-11-02: `DATA_DIR`, optional, joined the personal values: where your datasets live locally (ED-0020).
 
 ## Problem
 

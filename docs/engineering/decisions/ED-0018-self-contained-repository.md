@@ -3,10 +3,6 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
-- **History:**
-  - 2026-11-02: authors' names are allowed in bibliographic content (the bibliography, the paper notes, the thesis text), since citing a paper names its authors; the hygiene check skips those paths for names only ([ED-0034](ED-0034-literature.md)).
-  - 2026-11-08: narrowed to what it was meant for. Only the private material used to build the repository is excluded (the author's own earlier work and repositories, local files, notes, drafts); public sources (papers, books, official documentation, public code) may be cited and linked. Was: no links to other repositories and no references to any external implementation, which read literally forbade citing public code and reference pages.
-  - 2026-11-08: personal names and the graduation date are no longer excluded, and the private-pattern check is removed: the goal was only to keep the repository independent of the private material used to build it and of this machine. Was: no personal names (except authors in bibliographic content) and no graduation date, checked against `PRIVATE_PATTERNS` in `.env`.
 
 ## Problem
 

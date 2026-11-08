@@ -3,8 +3,6 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
-- **History:**
-  - 2026-11-02: excluded list reviewed after the upgrade to torch 2.14.1 + CUDA 12.6 (ED-0001): same kernels (`sm_50` to `sm_90`), so it is unchanged.
 
 ## Context
 

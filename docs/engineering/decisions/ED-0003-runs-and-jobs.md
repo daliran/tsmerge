@@ -3,9 +3,6 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
-- **History:**
-  - 2026-11-01: proposed.
-  - 2026-11-02: accepted, once the run-related questions were settled; the same layout now also holds local runs ([ED-0029](ED-0029-local-runs.md)), and the log is `output.log` everywhere.
 
 ## Problem
 

@@ -3,8 +3,6 @@
 - **Status:** accepted
 - **Date:** 2026-11-01
 - **Decided by:** the author
-- **History:**
-  - 2026-11-02: reports moved from `artifacts/expert-reviews/` to `outputs/expert-reviews/`: in an ML project "artifacts" suggests model files, and `outputs/` already holds everything generated locally.
 
 ## Problem
 

@@ -2,7 +2,7 @@
 
 Technical and organizational decisions: how the repository, the environment and the compute setup work.
 
-Research decisions (methods, datasets, metrics) belong to the research area. They get `RD-` ids, in [docs/research/method/](../../research/method/README.md), in their own folder created with the first one.
+Research decisions (methods, datasets, metrics, and how the research docs work) belong to the research area: [docs/research/decisions/](../../research/decisions/README.md), with `RD-` ids.
 
 **Decisions are history and rationale, not the documentation.** How things work is always described in the engineering docs ([setup](../setup.md), [cluster](../cluster.md), [running](../running.md), [runs](../runs.md), [CONTRIBUTING](../../../CONTRIBUTING.md), the folder READMEs), which link to the decisions for the *why*. A decision never holds the only copy of an operational fact.
 
@@ -16,15 +16,17 @@ Research decisions (methods, datasets, metrics) belong to the research area. The
 
 - **One file per decision:** `ED-NNNN-short-slug.md`, e.g. `ED-0001-python-and-pytorch.md`.
 - **Stable ids:**
-  - an id and its file name never change, with two recorded exceptions: on 2026-11-08 every `PD-NNN` became `ED-NNN` and every `PQ-NNN` became `EQ-NNN` ([ED-0035](ED-0035-engineering-folder.md)); on 2026-11-09 every id became 4 digits, e.g. `ED-034` → `ED-0034` ([ED-0037](ED-0037-four-digit-ids.md)). Older commit messages use the old forms;
-  - an id is never reused, not even for a rejected decision;
+  - an id and its file name never change;
+  - an id is never reused, not even for a deleted decision; engineering decisions have their own counter, separate from questions and from research decisions;
   - only a typo in a title may be fixed;
-  - the next id is the highest existing one plus one.
-- **Statuses:** `proposed` → `accepted` → `superseded by ED-NNNN`, or `rejected`. Only the user accepts or rejects a decision.
-- **Decisions are not frozen.** When new information emerges (a test result, a cluster rule, a consequence), update the decision in place, even after it is accepted and committed, and add a dated line to its **History** saying what changed and why.
-- **When the choice itself is reversed,** write a new decision that supersedes it, and change the old one's status line to `superseded by ED-NNNN`, so both the old reasons and the new ones stay readable.
-- **A decision that no longer holds** is either kept, with its status (`superseded by ED-NNNN` or `rejected`) and a line saying why, or deleted. Keep it when its reasons are still worth knowing (e.g. it's likely to be proposed again); delete it when nothing depends on it and the new decision already explains the change. Either way, its id is never reused.
-- **Docs follow decisions.** When a decision is accepted, updated or superseded, in the same step:
+  - the next id is the **highest id used** (recorded below the index) plus one.
+- **Statuses:** `proposed` → `accepted`. Only the user accepts a decision; a rejected proposal is deleted.
+- **Decisions describe the present.** Every decision states a choice that holds now, and why; the repository's past (old paths, names, ids) lives only in git history.
+- **Decisions are not frozen.** When new information emerges (a test result, a cluster rule, a consequence), update the decision in place, even after it is accepted and committed.
+- **When the choice itself changes,** update the decision so it states the new choice; it may say briefly what changed and why, under **Changes**, one dated line each. Moves, renames and rewordings are never logged: a decision is not a changelog.
+- **A decision that no longer holds** is deleted, and a new decision is written if a new choice replaces it. Its id is never reused.
+- **A reorganization is not a decision:** moving or renaming files, folders or ids changes the docs that describe them, and the commit message says why.
+- **Docs follow decisions.** When a decision is accepted, updated or deleted, in the same step:
   - update every Markdown file it affects, and every diagram ([diagrams](../assets/README.md));
   - close the [questions](../questions/README.md) it answers: their content moves into the decision, and the question files are deleted.
 - **Short and readable:** about one screen, one idea per line, lists as bullets. Link to details instead of restating them.
@@ -34,11 +36,11 @@ Research decisions (methods, datasets, metrics) belong to the research area. The
 ```markdown
 # ED-NNNN — <the choice, stated as what we do>
 
-- **Status:** proposed | accepted | superseded by ED-NNNN | rejected
+- **Status:** proposed | accepted
 - **Date:** YYYY-MM-DD
 - **Decided by:** the author
 - **Answers:** question EQ-NNNN (opened YYYY-MM-DD, …), if the decision closes one
-- **History:** (once it changes) one dated line per update: what changed, and why
+- **Changes:** (only if the choice itself changed) one dated line per change: what changed, and why
 
 ## Problem
 
@@ -110,7 +112,5 @@ What we chose, and why. How it was verified, if it was.
 | [ED-0031](ED-0031-vs-code.md) | Shared VS Code tasks, debug configurations, extensions and settings | accepted | 2026-11-02 |
 | [ED-0032](ED-0032-experiment-ids.md) | Experiments are named `e<NNNN>-<slug>`, and each has a short doc | accepted | 2026-11-02 |
 | [ED-0033](ED-0033-training-curves.md) | Training curves go in the run folder (`results/history.jsonl`); no wandb for now | accepted | 2026-11-02 |
-| [ED-0034](ED-0034-literature.md) | Papers: bibkeys, PDFs kept local, verified distillation notes as the source of truth | accepted | 2026-11-02 |
-| [ED-0035](ED-0035-engineering-folder.md) | The technical docs are "engineering": `docs/engineering/`, with ids `ED-`/`EQ-` | accepted | 2026-11-08 |
-| [ED-0036](ED-0036-research-docs.md) | The research docs: literature, knowledge (generic above, time-series below), method; ids `RD-`/`RQ-` | accepted | 2026-11-08 |
-| [ED-0037](ED-0037-four-digit-ids.md) | Ids have 4 digits: decisions, questions and experiments | accepted | 2026-11-09 |
+
+**Highest id used:** ED-0037. The next decision takes the number after it, even if decisions with lower numbers have been deleted.

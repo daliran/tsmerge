@@ -3,8 +3,6 @@
 - **Status:** accepted
 - **Date:** 2026-11-02
 - **Decided by:** the author
-- **History:**
-  - 2026-11-02: `check.sh` also checks that the diagrams' images match their sources (ED-0028); ShellCheck's options moved to `.shellcheckrc`, shared with the VS Code extension (ED-0031).
 
 ## Problem
 

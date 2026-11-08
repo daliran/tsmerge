@@ -6,15 +6,14 @@ stateDiagram-v2
   state "investigating" as investigating
   state "decision proposed (ED-NNNN)" as proposed
   state "accepted" as accepted
-  state "rejected" as rejected
-  state "superseded by ED-MMM" as superseded
+  state "deleted (id never reused)" as deleted
 
   [*] --> open: something isn't decided
   open --> investigating: tests, docs, numbers
   investigating --> proposed: options and a recommendation
   open --> proposed
   proposed --> accepted: the user decides, and the question file is deleted
-  proposed --> rejected: the user decides
-  accepted --> accepted: new information: updated in place, with a History line
-  accepted --> superseded: the choice itself changes: a new decision
+  proposed --> deleted: the user rejects it
+  accepted --> accepted: new information or a changed choice: updated in place
+  accepted --> deleted: it no longer holds
   [*] --> proposed: a change that needs no open question

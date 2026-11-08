@@ -2,7 +2,7 @@
 
 What the research is about and how it's done. How the repository's machinery works (setup, the cluster, runs, checks) is in [engineering/](../engineering/README.md).
 
-The area is built step by step, and every part is checked against its sources before it's marked done. How it's organized, and why: [ED-0036](../engineering/decisions/ED-0036-research-docs.md).
+The area is built step by step, and every part is checked against its sources before it's marked done.
 
 ## Contents
 
@@ -10,7 +10,9 @@ The area is built step by step, and every part is checked against its sources be
 |---|---|---|
 | [literature/](literature/README.md) | What others published: one note per paper, the bibliography ([references.bib](literature/references.bib)), and code references | 17 papers verified, 1 code reference |
 | [knowledge/](knowledge/README.md) | General theory, one concept per doc, independent of this thesis: signals, time series, change over time, evaluation, models, learning | 16 docs written, 35 placeholders |
-| [method/](method/README.md) | Everything specific to this work: research questions, research decisions, the protocol, experiments, findings | planned |
+| [method/](method/README.md) | Everything specific to this work: the protocol, experiments, findings | planned |
+| [decisions/](decisions/README.md) | Research decisions (`RD-`): why the research and its docs work the way they do | 2 accepted |
+| [questions/](questions/README.md) | Open research questions (`RQ-`) | none yet |
 
 Each area answers a different question:
 
@@ -27,9 +29,9 @@ Each area answers a different question:
 | Research decision | `RD-NNNN` | — |
 | Experiment | `e<NNNN>-<slug>` ([ED-0032](../engineering/decisions/ED-0032-experiment-ids.md)) | `e0001-joint-vs-merge` |
 
-- **Anonymous submissions** get `anon<year><word>` (e.g. `anon2026quasi`), renamed once their authors are known; the old key is then recorded in the entry's `note`.
+- **Anonymous submissions** get `anon<year><word>` (e.g. `anon2026quasi`), renamed once their authors are known.
 - A bibkey never changes otherwise, and is never reused.
-- Research questions and decisions live under `method/`, in `questions/` and `decisions/`, created with the first one.
+- Research decisions and questions live in [decisions/](decisions/README.md) and [questions/](questions/README.md), with the same rules as the engineering ones.
 
 ## Rules
 

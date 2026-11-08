@@ -24,7 +24,7 @@ The user owns git in this repository. Your job is to **check and propose** commi
    - Stop early when there is nothing to commit, or when a merge, rebase or cherry-pick is in progress (tell the user to finish or abort it first).
 3. **Check** and report each item as clear / flagged / not run (why):
    - the checks the project defines (formatter, linter, fast tests), if any;
-   - **personal data:** personal names, dates tied to a person, links to other private repos, paths outside the repo (see `CLAUDE.md`);
+   - **private or machine-specific content:** paths outside the repo, personal values, references to the private material used to build the repo (see `CLAUDE.md`);
    - **secrets:** tokens, passwords, keys, `.env` files;
    - **large files:** anything over ~5 MB (`find . -size +5M -not -path './.git/*' -not -path './.venv/*'`);
    - leftover debug output, commented-out code, temporary `TODO`s.

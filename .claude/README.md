@@ -36,7 +36,7 @@ Mechanical steps of the skill, run by the orchestrating session, never by the re
 
 | Script (`skills/expert-review/scripts/`) | What it does | Why |
 |---|---|---|
-| [check_hygiene.py](skills/expert-review/scripts/check_hygiene.py) | Checks every file git would commit for personal data (`PRIVATE_PATTERNS` in `.env`; not applied to bibliographic content, where authors' names belong), secrets, broken links, unknown ids, and UK spellings | Things with right or wrong answers are checked by a script, not by opinion |
+| [check_hygiene.py](skills/expert-review/scripts/check_hygiene.py) | Checks every file git would commit for absolute paths of a personal machine, secrets, broken links, unknown ids, and UK spellings | Things with right or wrong answers are checked by a script, not by opinion |
 | [check_citations.py](skills/expert-review/scripts/check_citations.py) | Checks that each finding's file, line and quoted text exist | Reviewers' findings are verified against the files before anyone trusts them |
 | [save_report.py](skills/expert-review/scripts/save_report.py) | Saves the aggregator's report, returned as text, to `report.md` | Subagents can't write report files themselves |
 
@@ -50,7 +50,7 @@ Mechanical steps of the skill, run by the orchestrating session, never by the re
 /expert-review [project | all | <path>] [--roles python-expert,hpc-engineer,…] [--max-findings 15]
 ```
 
-1. A hygiene script checks the repository mechanically: personal data, secrets, links, ids, US English.
+1. A hygiene script checks the repository mechanically: local paths, secrets, links, ids, US English.
 2. One reviewer per role reads the scope independently and writes its findings, each with a quoted location.
 3. A script checks every citation against the files.
 4. An aggregator verifies each finding, merges duplicates, re-rates severity and returns the report; a script saves it as `report.md`.
@@ -58,4 +58,3 @@ Mechanical steps of the skill, run by the orchestrating session, never by the re
 - **Output:** `outputs/expert-reviews/<date>-<scope>/` (git-ignored): `run.md`, `checks/`, `roles/`, `report.md`.
 - **Never touches the cluster:** checks that need it are listed in the report as *proposed checks*, for you to approve and run.
 - **Roles:** five now (`python-expert`, `ml-engineer`, `hpc-engineer`, `reproducibility`, `researcher`); three more (`methodology`, `timeseries`, `merging`) when their material exists. See [references/roles.md](skills/expert-review/references/roles.md).
-- **Personal-data check:** set `PRIVATE_PATTERNS` in your `.env` (a regular expression of names and identifiers that must never appear in committed files); without it, only generic patterns are checked.

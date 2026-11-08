@@ -26,7 +26,7 @@
 
 Option A:
 
-- **`.env`** (git-ignored): personal values only: `SSH_KEYS`, `CLUSTER_HOST`, `CLUSTER_ACCOUNT`, `CLUSTER_HOME_DIR`, `CLUSTER_WORK_DIR`, `PRIVATE_PATTERNS`, and optionally `DATA_DIR` ([ED-020](ED-020-dataset-location.md));
+- **`.env`** (git-ignored): personal values only: `SSH_KEYS`, `CLUSTER_HOST`, `CLUSTER_ACCOUNT`, `CLUSTER_HOME_DIR`, `CLUSTER_WORK_DIR`, and optionally `DATA_DIR` ([ED-020](ED-020-dataset-location.md));
 - **[.env.example](../../../.env.example)** (committed): the same keys with placeholders, as the template;
 - **project settings are never in `.env`:** they live in committed files, e.g. [defaults.sh](../../../scripts/cluster/defaults.sh) ([ED-013](ED-013-default-job-resources.md)).
 

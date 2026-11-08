@@ -4,12 +4,10 @@ answers.
 usage: python3 check_hygiene.py <run dir>
 
 Checks every file git would commit (tracked, plus untracked files not ignored) for:
-- personal data: the patterns in PRIVATE_PATTERNS (from the git-ignored .env), except in
-  bibliographic content, where authors' names belong (ED-034); and absolute paths of a
-  personal machine, everywhere;
+- personal data: absolute paths of a personal machine (ED-018);
 - likely secrets;
 - Markdown links whose file or heading doesn't exist;
-- decision and question ids (ED-, EQ-, DD-, DQ-) with no matching file, and files
+- decision and question ids (ED-, EQ-, RD-, RQ-) with no matching file, and files
   missing from their folder's index;
 - common UK spellings, in Markdown files.
 Writes <run dir>/checks/hygiene.md.
@@ -38,7 +36,7 @@ SECRETS = re.compile(
     r"|^-----BEGIN [A-Z ]*PRIVATE KEY-----"
 )
 LINK = re.compile(r"\]\(([^)#\s]*)(#[^)\s]+)?\)")
-ID = re.compile(r"\b((?:ED|EQ|DD|DQ)-\d{3})\b")
+ID = re.compile(r"\b((?:ED|EQ|RD|RQ)-\d{3})\b")
 # UK spellings, anchored to their British endings so US words (optimistic, organism,
 # cancellation, analyses) don't match.
 UK = re.compile(
@@ -52,13 +50,9 @@ UK = re.compile(
 ID_FOLDERS = {
     "ED": "docs/engineering/decisions",
     "EQ": "docs/engineering/questions",
-    "DD": "docs/domain/decisions",
-    "DQ": "docs/domain/questions",
+    "RD": "docs/research/method/decisions",
+    "RQ": "docs/research/method/questions",
 }
-
-
-# Bibliographic content may name authors (ED-034): PRIVATE_PATTERNS isn't applied here.
-BIBLIOGRAPHIC = ("docs/domain/references.bib", "docs/domain/literature/", "thesis/")
 
 
 def committable() -> list[Path]:
@@ -72,24 +66,10 @@ def committable() -> list[Path]:
     return [REPO / p for p in out.splitlines() if (REPO / p).is_file()]
 
 
-def private_patterns() -> re.Pattern | None:
-    env = REPO / ".env"
-    if not env.is_file():
-        return None
-    for line in env.read_text().splitlines():
-        if line.startswith("PRIVATE_PATTERNS="):
-            value = line.split("=", 1)[1].strip().strip("'\"")
-            # The template's placeholder value counts as "not set".
-            return (
-                re.compile(value, re.IGNORECASE) if value and "<" not in value else None
-            )
-    return None
-
-
 def highest_question_ids() -> dict[str, int]:
     """The "highest id used" recorded in each questions index, e.g. {"EQ": 14}."""
     found = {}
-    for prefix in ("EQ", "DQ"):
+    for prefix in ("EQ", "RQ"):
         index = REPO / ID_FOLDERS[prefix] / "README.md"
         if index.is_file():
             m = re.search(
@@ -129,7 +109,6 @@ def strip_code_blocks(text: str) -> str:
 def main() -> None:
     run_dir = Path(sys.argv[1])
     files = committable()
-    private = private_patterns()
     issues: dict[str, list[str]] = {
         "Personal data": [],
         "Secrets": [],
@@ -146,8 +125,6 @@ def main() -> None:
             continue
         own_source = file.resolve() == Path(__file__).resolve()
         for n, line in enumerate(text.splitlines(), 1):
-            if private and not rel.startswith(BIBLIOGRAPHIC) and private.search(line):
-                issues["Personal data"].append(f"`{rel}:{n}`: matches PRIVATE_PATTERNS")
             if LOCAL_PATHS.search(line) and not own_source:
                 issues["Personal data"].append(f"`{rel}:{n}`: absolute personal path")
             if SECRETS.search(line):
@@ -192,12 +169,6 @@ def main() -> None:
         lines += [f"## {section}", ""]
         lines += [f"- {item}" for item in sorted(set(found))] or ["none"]
         lines.append("")
-    if private is None:
-        lines.insert(
-            3,
-            "Note: PRIVATE_PATTERNS is not set in `.env`: "
-            "personal names were not checked.\n",
-        )
     out = run_dir / "checks" / "hygiene.md"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(lines))

@@ -127,7 +127,7 @@ Reference: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 - `docs/research/literature/`: one verified distillation note per paper, the source of truth for what it says, and code references (a checklist per library); `references.bib` there is the bibliography, one entry per source, keyed by bibkey (`ilharco2023editing`).
 - `docs/research/knowledge/`: general theory for people, one concept per doc (signals, time series, change over time, evaluation, models, learning); figures drawn by one script per `assets/` folder.
 - `docs/research/method/`: everything specific to this work (questions `RQ-`, decisions `RD-`, protocol, experiments, findings), created as it's needed.
-- The PDFs themselves stay local, in the git-ignored `papers/` folder: the repository is public, and most papers can't be redistributed ([ED-034](decisions/ED-034-literature.md)).
+- The PDFs themselves stay local, in the git-ignored `docs/research/literature/papers/` folder, beside their notes: the repository is public, and most papers can't be redistributed ([ED-034](decisions/ED-034-literature.md)).
 
 Reference: [docs/research/README.md](../research/README.md) ([ED-036](decisions/ED-036-research-docs.md)).
 
@@ -141,7 +141,7 @@ Reference: [docs/research/README.md](../research/README.md) ([ED-036](decisions/
 | `outputs/expert-reviews/` | expert-review reports, and the guard's log |
 | `outputs/pages/` | papers' pages rendered as images |
 | `data/` | datasets ([ED-020](decisions/ED-020-dataset-location.md)) |
-| `papers/` | the papers' PDFs, named by bibkey ([ED-034](decisions/ED-034-literature.md)) |
+| `docs/research/literature/papers/` | the papers' PDFs, named by bibkey ([ED-034](decisions/ED-034-literature.md)) |
 | `.env` | your personal values |
 | `.venv/` | the Python environment |
 | `CLAUDE.local.md` | personal context for AI agents |

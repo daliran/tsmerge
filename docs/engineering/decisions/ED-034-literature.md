@@ -4,6 +4,7 @@
 - **Date:** 2026-11-02
 - **Decided by:** the author
 - **History:**
+  - 2026-11-09: the PDFs moved from `papers/` at the repository root to `docs/research/literature/papers/`, beside their notes; still git-ignored. No download script: each entry's title and source say where to get a paper again.
   - 2026-11-08: the no-names rule was dropped ([ED-018](ED-018-self-contained-repository.md)), so author names need no exception.
   - 2026-11-08: the research area moved from `docs/domain/` to `docs/research/`, and `references.bib` into `literature/` ([ED-036](ED-036-research-docs.md)); public code may be a reference too, as a pinned `@software` entry with a checklist note ([literature README](../../research/literature/README.md)).
 
@@ -31,7 +32,7 @@
 
 - **Names: C.** First author's surname + year + first meaningful title word, lowercase ASCII; anonymous submissions get `anon<year><word>` until their authors are known.
 - **Location: B.**
-  - PDFs in `papers/<bibkey>.pdf`, git-ignored.
+  - PDFs in `docs/research/literature/papers/<bibkey>.pdf`, git-ignored (at the repository root until 2026-11-09).
   - `docs/research/literature/references.bib` holds one entry per paper: identifiers, URL, the version read, the original file name.
   - `docs/research/literature/<bibkey>.md` holds one note per paper.
 - **The notes are the source of truth for what a paper says:** equations in LaTeX, setups and the numbers we may compare against, every item with its page; our own comments marked as such.

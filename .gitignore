@@ -1,8 +1,8 @@
 # --- Everything generated locally: runs, quick tries, job records, review reports -----
 outputs/
 
-# --- Papers (ED-034): the PDFs stay local; their distillation notes are committed ------
-papers/
+# --- Papers (ED-034): the PDFs stay local, beside their notes; the notes are committed --
+/docs/research/literature/papers/
 
 # --- Datasets (ED-020): the local data folder, and data files anywhere -------------
 data/

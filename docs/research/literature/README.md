@@ -4,7 +4,7 @@ One distillation note per paper. **The notes are the source of truth for what a 
 
 ## Rules
 
-- **One file per paper:** `<bibkey>.md`, with the paper's entry in [references.bib](references.bib) and its PDF in `papers/<bibkey>.pdf`.
+- **One file per paper:** `<bibkey>.md`, with the paper's entry in [references.bib](references.bib) and its PDF in the git-ignored `papers/<bibkey>.pdf` here, beside the notes. Each entry's `title` names the paper, so a PDF is identified by its file name alone.
 - **Everything is traceable:** every equation, number and claim carries the page it comes from (`p. 4`, `Table 2, p. 7`). What isn't in the paper isn't in the note; our own comments are marked as such (**Our reading:**).
 - **Pages are the PDF's own pages,** counted from 1 (the `pNN.png` of `render_pages.sh`), which may differ from the number printed on the page.
 - **Equations in LaTeX, numbers exactly as printed:** results we may compare against are copied as tables, with their units and settings.

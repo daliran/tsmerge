@@ -31,6 +31,7 @@ Pictures live **beside the docs that show them**, never in one central folder:
 
 - each doc folder with pictures has an **`assets/`** subfolder, e.g. `docs/engineering/assets/`, `docs/research/knowledge/signals/assets/`;
 - a picture shown by docs in several folders goes in the `assets/` of their nearest common folder (e.g. `docs/assets/` for one shown in `docs/README.md` and `docs/engineering/overview.md`);
-- an `assets/` folder holds the pictures **and what generates them** (a Mermaid `.mmd` source, a drawing script), and a short README listing each file, what it shows and where it's shown.
+- an `assets/` folder holds the pictures **and what generates them** (a Mermaid `.mmd` source, a drawing script), and a short README listing each file, what it shows and where it's shown;
+- **the tool follows what the picture shows,** wherever it lives: a Mermaid `.mmd` source for structure and process (boxes, arrows, states, steps), a Python drawing script for data and functions (axes, curves, numbers).
 
 How diagrams are made and checked: [engineering/assets/README.md](engineering/assets/README.md).

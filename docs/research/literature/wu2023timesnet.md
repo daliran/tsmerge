@@ -22,22 +22,22 @@ Modeling **temporal variation**, which the authors call "the common key problem 
 
 For the input $\mathbf{X}_{\text{1D}} \in \mathbb{R}^{T \times C}$ (Equation 1, p. 3):
 
-$$\mathbf{A} = \operatorname{Avg}\Big(\operatorname{Amp}\big(\operatorname{FFT}(\mathbf{X}_{\text{1D}})\big)\Big), \quad \{f_1, \dots, f_k\} = \underset{f_* \in \{1, \dots, [\frac{T}{2}]\}}{\arg\operatorname{Topk}}(\mathbf{A}), \quad p_i = \left\lceil \frac{T}{f_i} \right\rceil, \; i \in \{1, \dots, k\}$$
+$$\mathbf{A} = \mathrm{Avg}\Big(\mathrm{Amp}\big(\mathrm{FFT}(\mathbf{X}_{\text{1D}})\big)\Big), \quad \{f_1, \dots, f_k\} = \underset{f_* \in \{1, \dots, [\frac{T}{2}]\}}{\arg\mathrm{Topk}}(\mathbf{A}), \quad p_i = \left\lceil \frac{T}{f_i} \right\rceil, \; i \in \{1, \dots, k\}$$
 
-- $\mathbf{A} \in \mathbb{R}^T$ is the amplitude of each frequency, averaged over the $C$ variates by $\operatorname{Avg}(\cdot)$; $\mathbf{A}_j$ is the intensity of the frequency-$j$ basis function, whose period length is $\lceil T/j \rceil$ (p. 4).
+- $\mathbf{A} \in \mathbb{R}^T$ is the amplitude of each frequency, averaged over the $C$ variates by $\mathrm{Avg}(\cdot)$; $\mathbf{A}_j$ is the intensity of the frequency-$j$ basis function, whose period length is $\lceil T/j \rceil$ (p. 4).
 - Only the top-$k$ amplitudes are kept, "considering the sparsity of frequency domain and to avoid the noises brought by meaningless high frequencies"; $k$ is a hyperparameter (p. 4).
 - Only frequencies in $\{1, \dots, [T/2]\}$ are considered, because of the conjugacy of the frequency domain (p. 4).
 - Summarized as (Equation 2, p. 4):
 
-$$\mathbf{A}, \{f_1, \dots, f_k\}, \{p_1, \dots, p_k\} = \operatorname{Period}(\mathbf{X}_{\text{1D}})$$
+$$\mathbf{A}, \{f_1, \dots, f_k\}, \{p_1, \dots, p_k\} = \mathrm{Period}(\mathbf{X}_{\text{1D}})$$
 
 ### 1D → 2D reshaping
 
 For each selected frequency (Equation 3, p. 4):
 
-$$\mathbf{X}^i_{\text{2D}} = \operatorname{Reshape}_{p_i, f_i}\big(\operatorname{Padding}(\mathbf{X}_{\text{1D}})\big), \quad i \in \{1, \dots, k\}$$
+$$\mathbf{X}^i_{\text{2D}} = \mathrm{Reshape}_{p_i, f_i}\big(\mathrm{Padding}(\mathbf{X}_{\text{1D}})\big), \quad i \in \{1, \dots, k\}$$
 
-- $\operatorname{Padding}(\cdot)$ extends the series with zeros along time so it fits the reshape (p. 4).
+- $\mathrm{Padding}(\cdot)$ extends the series with zeros along time so it fits the reshape (p. 4).
 - $\mathbf{X}^i_{\text{2D}} \in \mathbb{R}^{p_i \times f_i \times C}$: $p_i$ rows and $f_i$ columns; in the paper's words, its "columns and rows represent the intraperiod-variation and interperiod-variation under the corresponding period length $p_i$ respectively" (p. 4).
 - The result is a set of $k$ 2D tensors $\{\mathbf{X}^1_{\text{2D}}, \dots, \mathbf{X}^k_{\text{2D}}\}$, one per period (p. 4).
 - The reshape gives two kinds of locality, adjacent time points (columns) and adjacent periods (rows), so 2D kernels can process it (p. 4).
@@ -45,9 +45,9 @@ $$\mathbf{X}^i_{\text{2D}} = \operatorname{Reshape}_{p_i, f_i}\big(\operatorname
 
 ### TimesNet: residual stack of TimesBlocks
 
-The raw input is first embedded, $\mathbf{X}^0_{\text{1D}} = \operatorname{Embed}(\mathbf{X}_{\text{1D}}) \in \mathbb{R}^{T \times d_{\text{model}}}$; layer $l$ then computes (Equation 4, p. 4):
+The raw input is first embedded, $\mathbf{X}^0_{\text{1D}} = \mathrm{Embed}(\mathbf{X}_{\text{1D}}) \in \mathbb{R}^{T \times d_{\text{model}}}$; layer $l$ then computes (Equation 4, p. 4):
 
-$$\mathbf{X}^l_{\text{1D}} = \operatorname{TimesBlock}\big(\mathbf{X}^{l-1}_{\text{1D}}\big) + \mathbf{X}^{l-1}_{\text{1D}}$$
+$$\mathbf{X}^l_{\text{1D}} = \mathrm{TimesBlock}\big(\mathbf{X}^{l-1}_{\text{1D}}\big) + \mathbf{X}^{l-1}_{\text{1D}}$$
 
 The embedding layer itself isn't specified further in the paper.
 
@@ -57,16 +57,16 @@ Periods are re-estimated **from the deep features of each layer**, not only from
 
 $$
 \begin{aligned}
-\mathbf{A}^{l-1}, \{f_1, \dots, f_k\}, \{p_1, \dots, p_k\} &= \operatorname{Period}\big(\mathbf{X}^{l-1}_{\text{1D}}\big), \\
-\mathbf{X}^{l,i}_{\text{2D}} &= \operatorname{Reshape}_{p_i, f_i}\big(\operatorname{Padding}(\mathbf{X}^{l-1}_{\text{1D}})\big), \quad i \in \{1, \dots, k\} \\
-\widehat{\mathbf{X}}^{l,i}_{\text{2D}} &= \operatorname{Inception}\big(\mathbf{X}^{l,i}_{\text{2D}}\big), \quad i \in \{1, \dots, k\} \\
-\widehat{\mathbf{X}}^{l,i}_{\text{1D}} &= \operatorname{Trunc}\Big(\operatorname{Reshape}_{1,(p_i \times f_i)}\big(\widehat{\mathbf{X}}^{l,i}_{\text{2D}}\big)\Big), \quad i \in \{1, \dots, k\}
+\mathbf{A}^{l-1}, \{f_1, \dots, f_k\}, \{p_1, \dots, p_k\} &= \mathrm{Period}\big(\mathbf{X}^{l-1}_{\text{1D}}\big), \\
+\mathbf{X}^{l,i}_{\text{2D}} &= \mathrm{Reshape}_{p_i, f_i}\big(\mathrm{Padding}(\mathbf{X}^{l-1}_{\text{1D}})\big), \quad i \in \{1, \dots, k\} \\
+\widehat{\mathbf{X}}^{l,i}_{\text{2D}} &= \mathrm{Inception}\big(\mathbf{X}^{l,i}_{\text{2D}}\big), \quad i \in \{1, \dots, k\} \\
+\widehat{\mathbf{X}}^{l,i}_{\text{1D}} &= \mathrm{Trunc}\Big(\mathrm{Reshape}_{1,(p_i \times f_i)}\big(\widehat{\mathbf{X}}^{l,i}_{\text{2D}}\big)\Big), \quad i \in \{1, \dots, k\}
 \end{aligned}
 $$
 
 - $\mathbf{X}^{l,i}_{\text{2D}} \in \mathbb{R}^{p_i \times f_i \times d_{\text{model}}}$; $\widehat{\mathbf{X}}^{l,i}_{\text{1D}} \in \mathbb{R}^{T \times d_{\text{model}}}$ (p. 5).
-- $\operatorname{Inception}(\cdot)$ is a parameter-efficient inception block (Szegedy et al., 2015) with multi-scale 2D kernels (p. 5). Its kernel sizes and number of branches aren't given in the paper.
-- $\operatorname{Trunc}(\cdot)$ truncates the padded series of length $p_i \times f_i$ back to $T$ (p. 5).
+- $\mathrm{Inception}(\cdot)$ is a parameter-efficient inception block (Szegedy et al., 2015) with multi-scale 2D kernels (p. 5). Its kernel sizes and number of branches aren't given in the paper.
+- $\mathrm{Trunc}(\cdot)$ truncates the padded series of length $p_i \times f_i$ back to $T$ (p. 5).
 - **One shared inception block** for all $k$ tensors, "to improve parameter efficiency, which can make the model size invariant to the selection of hyper-parameter $k$" (p. 5).
 
 ### Adaptive aggregation
@@ -74,7 +74,7 @@ $$
 The $k$ 1D outputs are fused with weights from the amplitudes of their frequencies, an idea taken from Auto-Correlation (Wu et al., 2021) (Equation 6, p. 5):
 
 $$
-\widehat{\mathbf{A}}^{l-1}_{f_1}, \dots, \widehat{\mathbf{A}}^{l-1}_{f_k} = \operatorname{Softmax}\big(\mathbf{A}^{l-1}_{f_1}, \dots, \mathbf{A}^{l-1}_{f_k}\big), \qquad
+\widehat{\mathbf{A}}^{l-1}_{f_1}, \dots, \widehat{\mathbf{A}}^{l-1}_{f_k} = \mathrm{Softmax}\big(\mathbf{A}^{l-1}_{f_1}, \dots, \mathbf{A}^{l-1}_{f_k}\big), \qquad
 \mathbf{X}^l_{\text{1D}} = \sum_{i=1}^{k} \widehat{\mathbf{A}}^{l-1}_{f_i} \times \widehat{\mathbf{X}}^{l,i}_{\text{1D}}
 $$
 

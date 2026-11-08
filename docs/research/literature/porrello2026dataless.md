@@ -55,7 +55,7 @@ where $\tau^l$ is the part of $\tau$ for layer $l$ (p. 4).
 
 **KFAC for one fully-connected layer** (p. 4). Weights $W^l \in \mathbb{R}^{D_1 \times D_2}$ (no bias), input $a_n^l \in \mathbb{R}^{D_2}$, output $z_n^l = W a_n^l \in \mathbb{R}^{D_1}$:
 
-$$G(\operatorname{vec} W^l) \overset{\text{KFAC}}{\approx} \left( \frac{1}{|\mathcal{D}|} \sum_n (J_{z_n^l} f_n)^\top \nabla^2 c_n (J_{z_n^l} f_n) \right) \otimes \left( \frac{1}{|\mathcal{D}|} \sum_n a_n^l a_n^{l\top} \right) := B^l \otimes A^l$$
+$$G(\mathrm{vec} W^l) \overset{\text{KFAC}}{\approx} \left( \frac{1}{|\mathcal{D}|} \sum_n (J_{z_n^l} f_n)^\top \nabla^2 c_n (J_{z_n^l} f_n) \right) \otimes \left( \frac{1}{|\mathcal{D}|} \sum_n a_n^l a_n^{l\top} \right) := B^l \otimes A^l$$
 
 with $A^l \in \mathbb{R}^{D_2 \times D_2}$ and $B^l \in \mathbb{R}^{D_1 \times D_1}$ (p. 4). The approximation assumes $\mathbb{E}_n[\bullet_n \otimes \star_n] \approx \mathbb{E}_n[\bullet_n] \otimes \mathbb{E}_n[\star_n]$ (p. 4).
 
@@ -93,9 +93,9 @@ The error is small when the per-task factors cluster around their means, which t
 
 **Disentanglement error** (Eq. 19, pp. 17–18), from Ortiz-Jimenez et al. (2023):
 
-$$\xi(\alpha_1, \alpha_2) = \sum_{t=1}^{2} \mathbb{E}_{x \sim \mu_t} \left[ \operatorname{dist}\left( f(x; \theta_0 + \alpha_t \tau_t), f(x; \theta_0 + \alpha_1 \tau_1 + \alpha_2 \tau_2) \right) \right]$$
+$$\xi(\alpha_1, \alpha_2) = \sum_{t=1}^{2} \mathbb{E}_{x \sim \mu_t} \left[ \mathrm{dist}\left( f(x; \theta_0 + \alpha_t \tau_t), f(x; \theta_0 + \alpha_1 \tau_1 + \alpha_2 \tau_2) \right) \right]$$
 
-with $\operatorname{dist}(y_1, y_2) = \mathbb{1}(y_1 \neq y_2)$; $\xi = 0$ means no interference at those coefficients (p. 18).
+with $\mathrm{dist}(y_1, y_2) = \mathbb{1}(y_1 \neq y_2)$; $\xi = 0$ means no interference at those coefficients (p. 18).
 
 **Normalcy score / task localization** (p. 8). For an input $x$ and task vector $\tau_t$, $\|J_\theta f(x, \theta_0) \tau_t\|_2^2$ is read as a "normalcy score" for task $t$; the regularizer forces it low for inputs outside task $t$'s training distribution (p. 8).
 

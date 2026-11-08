@@ -22,7 +22,7 @@ Task arithmetic (adding or subtracting fine-tuned weight differences to a pre-tr
 
 **Setting:**
 
-- $T$ tasks, each a triplet $(\mathcal{D}_t, \mu_t, f_t^\star)$: a data support $\mathcal{D}_t \subseteq \mathcal{X}$, an input distribution $\mu_t$ with $\operatorname{supp}(\mu_t) = \mathcal{D}_t$, and a target function $f_t^\star : \mathcal{D}_t \to \mathcal{Y}$ (p. 3).
+- $T$ tasks, each a triplet $(\mathcal{D}_t, \mu_t, f_t^\star)$: a data support $\mathcal{D}_t \subseteq \mathcal{X}$, an input distribution $\mu_t$ with $\mathrm{supp}(\mu_t) = \mathcal{D}_t$, and a target function $f_t^\star : \mathcal{D}_t \to \mathcal{Y}$ (p. 3).
 - Network $f : \mathcal{X} \times \Theta \to \mathcal{Y}$, with $\mathcal{X} \subseteq \mathbb{R}^d$, $\Theta \subseteq \mathbb{R}^m$, $\mathcal{Y} \subseteq \mathbb{R}^c$ (p. 3).
 - All tasks are fine-tuned from the **same pre-trained weights** $\theta_0$, giving $\theta_t^\star$ (p. 3).
 - The formal property assumes **non-intersecting** task supports: $\mathcal{D}_t \cap \mathcal{D}_{t'} = \varnothing$ for $t \neq t'$ (p. 3).
@@ -70,9 +70,9 @@ where $g_t(x; \alpha_t \tau_t) = 0$ for $x \notin \mathcal{D}_t$ and $t = 1, \do
 
 **Disentanglement error** (p. 5), for two tasks:
 
-$$\xi(\alpha_1, \alpha_2) = \sum_{t=1}^{2} \mathbb{E}_{x \sim \mu_t}\left[\operatorname{dist}\left(f(x; \theta_0 + \alpha_t \tau_t),\ f(x; \theta_0 + \alpha_1 \tau_1 + \alpha_2 \tau_2)\right)\right] \tag{6}$$
+$$\xi(\alpha_1, \alpha_2) = \sum_{t=1}^{2} \mathbb{E}_{x \sim \mu_t}\left[\mathrm{dist}\left(f(x; \theta_0 + \alpha_t \tau_t),\ f(x; \theta_0 + \alpha_1 \tau_1 + \alpha_2 \tau_2)\right)\right] \tag{6}$$
 
-- For classification, $\operatorname{dist}(y_1, y_2) = \mathbb{1}(y_1 \neq y_2)$, the prediction error (p. 5).
+- For classification, $\mathrm{dist}(y_1, y_2) = \mathbb{1}(y_1 \neq y_2)$, the prediction error (p. 5).
 - Smaller $\xi(\alpha_1, \alpha_2)$ means more weight disentangled at $(\alpha_1, \alpha_2)$ (p. 5).
 
 **Linearized fine-tuning** (the proposed method, Section 5, pp. 6–7):
@@ -101,15 +101,15 @@ $$\xi(\alpha_1, \alpha_2) = \sum_{t=1}^{2} \mathbb{E}_{x \sim \mu_t}\left[\opera
 
 **Normalized accuracy** for task addition (A, p. 18), relative to each task's own fine-tuned model:
 
-$$\text{Normalized accuracy} = \frac{1}{T} \sum_{t=1}^{T} \frac{\operatorname{acc}_{x \sim \mu_t}\left[f(x; \theta_0 + \sum_{t'} \tau_{t'})\right]}{\operatorname{acc}_{x \sim \mu_t}\left[f(x; \theta_0 + \tau_t)\right]} \tag{7}$$
+$$\text{Normalized accuracy} = \frac{1}{T} \sum_{t=1}^{T} \frac{\mathrm{acc}_{x \sim \mu_t}\left[f(x; \theta_0 + \sum_{t'} \tau_{t'})\right]}{\mathrm{acc}_{x \sim \mu_t}\left[f(x; \theta_0 + \tau_t)\right]} \tag{7}$$
 
 Normalization is with respect to the single-task accuracy "achieved by the model fine-tuned on each task" (p. 18); the Table 1 caption says each method is normalized "by their single-task accuracies" (p. 4). Eq. 7 itself is written only with the non-linear model $f$ (p. 18). **Our reading:** each method's normalized accuracy uses that method's own single-task accuracies (linearized fine-tuned model for linearized FT, post-hoc model for post-hoc linearization); this is consistent with Table 1's absolute and normalized columns against Figure 7's bars (p. 21), e.g. ViT-B/32 non-linear 71.4 / 0.765 ≈ 93.3.
 
 **Eigenfunction localization** (Section 6.1, pp. 7–8; C, p. 20):
 
 - A kernel $k$ decomposes into eigenfunction-eigenvalue pairs $\{(\phi_\rho, \lambda_\rho)\}_{\rho \in \mathbb{N}}$; it can only represent $f^\star(x) = \sum_{\rho=1}^{\infty} c_\rho \phi_\rho(x)$ with finite kernel norm $\|f^\star\|_{\mathcal{H}}^2 = \sum_{\rho=1}^{\infty} c_\rho^2 / \lambda_\rho < +\infty$ (p. 7).
-- **Proposition 1 (simplified)** (p. 8): $k$ can perform task arithmetic with respect to $\{f_t^\star\}$ and $\{\mathcal{D}_t\}$ if, for each task $t$, there is a subset of localized eigenfunctions with $\operatorname{supp}(\phi) \subseteq \mathcal{D}_t$, and $f_t^\star$ is represented only with these.
-- **Proposition 2** (formal version, p. 20): if for all $t, \rho$ either $c_{t,\rho}^\star = 0$ or $\operatorname{supp}(\phi_\rho) \subseteq \mathcal{D}_t$, then $k$ has the task arithmetic property. The proof writes the requirement as Eq. (8) and rewrites it as (p. 20):
+- **Proposition 1 (simplified)** (p. 8): $k$ can perform task arithmetic with respect to $\{f_t^\star\}$ and $\{\mathcal{D}_t\}$ if, for each task $t$, there is a subset of localized eigenfunctions with $\mathrm{supp}(\phi) \subseteq \mathcal{D}_t$, and $f_t^\star$ is represented only with these.
+- **Proposition 2** (formal version, p. 20): if for all $t, \rho$ either $c_{t,\rho}^\star = 0$ or $\mathrm{supp}(\phi_\rho) \subseteq \mathcal{D}_t$, then $k$ has the task arithmetic property. The proof writes the requirement as Eq. (8) and rewrites it as (p. 20):
 
   $$\int_{\mathcal{D}_{t'}} \left(\sum_{t \in [T],\, t \neq t'} \sum_{\rho \in \mathbb{N}} c_{t,\rho}^\star \phi_\rho(x)\right)^2 dx = 0 \tag{9}$$
 
@@ -238,7 +238,7 @@ Normalization is with respect to the single-task accuracy "achieved by the model
 **Our reading:**
 
 - **A second task-arithmetic variant to test:** besides standard task vectors, linearized fine-tuning ($\tau_{\text{lin}}$, evaluated with $f_{\text{lin}}$) is a direct, cheap-to-implement alternative (Listing 1, p. 19, is a few lines with `jvp`). It should be compared against joint training on the same tasks, which this paper does not do.
-- **Weight disentanglement as a diagnostic:** $\xi(\alpha_1, \alpha_2)$ (Eq. 6) can be computed for our task pairs. For forecasting and anomaly scores, $\operatorname{dist}$ would need a regression distance (e.g. MSE between outputs) or a distance on anomaly decisions; this is a choice we'd have to make and justify.
+- **Weight disentanglement as a diagnostic:** $\xi(\alpha_1, \alpha_2)$ (Eq. 6) can be computed for our task pairs. For forecasting and anomaly scores, $\mathrm{dist}$ would need a regression distance (e.g. MSE between outputs) or a distance on anomaly decisions; this is a choice we'd have to make and justify.
 - **The disjoint-support assumption is a key question for time series:** if our tasks are different machines or datasets, supports may be nearly disjoint; if they are successive periods of the same signal, supports overlap heavily, and Property 1 may not even be well-posed. This could explain where task arithmetic falls behind joint training.
 - **Pre-training matters:** task arithmetic fails from random initialization (Table 3). If our time-series backbones are small or trained from scratch, task arithmetic may fail for the same reason; a pre-trained (or jointly pre-trained) $\theta_0$ is probably required, and worth testing explicitly.
 - **Heads:** the closed-vocabulary setup (D.6, p. 25), with per-task heads fine-tuned and then frozen while merging the backbone, is the closest to forecasting or anomaly heads that can't be built from text prompts; it shows lower task-arithmetic performance.

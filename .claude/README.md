@@ -24,9 +24,13 @@ Invoked with `/<name>`.
 |---|---|---|
 | [expert_review_guard.py](hooks/expert_review_guard.py) | before every shell command and Write/Edit call, registered in [settings.json](settings.json); it acts only when the caller is one of the two subagents above | blocks running a cluster or network program (`ssh`, `rsync`, Slurm) or a cluster script, `run_local.sh` or `render_diagrams.sh` (they write files) under any path; blocks Write/Edit outside `outputs/expert-reviews/`. Reading or checking the scripts stays allowed |
 
-**Why in `settings.json`:** a hook declared inside a subagent's own definition silently didn't run in the first review (2026-11-01). A project hook always runs, and the hook input names the calling agent (`agent_type`), so the guard applies only to the reviewers and leaves your main session alone.
+**Why in `settings.json`:** a hook declared inside a subagent's own definition silently didn't run in the first review (2026-11-01).
 
-**Audit log:** every call the guard checks for those subagents is logged, allowed or blocked, one line each, in `outputs/expert-reviews/guard.log` (git-ignored). It shows what the review agents did, and proves the guard runs: verified live on 2026-11-01 without restarting Claude Code.
+A project hook always runs, and the hook input names the calling agent (`agent_type`), so the guard applies only to the reviewers and leaves your main session alone.
+
+**Audit log:** every call the guard checks for those subagents is logged, allowed or blocked, one line each, in `outputs/expert-reviews/guard.log` (git-ignored).
+
+It shows what the review agents did, and proves the guard runs: verified live on 2026-11-01 without restarting Claude Code.
 
 The guard inspects command text: it catches mistakes, but it is not a security boundary. The agents' instructions forbid the same things. Its behavior is tested in `tests/test_expert_review_guard.py`.
 
@@ -57,4 +61,7 @@ Mechanical steps of the skill, run by the orchestrating session, never by the re
 
 - **Output:** `outputs/expert-reviews/<date>-<scope>/` (git-ignored): `run.md`, `checks/`, `roles/`, `report.md`.
 - **Never touches the cluster:** checks that need it are listed in the report as *proposed checks*, for you to approve and run.
-- **Roles:** five now (`python-expert`, `ml-engineer`, `hpc-engineer`, `reproducibility`, `researcher`); three more (`methodology`, `timeseries`, `merging`) when their material exists. See [references/roles.md](skills/expert-review/references/roles.md).
+- **Roles:**
+  - Five now (`python-expert`, `ml-engineer`, `hpc-engineer`, `reproducibility`, `researcher`).
+  - Three more (`methodology`, `timeseries`, `merging`) when their material exists.
+  - See [references/roles.md](skills/expert-review/references/roles.md).

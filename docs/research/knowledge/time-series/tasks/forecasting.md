@@ -16,9 +16,16 @@
 - **given:** the last $L$ steps (the **context** or look-back);
 - **produce:** the next $H$ steps (the **horizon**).
 
-**Short and long term:** forecasts are commonly split into short-term and long-term, a separation that "depends on the forecasting horizon" ([wang2026deep](../../../literature/wang2026deep.md), p. 11). The further ahead, the harder: uncertainty accumulates with every step.
+**Short and long term:** forecasts are commonly split into short-term and long-term, a separation that "depends on the forecasting horizon" ([wang2026deep](../../../literature/wang2026deep.md), p. 11).
 
-**How it's judged:** by the **forecast error**, the difference between an observed value and its forecast, measured on data the model has never seen and summarized by MAE and MSE ([regression errors](../../evaluation/regression-errors.md)). MSE and MAE are the standard measures for long-term forecasting benchmarks ([wang2026deep](../../../literature/wang2026deep.md), p. 11).
+The further ahead, the harder: uncertainty accumulates with every step.
+
+**How it's judged:** by the **forecast error**, the difference between an observed value and its forecast:
+
+- measured on data the model has never seen
+- and summarized by MAE and MSE ([regression errors](../../evaluation/regression-errors.md)).
+
+MSE and MAE are the standard measures for long-term forecasting benchmarks ([wang2026deep](../../../literature/wang2026deep.md), p. 11).
 
 **What makes it hard:** the future may not behave like the past ([stationarity](../structure/stationarity.md): when the series isn't stationary, past patterns stop being a reliable guide).
 

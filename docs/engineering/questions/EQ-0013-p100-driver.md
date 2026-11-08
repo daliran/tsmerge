@@ -11,7 +11,9 @@
 
 ## Options
 
-- **A. Test it once:** a short CPU-profile job on `all_serial` that requests the P100 (`CLUSTER_PROFILE=cpu SBATCH_OPTS="--constraint=gpu_P100_16G --gres=gpu:1" scripts/cluster/submit.sh hello python -m tsmerge.hello`), then read the driver and the result in `run.json`. About a minute, free.
+- **A. Test it once:** a short CPU-profile job on `all_serial` that requests the P100 (`CLUSTER_PROFILE=cpu SBATCH_OPTS="--constraint=gpu_P100_16G --gres=gpu:1" scripts/cluster/submit.sh hello python -m tsmerge.hello`).
+  - Then read the driver and the result in `run.json`.
+  - About a minute, free.
 - **B. Never use GPUs on `all_serial`:** simpler; light GPU work goes to `all_usr_prod`, billed.
 
 ## Hypotheses

@@ -35,7 +35,9 @@ The **period** is the number of steps before the pattern repeats: in an hourly s
 
 ![An hourly series with a daily cycle and lower values every weekend](assets/multiple-seasonality.png)
 
-**Why it matters:** seasonality is the most predictable part of many series. It also sets a minimum for how much history a model must see: to recognize a weekly pattern, it needs to look at least a week back (see [windows](../data-preparation/windows.md)).
+**Why it matters:** seasonality is the most predictable part of many series.
+
+It also sets a minimum for how much history a model must see: to recognize a weekly pattern, it needs to look at least a week back (see [windows](../data-preparation/windows.md)).
 
 ## Seasonality vs cycles
 
@@ -46,7 +48,9 @@ The two are easy to confuse, because both go up and down. The difference is **re
 
 ![A seasonal wave repeating every 50 steps, and a cyclic one whose ups and downs last 70, 110, 60, 95 steps](assets/seasonal-cyclic.png)
 
-Cycles are usually slower: in economic data their duration "is usually at least 2 years", and "the average length of cycles is longer than the length of a seasonal pattern" ([FPP3, 2.3][fpp-patterns]). Because their length varies, cycles are much harder to predict than seasonality. That's why the trend and the cycle are often merged into one **trend-cycle** component ([FPP3, 3.2][fpp-components]).
+Cycles are usually slower: in economic data their duration "is usually at least 2 years", and "the average length of cycles is longer than the length of a seasonal pattern" ([FPP3, 2.3][fpp-patterns]).
+
+Because their length varies, cycles are much harder to predict than seasonality. That's why the trend and the cycle are often merged into one **trend-cycle** component ([FPP3, 3.2][fpp-components]).
 
 ## Key points
 

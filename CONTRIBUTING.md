@@ -10,15 +10,24 @@ How a change gets into this repository: decisions, git, checks and commit messag
 
 ## Git
 
-- People run every git command that changes the repository (`add`, `commit`, `push`, branches). AI agents only read (`git status`, `git diff`, `git log`) and propose commits with the [commit-plan](.claude/skills/commit-plan/SKILL.md) skill: the messages and the exact commands to run.
+- People run every git command that changes the repository (`add`, `commit`, `push`, branches).
+- AI agents only read (`git status`, `git diff`, `git log`) and propose commits with the [commit-plan](.claude/skills/commit-plan/SKILL.md) skill: the messages and the exact commands to run.
 - The default branch is `main`.
 - Small steps: each commit has one clear purpose.
-- Never commit `outputs/` (everything generated locally: runs, job records, review reports), `.env` (personal values), checkpoints (`*.pt`, `*.pth`, `*.ckpt`) or files over ~5 MB.
-- Nothing machine-specific in committed files: local paths and personal values stay in the git-ignored `.env` and `CLAUDE.local.md`, and nothing refers to the private material used to build the repository ([ED-0018](docs/engineering/decisions/ED-0018-self-contained-repository.md)).
+- Never commit:
+  - `outputs/` (everything generated locally: runs, job records, review reports);
+  - `.env` (personal values);
+  - checkpoints (`*.pt`, `*.pth`, `*.ckpt`);
+  - or files over ~5 MB.
+- Nothing machine-specific in committed files:
+  - local paths and personal values stay in the git-ignored `.env` and `CLAUDE.local.md`;
+  - and nothing refers to the private material used to build the repository ([ED-0018](docs/engineering/decisions/ED-0018-self-contained-repository.md)).
 
 ## Adding a file
 
-Every file the repository tracks, except docs, is listed with a one-line purpose in the inventory of [overview.md](docs/engineering/overview.md#every-file-in-the-repository); a test fails if one is missing. Add the line in the same commit as the file, together with its folder's README.
+Every file the repository tracks, except docs, is listed with a one-line purpose in the inventory of [overview.md](docs/engineering/overview.md#every-file-in-the-repository).
+
+A test fails if one is missing. Add the line in the same commit as the file, together with its folder's README.
 
 ## Checks before committing
 
@@ -41,7 +50,9 @@ It runs:
 
 In VS Code, the shared settings run the same Ruff (the one in `.venv`) with the same rules, formatting and sorting imports on save, so files are already clean when the hook checks them ([ED-0031](docs/engineering/decisions/ED-0031-vs-code.md)).
 
-The ruff rules are explicit in `pyproject.toml` (`E, W, F, I, UP, B, SIM, RUF`, line length 88), so a ruff upgrade can't change what is checked ([ED-0012](docs/engineering/decisions/ED-0012-code-checks.md)). `ruff` and `pytest` come with the project's environment (`uv sync`); `shellcheck` is a system package ([setup.md](docs/engineering/setup.md#1-base-tools)).
+The ruff rules are explicit in `pyproject.toml` (`E, W, F, I, UP, B, SIM, RUF`, line length 88), so a ruff upgrade can't change what is checked ([ED-0012](docs/engineering/decisions/ED-0012-code-checks.md)).
+
+`ruff` and `pytest` come with the project's environment (`uv sync`); `shellcheck` is a system package ([setup.md](docs/engineering/setup.md#1-base-tools)).
 
 ### Git hooks: the checks run by themselves
 
@@ -75,4 +86,6 @@ The full rules and examples are in the [commit-plan](.claude/skills/commit-plan/
 
 ## In-depth reviews
 
-For a review from several expert viewpoints (Python, ML engineering, HPC/Slurm, reproducibility, research), run `/expert-review` in Claude Code. It writes a verified report to `outputs/expert-reviews/` (git-ignored) and never touches the cluster. See [.claude/README.md](.claude/README.md).
+For a review from several expert viewpoints (Python, ML engineering, HPC/Slurm, reproducibility, research), run `/expert-review` in Claude Code.
+
+It writes a verified report to `outputs/expert-reviews/` (git-ignored) and never touches the cluster. See [.claude/README.md](.claude/README.md).

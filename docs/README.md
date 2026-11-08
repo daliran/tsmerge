@@ -4,7 +4,11 @@ Everything we write lives here. External sources (papers) are kept apart and nev
 
 ## Knowledge first
 
-Every experiment answers a question, every result supports or refutes a claim, and every lasting choice has a decision. Each has a stable, grep-able id: never changed, never reused, even after its file is deleted. Ids are unique per area and type: engineering questions (`EQ-`), engineering decisions (`ED-`), research questions (`RQ-`), research decisions (`RD-`) and experiments (`e`) each count on their own.
+Every experiment answers a question, every result supports or refutes a claim, and every lasting choice has a decision.
+
+Each has a stable, grep-able id: never changed, never reused, even after its file is deleted.
+
+Ids are unique per area and type: engineering questions (`EQ-`), engineering decisions (`ED-`), research questions (`RQ-`), research decisions (`RD-`) and experiments (`e`) each count on their own.
 
 | Type | Id |
 |---|---|
@@ -23,7 +27,11 @@ Knowledge flows one way: sources → literature notes → concepts → questions
 *Source: [assets/repository-map.mmd](assets/repository-map.mmd)*
 
 - [engineering/](engineering/README.md): all the technical work around the research: setup, the environment, the Unimore cluster, running and recording runs, checks and tooling, with its decisions (`ED-`) and open questions (`EQ-`).
-- [research/](research/README.md): the research itself: [literature/](research/literature/README.md) (what others published: paper notes and the bibliography), [knowledge/](research/knowledge/README.md) (general theory, one concept per doc) and [method/](research/method/README.md) (everything specific to this work: protocol, experiments, findings), with its [decisions](research/decisions/README.md) (`RD-`) and [questions](research/questions/README.md) (`RQ-`).
+- [research/](research/README.md): the research itself:
+  - [literature/](research/literature/README.md) (what others published: paper notes and the bibliography);
+  - [knowledge/](research/knowledge/README.md) (general theory, one concept per doc);
+  - and [method/](research/method/README.md) (everything specific to this work: protocol, experiments, findings);
+  - with its [decisions](research/decisions/README.md) (`RD-`) and [questions](research/questions/README.md) (`RQ-`).
 
 ## Assets
 

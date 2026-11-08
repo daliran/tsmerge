@@ -17,7 +17,9 @@ PyTorch wheels ship their own CUDA runtime. So on each machine only two things m
 - **the GPU architecture:** the wheel must contain kernels for it;
 - **the driver:** it must support the wheel's CUDA version, natively or through CUDA's compatibility within a major version.
 
-The cluster's `all_usr_prod` partition has 87 GPUs, from Pascal (GTX 1080) to Blackwell (RTX PRO 6000) ([GPU inventory](../cluster.md#partitions-and-gpus)); the drivers seen on its nodes are 535 (CUDA ≤ 12.2 natively). The local driver supports CUDA up to 13.4.
+The cluster's `all_usr_prod` partition has 87 GPUs, from Pascal (GTX 1080) to Blackwell (RTX PRO 6000) ([GPU inventory](../cluster.md#partitions-and-gpus)).
+
+The drivers seen on its nodes are 535 (CUDA ≤ 12.2 natively). The local driver supports CUDA up to 13.4.
 
 The cluster also offers its own Python and PyTorch as modules (Python 3.9–3.11; PyTorch 2.7 and 2.8 with CUDA 12.6).
 
@@ -59,8 +61,12 @@ GPU coverage is counted on the 87 GPUs of `all_usr_prod`.
 
 - **PyTorch: option B, torch 2.14.1 with CUDA 12.6.** Same GPU coverage as A, a maintained version, and adopted before any experiment code exists, so no results are split across versions. Option C needs newer drivers than the cluster's.
 - **Environment manager:** uv everywhere, for reproducibility. The cluster's Python and PyTorch modules are not used.
-- **Python:** exactly **3.12.16** (`.python-version`), managed by uv only (`python-preference = "only-managed"`), so every machine runs the same Python build, never the system one. Pinning only `3.12` would let another machine pick a newer 3.12.x (first expert review, item L21).
-- **The repository's own tooling uses the same Python:** scripts run with `uv run`; the guard hook, which runs on every tool call, uses the project environment's Python directly (`.venv/bin/python`), the fastest way to start it (first expert review, item L4).
+- **Python:** exactly **3.12.16** (`.python-version`), managed by uv only (`python-preference = "only-managed"`).
+  - So every machine runs the same Python build, never the system one.
+  - Pinning only `3.12` would let another machine pick a newer 3.12.x (first expert review, item L21).
+- **The repository's own tooling uses the same Python:**
+  - scripts run with `uv run`;
+  - the guard hook, which runs on every tool call, uses the project environment's Python directly (`.venv/bin/python`), the fastest way to start it (first expert review, item L4).
 
 **Verified** (2026-11-02):
 

@@ -44,7 +44,12 @@ Signals can be grouped in several ways. Two questions sort most of them.
 | **Frequency** | a rate of repetition | a spectrum: how much of each pitch a sound contains |
 | **Sequence position** | an index in an ordered list | DNA: which letter is at position 1, 2, 3… |
 
-**The same thing can be seen in more than one domain.** The sound and the spectrum in the figure above are two views of the same tone: the first says how the pressure changes over time, the second how strong each frequency is (440 Hz and 880 Hz). Neither view has more information; they make different things easy to see.
+**The same thing can be seen in more than one domain.** The sound and the spectrum in the figure above are two views of the same tone:
+
+- the first says how the pressure changes over time;
+- the second how strong each frequency is (440 Hz and 880 Hz).
+
+Neither view has more information; they make different things easy to see.
 
 ## Time-based vs not time-based
 
@@ -62,7 +67,9 @@ The key difference is **direction**:
 - **Time flows one way.** At any moment you know the past, never the future. A model that predicts what comes next must only use what came before. Using later values, even by accident, is cheating, and it makes results look better than they are.
 - **Space and other domains have no such arrow.** An image can be read left to right or right to left. Every pixel is available at once.
 
-Some non-time signals still have a natural **order**. DNA has no "past" and "future", but its letters come in a fixed sequence. Ordered signals like these can be treated with the same tools as time-based ones, which is the idea behind [time series](../time-series/time-series.md).
+Some non-time signals still have a natural **order**. DNA has no "past" and "future", but its letters come in a fixed sequence.
+
+Ordered signals like these can be treated with the same tools as time-based ones, which is the idea behind [time series](../time-series/time-series.md).
 
 ## Key points
 

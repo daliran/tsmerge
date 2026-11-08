@@ -1,6 +1,10 @@
 # tsmerge
 
-The experiment code. Every module runs as `python -m tsmerge.<module>`, from the repository root, or from a run's frozen `code/` copy: the package isn't installed, so each run imports exactly its own code ([ED-0030](../docs/engineering/decisions/ED-0030-experiment-code.md)).
+The experiment code.
+
+Every module runs as `python -m tsmerge.<module>`, from the repository root, or from a run's frozen `code/` copy.
+
+The package isn't installed, so each run imports exactly its own code ([ED-0030](../docs/engineering/decisions/ED-0030-experiment-code.md)).
 
 | Module | What it is |
 |---|---|

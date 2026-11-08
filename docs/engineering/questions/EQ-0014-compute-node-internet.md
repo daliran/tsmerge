@@ -10,7 +10,9 @@
 
 ## Options
 
-- **A. Test it once:** a short CPU job that tries an HTTPS request to a public site and records the result. About a minute, free on `all_serial` (though `all_serial` runs on the login nodes, which may differ from the GPU nodes: the test would also need one short job on `all_usr_prod`, billed: a fraction of a standard hour).
+- **A. Test it once:** a short CPU job that tries an HTTPS request to a public site and records the result.
+  - About a minute, free on `all_serial`.
+  - Though `all_serial` runs on the login nodes, which may differ from the GPU nodes: the test would also need one short job on `all_usr_prod`, billed: a fraction of a standard hour.
 - **B. Ask the HPC helpdesk.**
 - **C. Assume no:** design anything online to run offline in jobs and sync from your machine.
 

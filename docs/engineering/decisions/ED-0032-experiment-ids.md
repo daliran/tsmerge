@@ -21,7 +21,10 @@
 Option A:
 
 - **an experiment's name is `e<NNNN>-<slug>`:** `NNNN` is four digits, never changed and never reused, like decision ids; the slug says what it studies in a few words (`e0001-joint-vs-merge`);
-- **each experiment has a short doc,** written before its first run, in [docs/research/method/](../../research/method/README.md) (created with the first experiment): what it tests, which research questions it answers, which runs or sweeps belong to it;
+- **each experiment has a short doc,** written before its first run, in [docs/research/method/](../../research/method/README.md) (created with the first experiment):
+  - what it tests,
+  - which research questions it answers,
+  - which runs or sweeps belong to it;
 - **names that aren't experiments stay allowed,** for setup and smoke tests (`hello`): the scripts accept any valid name; only experiment runs use the `e<NNNN>-` form.
 
 ## Consequences

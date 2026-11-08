@@ -25,7 +25,8 @@
 Option A ([CLAUDE.md](../../../CLAUDE.md)):
 
 - committed files contain no paths outside the repository and no personal values (they go in `.env`, [ED-0014](ED-0014-personal-values.md)); people are "the user" (agent rules) or "the author" (records), a writing convention;
-- committed files never refer to the private material used to build the repository: the author's own earlier work and repositories, local files, notes, drafts (listed in `CLAUDE.local.md`); public sources (papers, books, official documentation, public code) may be cited and linked, and every choice is still justified on its own merits;
+- committed files never refer to the private material used to build the repository: the author's own earlier work and repositories, local files, notes, drafts (listed in `CLAUDE.local.md`);
+  - public sources (papers, books, official documentation, public code) may be cited and linked, and every choice is still justified on its own merits;
 - personal and machine-specific context lives in `CLAUDE.local.md` (git-ignored), which agents read automatically; personal values the scripts need live in `.env` ([ED-0014](ED-0014-personal-values.md));
 - the expert review's hygiene check flags absolute paths of a personal machine ([ED-0011](ED-0011-expert-review-guard.md)); references to the private material are kept out by this rule and by review, since a check would have to name it.
 

@@ -32,4 +32,6 @@ Setting it up (the `~/.bashrc` line, `.env`) is described in [setup.md](../docs/
 
 **Why:** one place for the checks every commit must pass, so the list never exists in two copies.
 
-**What it does:** checks `uv.lock`, runs ruff (lint and format), shellcheck and pytest, checks the diagrams are rendered, reports each, and fails if any fails. The pre-commit hook in `.githooks/` runs it on every commit. Details: [CONTRIBUTING.md](../CONTRIBUTING.md#checks-before-committing).
+**What it does:** checks `uv.lock`, runs ruff (lint and format), shellcheck and pytest, checks the diagrams are rendered, reports each, and fails if any fails.
+
+The pre-commit hook in `.githooks/` runs it on every commit. Details: [CONTRIBUTING.md](../CONTRIBUTING.md#checks-before-committing).

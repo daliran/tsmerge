@@ -1,6 +1,10 @@
 # Cluster scripts
 
-Scripts that run experiments on the Unimore AImageLab-HPC Slurm cluster, from your machine. Local recorded runs use `scripts/run_local.sh` instead. The cluster's facts and rules are in [cluster.md](../../docs/engineering/cluster.md); how we work with it, in [running.md](../../docs/engineering/running.md). What a run is and records: [runs.md](../../docs/engineering/runs.md).
+Scripts that run experiments on the Unimore AImageLab-HPC Slurm cluster, from your machine. Local recorded runs use `scripts/run_local.sh` instead.
+
+- The cluster's facts and rules are in [cluster.md](../../docs/engineering/cluster.md).
+- How we work with it, in [running.md](../../docs/engineering/running.md).
+- What a run is and records: [runs.md](../../docs/engineering/runs.md).
 
 **Before using them:**
 

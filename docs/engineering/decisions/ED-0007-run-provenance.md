@@ -8,7 +8,9 @@
 
 Raised by the first expert review (2026-11-01, items H3, M1, L22):
 
-- A run submitted with uncommitted changes recorded them in `patch.diff`, but inside `code/`, which `pull.sh` skips: back on your machine, only `"git_dirty": true` remained. Once the cluster copy is gone (it isn't backed up, and is deleted when access ends), such a run couldn't be rebuilt.
+- A run submitted with uncommitted changes recorded them in `patch.diff`, but inside `code/`, which `pull.sh` skips.
+  - Back on your machine, only `"git_dirty": true` remained.
+  - Once the cluster copy is gone (it isn't backed up, and is deleted when access ends), such a run couldn't be rebuilt.
 - The patch covered only tracked files: new files were in neither the commit nor the patch. The first `hello` run was an example.
 - The dirty flag, the frozen code and the patch were captured at slightly different moments.
 

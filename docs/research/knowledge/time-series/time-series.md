@@ -22,7 +22,9 @@ where $x_t$ is the value at step $t$. The steps are usually equally spaced: ever
 
 ## What makes a time series special
 
-A table of data where each row is a separate person, product or patient has no natural order: shuffling the rows changes nothing. A time series is different. "Time series data have a natural temporal ordering", which distinguishes it from "cross-sectional studies, in which there is no natural ordering of the observations" ([Time series][ts]).
+A table of data where each row is a separate person, product or patient has no natural order: shuffling the rows changes nothing.
+
+A time series is different. "Time series data have a natural temporal ordering", which distinguishes it from "cross-sectional studies, in which there is no natural ordering of the observations" ([Time series][ts]).
 
 Three consequences follow, and they matter for everything later:
 
@@ -43,7 +45,9 @@ How many values are recorded at each step?
 
 ![One temperature reading per hour, vs three readings per hour sharing the same time axis](assets/univariate-multivariate.png)
 
-In a multivariate series all channels **share the same clock**: row $t$ holds every channel's value at the same moment. The channels often influence each other (the power load follows the temperature), and that relation is information a model can use.
+In a multivariate series all channels **share the same clock**: row $t$ holds every channel's value at the same moment.
+
+The channels often influence each other (the power load follows the temperature), and that relation is information a model can use.
 
 Real benchmark datasets range from a handful of channels to hundreds. These counts come from the TimesNet paper's dataset table ([wu2023timesnet](../../literature/wu2023timesnet.md), Table 6, p. 14):
 
@@ -78,9 +82,14 @@ The same idea, an ordered list of values, with one or more channels, fits a surp
 Two examples from the figure:
 
 - **Audio** is already a time series: sampled sound is one number per step, 8,000 steps per second in the figure (real recordings use 44,100 or more).
-- **DNA** isn't measured in time, but its letters come in a fixed order. To turn letters into numbers, each position gets 4 channels, one per letter, set to 1 for the letter that's there and 0 for the others. This is called **one-hot encoding**. The result is a 4-channel series indexed by position.
+- **DNA** isn't measured in time, but its letters come in a fixed order.
+  - To turn letters into numbers, each position gets 4 channels, one per letter, set to 1 for the letter that's there and 0 for the others.
+  - This is called **one-hot encoding**.
+  - The result is a 4-channel series indexed by position.
 
-**What changes when the index isn't time:** a DNA sequence has an order but no past and future. Every position is known at once, and reading it backwards is just as valid. The tools carry over; the rule "never use the future" only applies when the index really is time.
+**What changes when the index isn't time:** a DNA sequence has an order but no past and future. Every position is known at once, and reading it backwards is just as valid.
+
+The tools carry over; the rule "never use the future" only applies when the index really is time.
 
 ## What the values can be
 

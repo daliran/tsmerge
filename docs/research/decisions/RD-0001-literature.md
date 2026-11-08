@@ -6,7 +6,10 @@
 
 ## Problem
 
-- The research builds on 24 papers, about 96 MB of PDFs, downloaded under inconsistent names: arXiv ids (`2212.04089v3.pdf`), submission numbers with truncated titles (`11979_Merging_on_the_Fly_Witho.pdf`), and hand-numbered titles whose numbers collide across two folders.
+- The research builds on 24 papers, about 96 MB of PDFs, downloaded under inconsistent names:
+  - arXiv ids (`2212.04089v3.pdf`),
+  - submission numbers with truncated titles (`11979_Merging_on_the_Fly_Witho.pdf`),
+  - and hand-numbered titles whose numbers collide across two folders.
 - The repository is public: most papers can't be redistributed, especially submissions still under review, and several PDFs exceed the 5 MB limit for committed files.
 - What a paper says must be available to anyone working on the repository, and checkable, without the PDF.
 

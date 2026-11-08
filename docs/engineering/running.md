@@ -83,7 +83,9 @@ The repository's tasks and debug configurations run all of the above from the ed
 
 Datasets live outside the code ([ED-0020](decisions/ED-0020-dataset-location.md)):
 
-- **locally:** in `data/` at the repository root (git-ignored), or wherever `DATA_DIR` in `.env` points. Recorded runs (`run_local.sh`) and the VS Code debugger read `.env` by themselves; for a quick try in a terminal, add `--env-file .env`: `uv run --env-file .env python -m tsmerge.<module>`;
+- **locally:** in `data/` at the repository root (git-ignored), or wherever `DATA_DIR` in `.env` points.
+  - Recorded runs (`run_local.sh`) and the VS Code debugger read `.env` by themselves.
+  - For a quick try in a terminal, add `--env-file .env`: `uv run --env-file .env python -m tsmerge.<module>`;
 - **on the cluster:** in the work area's `data/` folder; jobs find it as `DATA_DIR`.
 
 Upload a dataset once, preferably as a few large files:
@@ -105,9 +107,15 @@ rsync -az --partial data/<dataset>/ ailb:/work/<project account>/<username>/tsme
 | Very light GPU work, free | `all_serial`, on its P100 GPUs only (the K80s are too old): `CLUSTER_PROFILE=cpu SBATCH_OPTS="--constraint=gpu_P100_16G --gres=gpu:1" scripts/cluster/submit.sh …`. Not verified yet: [EQ-0013](questions/EQ-0013-p100-driver.md) | [ED-0002](decisions/ED-0002-cluster-partition.md) |
 | Never | `boost_usr_prod` | reserved for projects that need high-memory GPUs ([ED-0002](decisions/ED-0002-cluster-partition.md)) |
 
-- **CPU-only jobs** (data preparation, aggregating results): `CLUSTER_PROFILE=cpu scripts/cluster/submit.sh …`. No GPU is requested or checked, and the job runs on `all_serial` (free, at most 4 hours), with the same run folder and records as GPU runs. For heavy or long CPU work, add `CLUSTER_CPU_PARTITION=all_usr_prod` (billed, up to 24 hours). Why: [ED-0022](decisions/ED-0022-cpu-jobs.md).
+- **CPU-only jobs** (data preparation, aggregating results): `CLUSTER_PROFILE=cpu scripts/cluster/submit.sh …`.
+  - No GPU is requested or checked, and the job runs on `all_serial` (free, at most 4 hours), with the same run folder and records as GPU runs.
+  - For heavy or long CPU work, add `CLUSTER_CPU_PARTITION=all_usr_prod` (billed, up to 24 hours).
+  - Why: [ED-0022](decisions/ED-0022-cpu-jobs.md).
 
-- **GPU models:** jobs run only on the models allowed in `scripts/cluster/defaults.sh`; Blackwell is always excluded, because this PyTorch build can't run on it ([ED-0004](decisions/ED-0004-gpu-allow-list.md)). All other models are allowed, high-memory ones included as part of the mixed list ([ED-0027](decisions/ED-0027-gpu-pool.md)). To compare runs on identical hardware, narrow the list for a sweep to one family of at most 24 GB, e.g. `CLUSTER_GPU_SUBSET="gpu_2080_11G gpu_2080Ti_11G" scripts/cluster/submit.sh …` (only allowed models are accepted).
+- **GPU models:** jobs run only on the models allowed in `scripts/cluster/defaults.sh`.
+  - Blackwell is always excluded, because this PyTorch build can't run on it ([ED-0004](decisions/ED-0004-gpu-allow-list.md)).
+  - All other models are allowed, high-memory ones included as part of the mixed list ([ED-0027](decisions/ED-0027-gpu-pool.md)).
+  - To compare runs on identical hardware, narrow the list for a sweep to one family of at most 24 GB, e.g. `CLUSTER_GPU_SUBSET="gpu_2080_11G gpu_2080Ti_11G" scripts/cluster/submit.sh …` (only allowed models are accepted).
 - **Every Slurm option** (account, partition, GPUs, time limit, …) is preset: you pass only the experiment name and the command. Defaults and how to override them: [scripts/cluster/README.md](../../scripts/cluster/README.md#commands).
 
 ### The cycle
@@ -133,9 +141,11 @@ scripts/cluster/pull.sh hello        # bring the experiment's runs back into out
 - **If a submission fails** (for example `sbatch` rejects an option, or the budget is spent), `submit.sh` says which step failed and removes the half-created run folder, so no run is left marked "submitted" without a job.
 - Before submitting, it checks the GPU lists against the cluster, and warns if a GPU model appeared or disappeared ([ED-0004](decisions/ED-0004-gpu-allow-list.md)).
 - Each run's `run.json` records what ran, where and how it ended; `output.log` holds the job's output.
-- **How a run ended** is always recorded in `run.json`'s `status` (`completed`, `failed`, `timeout`, `canceled`, `stopped`; meanings in [runs.md](runs.md#how-a-run-ended-status)). A run gets its time limit **minus 2 minutes**, and `sacct` shows runs stopped at the limit as `FAILED`: trust `run.json`.
+- **How a run ended** is always recorded in `run.json`'s `status` (`completed`, `failed`, `timeout`, `canceled`, `stopped`; meanings in [runs.md](runs.md#how-a-run-ended-status)).
+  - A run gets its time limit **minus 2 minutes**, and `sacct` shows runs stopped at the limit as `FAILED`: trust `run.json`.
 - **Sweeps:** give the runs of one comparison the same sweep id, so they can be grouped later: `SWEEP=<id> scripts/cluster/submit.sh …`. It's recorded in each run's `run.json`.
-- **Runs that use earlier runs** (e.g. merging fine-tuned checkpoints): list them with `INPUTS="<experiment>/<run id> …" scripts/cluster/submit.sh …`. They are recorded in `run.json`, and the program finds them under `RUNS_ROOT` ([runs.md](runs.md#what-a-run-provides)).
+- **Runs that use earlier runs** (e.g. merging fine-tuned checkpoints): list them with `INPUTS="<experiment>/<run id> …" scripts/cluster/submit.sh …`.
+  - They are recorded in `run.json`, and the program finds them under `RUNS_ROOT` ([runs.md](runs.md#what-a-run-provides)).
 - **What each run records** (`run.json`, `config.json`), its folder layout and where runs live: [runs.md](runs.md).
 - After a change to `uv.lock` or to your uv version, rerun `scripts/cluster/setup_remote.sh` first: jobs refuse to run against an outdated environment, or while a rebuild is in progress.
 - **Don't rebuild the environment while jobs are running or queued:** there is one environment, rebuilt in place. Running jobs could load a mix of old and new packages, and queued jobs submitted with the old `uv.lock` will refuse to start.

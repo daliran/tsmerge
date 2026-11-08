@@ -30,7 +30,9 @@ Three ways a run could lose its provenance or its results:
 ## Decision
 
 - **Unpushed commits, A:** `submit.sh` warns when no remote-tracking branch contains the commit (checked locally, without contacting GitHub).
-- **Requeue:** the cluster doesn't requeue jobs (`JobRequeue = 0`, checked 2026-11-02); `submit.sh` still passes `--no-requeue` explicitly (`CLUSTER_REQUEUE` in [defaults.sh](../../../scripts/cluster/defaults.sh)), so it stays that way if the configuration changes. `run.json` records it.
+- **Requeue:** the cluster doesn't requeue jobs (`JobRequeue = 0`, checked 2026-11-02).
+  - `submit.sh` still passes `--no-requeue` explicitly (`CLUSTER_REQUEUE` in [defaults.sh](../../../scripts/cluster/defaults.sh)), so it stays that way if the configuration changes.
+  - `run.json` records it.
 - **Backup, A:** after pulling, copy `outputs/` to a second place (another drive, a cloud-synced folder), checkpoints only if needed: the command is in [running.md](../running.md#safety-net).
 
 ## Consequences

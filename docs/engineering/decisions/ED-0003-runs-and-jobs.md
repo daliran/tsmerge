@@ -82,7 +82,11 @@ The same locally and on the cluster:
 
 ## Consequences
 
-- How runs end, what they record, how they keep their provenance and how submissions stay safe are separate decisions: [ED-0006](ED-0006-run-endings.md), [ED-0007](ED-0007-run-provenance.md), [ED-0009](ED-0009-run-records.md), [ED-0010](ED-0010-safe-submissions.md).
+- How runs end, what they record, how they keep their provenance and how submissions stay safe are separate decisions:
+  - [ED-0006](ED-0006-run-endings.md)
+  - [ED-0007](ED-0007-run-provenance.md)
+  - [ED-0009](ED-0009-run-records.md)
+  - [ED-0010](ED-0010-safe-submissions.md)
 - wandb is not used for now; curves go in `results/history.jsonl` ([ED-0033](ED-0033-training-curves.md)). If it's added, it plugs in without changing the layout: project `tsmerge`, group = experiment, run id = our run id, files in `wandb/`.
 - Personal values (account, user, paths) come from the local `.env` ([ED-0014](ED-0014-personal-values.md)).
 

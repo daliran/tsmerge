@@ -10,7 +10,9 @@
 Two related gaps:
 
 - **Resume after a timeout.** A job lasts at most 24 hours. A run that times out could only restart from scratch, losing its GPU hours.
-- **Runs that use other runs' outputs.** Task arithmetic needs a base model and several fine-tuned checkpoints produced by earlier runs. Nothing defined how a run names its input runs, how a job finds them, or how they are recorded; a merged model couldn't be traced to the exact checkpoints it was built from.
+- **Runs that use other runs' outputs.**
+  - Task arithmetic needs a base model and several fine-tuned checkpoints produced by earlier runs.
+  - Nothing defined how a run names its input runs, how a job finds them, or how they are recorded; a merged model couldn't be traced to the exact checkpoints it was built from.
 
 ## Options
 

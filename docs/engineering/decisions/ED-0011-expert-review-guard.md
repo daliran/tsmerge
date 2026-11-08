@@ -6,7 +6,11 @@
 
 ## Problem
 
-The `/expert-review` skill ([.claude/README.md](../../../.claude/README.md)) runs several AI reviewer agents. They must only read and check the repository: never contact the cluster, never change files outside their review folder. In the first review (2026-11-01):
+The `/expert-review` skill ([.claude/README.md](../../../.claude/README.md)) runs several AI reviewer agents.
+
+They must only read and check the repository: never contact the cluster, never change files outside their review folder.
+
+In the first review (2026-11-01):
 
 - the guard hook, declared inside the review agents' own definitions, **never ran**: commands it should have blocked went through (only the agents' instructions kept them off the cluster);
 - its matching was too strict (it blocked `grep ssh …`) and too loose (it missed `cd scripts && cluster/submit.sh`), and it failed open on unreadable input;
@@ -32,7 +36,9 @@ The `/expert-review` skill ([.claude/README.md](../../../.claude/README.md)) run
 Option A ([expert_review_guard.py](../../../.claude/hooks/expert_review_guard.py)):
 
 - registered in `.claude/settings.json`, run with the project environment's Python (uv's 3.12.16, the fastest launcher); for any caller other than `expert-reviewer` and `expert-review-aggregator`, it allows everything;
-- it checks **what each part of a command runs**, not every word: it blocks `ssh`, `rsync`, `scp`, Slurm commands, any cluster script, and the scripts that write outside the review folder (`run_local.sh`, `render_diagrams.sh`), under any path; it allows reading and checking them (`grep`, `cat`, `shellcheck`, `bash -n`);
+- it checks **what each part of a command runs**, not every word:
+  - it blocks `ssh`, `rsync`, `scp`, Slurm commands, any cluster script, and the scripts that write outside the review folder (`run_local.sh`, `render_diagrams.sh`), under any path;
+  - it allows reading and checking them (`grep`, `cat`, `shellcheck`, `bash -n`);
 - it blocks Write/Edit calls outside `outputs/expert-reviews/`;
 - it fails closed: unreadable input is blocked;
 - every call it checks is logged to `outputs/expert-reviews/guard.log` (git-ignored): an audit trail, and proof it runs;

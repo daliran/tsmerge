@@ -1,6 +1,9 @@
 # Method
 
-Everything specific to this work: what we ask, what we decided, how we test it, and what we found. The general concepts it relies on are in [knowledge/](../knowledge/README.md); what other people published is in [literature/](../literature/README.md).
+Everything specific to this work: what we ask, what we decided, how we test it, and what we found.
+
+- The general concepts it relies on are in [knowledge/](../knowledge/README.md);
+- what other people published is in [literature/](../literature/README.md).
 
 **Status:** planned. Each part is created when it's first needed, with its own README holding its template and index.
 

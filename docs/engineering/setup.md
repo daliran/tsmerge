@@ -1,6 +1,8 @@
 # Setup
 
-How to prepare a local machine to work on this repository: base tools, git, SSH (GitHub and the Unimore AImageLab-HPC cluster), Python, the GPU, optionally Docker for the diagrams, and VS Code. Facts about the cluster are in [cluster.md](cluster.md); daily use in [running.md](running.md).
+How to prepare a local machine to work on this repository: base tools, git, SSH (GitHub and the Unimore AImageLab-HPC cluster), Python, the GPU, optionally Docker for the diagrams, and VS Code.
+
+Facts about the cluster are in [cluster.md](cluster.md); daily use in [running.md](running.md).
 
 Everything here works on **native Linux** and on **WSL2 on Windows**. Where the two differ, both are given; the differences are summed up in [Native Linux or WSL2](#native-linux-or-wsl2).
 
@@ -28,7 +30,11 @@ sudo apt install make rsync openssh-client curl keychain git-lfs shellcheck
 
 (Ubuntu/Debian; Ubuntu 24.04 LTS recommended, since older releases ship outdated packages. On other distributions, install the same packages with their package manager.)
 
-**Upgrading an older Ubuntu** goes one LTS at a time (20.04 → 22.04 → 24.04): run `sudo do-release-upgrade`, restart (on WSL2: `wsl --shutdown`), and repeat. On WSL2, enable systemd first (above). When the upgrade asks whether to keep a locally modified configuration file you never edited on purpose, take the package maintainer's version. Afterwards, re-add any PPA (the upgrade disables them) and run `sudo apt autoremove`.
+**Upgrading an older Ubuntu** goes one LTS at a time (20.04 → 22.04 → 24.04): run `sudo do-release-upgrade`, restart (on WSL2: `wsl --shutdown`), and repeat.
+
+- On WSL2, enable systemd first (above).
+- When the upgrade asks whether to keep a locally modified configuration file you never edited on purpose, take the package maintainer's version.
+- Afterwards, re-add any PPA (the upgrade disables them) and run `sudo apt autoremove`.
 
 - `keychain` keeps SSH keys unlocked for the session ([step 3](#3-ssh-github-and-the-cluster)).
 - `git-lfs` stores large binary files outside the normal git history, if the repository ever needs it.
@@ -98,11 +104,20 @@ Check with `git config --global --list`.
 
 ## 3. SSH: GitHub and the cluster
 
-Use **one key per host**: one for GitHub, one for the cluster. Each key is named after what it is for, and `~/.ssh/config` pins every host to its own key, so ssh never offers the wrong one. The compute scripts reach the cluster through the alias `ailb`. The real host and user names live only in your `~/.ssh/config`, never in the repository.
+Use **one key per host**: one for GitHub, one for the cluster.
+
+- Each key is named after what it is for, and `~/.ssh/config` pins every host to its own key, so ssh never offers the wrong one.
+- The compute scripts reach the cluster through the alias `ailb`.
+- The real host and user names live only in your `~/.ssh/config`, never in the repository.
 
 ### Get the keys
 
-**Key names.** `ssh-keygen` names a key after its algorithm (`id_rsa`, `id_ed25519`), not after what it's for, so with two keys the defaults collide and say nothing. This guide names each key `id_<type>_<host>`, e.g. `id_ed25519_github` or `id_rsa_github`: the type is the algorithm, the suffix is the host it opens. Any name works, since ssh only uses the file `IdentityFile` points to. For new keys, use **Ed25519**: the modern default, short and fast. Existing RSA keys (2048 bits or more) are fine to keep.
+**Key names.** `ssh-keygen` names a key after its algorithm (`id_rsa`, `id_ed25519`), not after what it's for, so with two keys the defaults collide and say nothing.
+
+- This guide names each key `id_<type>_<host>`, e.g. `id_ed25519_github` or `id_rsa_github`: the type is the algorithm, the suffix is the host it opens.
+- Any name works, since ssh only uses the file `IdentityFile` points to.
+- For new keys, use **Ed25519**: the modern default, short and fast.
+- Existing RSA keys (2048 bits or more) are fine to keep.
 
 **New keys** (any machine):
 
@@ -116,7 +131,9 @@ Then register each public key (`.pub`):
 - **GitHub:** GitHub → Settings → SSH and GPG keys → *New SSH key*, type *Authentication key*; paste the output of `cat ~/.ssh/id_ed25519_github.pub`.
 - **Cluster:** follow the cluster's documentation. Where password login is allowed: `ssh-copy-id -i ~/.ssh/id_ed25519_ailb.pub <cluster-user>@<login-host>`.
 
-**WSL2, keys already on Windows:** WSL has its own `~/.ssh`, separate from Windows' `C:\Users\<you>\.ssh`. Copy the keys you already use into WSL (ssh refuses keys read straight from `/mnt/c`, whose permissions are too open), naming each after its host:
+**WSL2, keys already on Windows:** WSL has its own `~/.ssh`, separate from Windows' `C:\Users\<you>\.ssh`.
+
+Copy the keys you already use into WSL (ssh refuses keys read straight from `/mnt/c`, whose permissions are too open), naming each after its host:
 
 ```bash
 cp /mnt/c/Users/<you>/.ssh/<github-key>     ~/.ssh/id_<type>_github
@@ -125,7 +142,9 @@ cp /mnt/c/Users/<you>/.ssh/<cluster-key>     ~/.ssh/id_<type>_ailb
 cp /mnt/c/Users/<you>/.ssh/<cluster-key>.pub ~/.ssh/id_<type>_ailb.pub
 ```
 
-To tell which key is which, compare fingerprints (`ssh-keygen -lf <key>.pub`) with those listed on GitHub → Settings → SSH and GPG keys. Copy only keys in OpenSSH format (first line `-----BEGIN OPENSSH PRIVATE KEY-----`); PuTTY `.ppk` files are not needed.
+To tell which key is which, compare fingerprints (`ssh-keygen -lf <key>.pub`) with those listed on GitHub → Settings → SSH and GPG keys.
+
+Copy only keys in OpenSSH format (first line `-----BEGIN OPENSSH PRIVATE KEY-----`); PuTTY `.ppk` files are not needed.
 
 ### Configure `~/.ssh/config`
 
@@ -188,9 +207,15 @@ It is safe to rerun: whatever is already unlocked is skipped.
 - the keys stay unlocked until WSL or the machine restarts (on WSL2, WSL also stops by itself some time after every terminal and VS Code window is closed);
 - the cluster connection stays open until it has gone unused for 8 hours (`ControlPersist`), or until the network drops; after that, rerun the script.
 
-**Why it matters beyond convenience:** the cluster scripts run ssh non-interactively, where nobody can type a password. Without an unlocked key and an open connection they fail with `Permission denied`. Check the loaded keys with `ssh-add -l`, and the cluster connection with `ssh -O check ailb`.
+**Why it matters beyond convenience:** the cluster scripts run ssh non-interactively, where nobody can type a password. Without an unlocked key and an open connection they fail with `Permission denied`.
 
-**From VS Code:** the task *Start session (unlock SSH and the cluster)* runs the same script. To run it whenever VS Code opens the repository, add `"runOptions": { "runOn": "folderOpen" }` to that task in your copy of `.vscode/tasks.json` (VS Code asks once to allow automatic tasks); it then prompts on every folder open, even when you only read code.
+Check the loaded keys with `ssh-add -l`, and the cluster connection with `ssh -O check ailb`.
+
+**From VS Code:** the task *Start session (unlock SSH and the cluster)* runs the same script.
+
+To run it whenever VS Code opens the repository, add `"runOptions": { "runOn": "folderOpen" }` to that task in your copy of `.vscode/tasks.json` (VS Code asks once to allow automatic tasks).
+
+It then prompts on every folder open, even when you only read code.
 
 ### Check
 
@@ -200,13 +225,19 @@ ssh ailb hostname        # first time: confirm the host key
 ssh ailb hostname        # second time: returns instantly (connection reused)
 ```
 
-**If the cluster asks for a password after the key** (`ssh -v` shows `Authenticated using "publickey" with partial success`), it requires both. Scripts can't type the password, so open the shared connection by hand at the start of each working session, as described in [running.md](running.md#start-each-session).
+**If the cluster asks for a password after the key** (`ssh -v` shows `Authenticated using "publickey" with partial success`), it requires both.
+
+Scripts can't type the password, so open the shared connection by hand at the start of each working session, as described in [running.md](running.md#start-each-session).
 
 Your cluster account is prepared once, in [step 7](#7-the-cluster-once-per-account).
 
 ## 4. Python with uv
 
-[uv](https://docs.astral.sh/uv/) manages Python itself and every dependency. It is also a **Python version manager** (like `py` on Windows or pyenv): each version is downloaded once into `~/.local/share/uv/python` and shared by all projects. You don't need a system Python, and you should not use it.
+[uv](https://docs.astral.sh/uv/) manages Python itself and every dependency.
+
+It is also a **Python version manager** (like `py` on Windows or pyenv): each version is downloaded once into `~/.local/share/uv/python` and shared by all projects.
+
+You don't need a system Python, and you should not use it.
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -248,7 +279,13 @@ uv python pin 3.12            # pin a project to a version (writes .python-versi
 uv self update                # update uv itself
 ```
 
-You rarely need `uv python install` by hand: `uv sync` downloads the version the repository pins the first time. This repository pins an exact version, **3.12.16** (`.python-version`), so every machine runs the identical build ([ED-0001](decisions/ED-0001-python-and-pytorch.md)). The repository's own tooling uses the same Python: scripts run with `uv run`, and the expert-review guard hook uses the project environment's Python (`.venv/bin/python`), so `uv sync` must have been run. The cluster uses uv the same way, so local and cluster runs use the same Python build regardless of each machine's system Python.
+You rarely need `uv python install` by hand: `uv sync` downloads the version the repository pins the first time.
+
+This repository pins an exact version, **3.12.16** (`.python-version`), so every machine runs the identical build ([ED-0001](decisions/ED-0001-python-and-pytorch.md)).
+
+The repository's own tooling uses the same Python: scripts run with `uv run`, and the expert-review guard hook uses the project environment's Python (`.venv/bin/python`), so `uv sync` must have been run.
+
+The cluster uses uv the same way, so local and cluster runs use the same Python build regardless of each machine's system Python.
 
 ## 5. GPU and CUDA (optional)
 
@@ -261,7 +298,10 @@ A local NVIDIA GPU is optional: without one, everything runs on CPU, only slower
 
 The driver must be recent enough for the CUDA version of the PyTorch build pinned in `pyproject.toml`: `nvidia-smi` shows the highest CUDA version the driver supports, top right.
 
-**WSL2:** the GPU is shared with Windows. Games, browsers and other GPU-accelerated Windows apps take memory that training can't use, and their processes don't show in `nvidia-smi` inside WSL, only the total in *Memory-Usage*. Check it before a local run, and close them if memory is nearly full.
+**WSL2:** the GPU is shared with Windows.
+
+- Games, browsers and other GPU-accelerated Windows apps take memory that training can't use, and their processes don't show in `nvidia-smi` inside WSL, only the total in *Memory-Usage*.
+- Check it before a local run, and close them if memory is nearly full.
 
 ## 6. The repository
 
@@ -286,7 +326,8 @@ scripts/run_local.sh hello python -m tsmerge.hello
   ```
 
 - An existing clone made over HTTPS can switch to SSH: `git remote set-url origin git@github.com:<owner>/tsmerge.git`.
-- **WSL2:** clone into the WSL filesystem (e.g. under `~`), **not** under `/mnt/c` or `/mnt/d`: the Windows drives are much slower for git, uv and rsync. To edit in VS Code on Windows, install the *WSL* extension and run `code .` from the repo in a WSL shell.
+- **WSL2:** clone into the WSL filesystem (e.g. under `~`), **not** under `/mnt/c` or `/mnt/d`: the Windows drives are much slower for git, uv and rsync.
+  - To edit in VS Code on Windows, install the *WSL* extension and run `code .` from the repo in a WSL shell.
 - **VS Code:** set it up as in [step 9](#9-vs-code).
 
 ## 7. The cluster (once per account)
@@ -326,7 +367,9 @@ What each script does: [scripts/cluster/README.md](../../scripts/cluster/README.
 
 ## 8. Diagrams (optional)
 
-Only needed to change or add the Mermaid diagrams in the docs' `assets/` folders ([how diagrams work](assets/README.md)): reading the docs and committing other changes work without it. The diagrams are rendered by a pinned Docker image, `minlag/mermaid-cli` (about 1 GB), that bundles everything the renderer needs ([ED-0028](decisions/ED-0028-diagrams.md)).
+Only needed to change or add the Mermaid diagrams in the docs' `assets/` folders ([how diagrams work](assets/README.md)): reading the docs and committing other changes work without it.
+
+The diagrams are rendered by a pinned Docker image, `minlag/mermaid-cli` (about 1 GB), that bundles everything the renderer needs ([ED-0028](decisions/ED-0028-diagrams.md)).
 
 | | Native Linux | WSL2 on Windows |
 |---|---|---|
@@ -400,7 +443,8 @@ Nothing to set by hand: `.vscode/settings.json` holds it.
 
 ## Troubleshooting
 
-- **`Permission denied (publickey)` from GitHub:** check which key ssh offers and whether GitHub accepts it: `ssh -v -T git@github.com 2>&1 | grep -E "Offering|accepts"`. If it is accepted but still fails, the key has a passphrase and no prompt was possible (scripts, `BatchMode`): load it with `keychain`.
+- **`Permission denied (publickey)` from GitHub:** check which key ssh offers and whether GitHub accepts it: `ssh -v -T git@github.com 2>&1 | grep -E "Offering|accepts"`.
+  - If it is accepted but still fails, the key has a passphrase and no prompt was possible (scripts, `BatchMode`): load it with `keychain`.
 - **`Permission denied (password)` from the cluster:** the key was accepted but the cluster also wants a password; open the connection by hand first ([running.md](running.md#start-each-session)).
 - **`do-release-upgrade` hangs** (the log shows it stuck on `snap list`): systemd isn't enabled in WSL2; see the WSL2 notes at the top.
 - **`UNPROTECTED PRIVATE KEY FILE`:** the key's permissions are too open; `chmod 600` it. On WSL2, this is what happens with keys used directly from `/mnt/c`.
@@ -409,4 +453,6 @@ Nothing to set by hand: `.vscode/settings.json` holds it.
 - **`torch.cuda.is_available()` is `False` but `nvidia-smi` works:** the driver is probably older than the CUDA version of the PyTorch build. Update the driver; don't change the PyTorch build without a decision.
 - **`nvidia-smi` not found in WSL:** update the Windows NVIDIA driver and WSL (`wsl --update` in PowerShell), then restart WSL (`wsl --shutdown`).
 - **`uv: command not found`:** open a new shell, or run `source ~/.local/bin/env`.
-- **`render_diagrams.sh` says Docker isn't available:** on WSL2, start Docker Desktop and check that this distro is turned on under *Resources* → *WSL integration*; on native Linux, check `systemctl status docker` and that you are in the `docker` group (`groups`).
+- **`render_diagrams.sh` says Docker isn't available:**
+  - On WSL2, start Docker Desktop and check that this distro is turned on under *Resources* → *WSL integration*;
+  - on native Linux, check `systemctl status docker` and that you are in the `docker` group (`groups`).

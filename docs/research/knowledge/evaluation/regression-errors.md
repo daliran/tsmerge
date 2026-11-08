@@ -7,7 +7,11 @@
 
 ## Errors and their averages
 
-A **forecast error** is "the difference between an observed value and its forecast" ([FPP3, 5.8][fpp-accuracy]), written $e_t$. The same holds for any predicted number, e.g. an imputed value. Accuracy "can only be determined by considering how well a model performs on new data" ([FPP3, 5.8][fpp-accuracy]). The errors are summarized by:
+A **forecast error** is "the difference between an observed value and its forecast" ([FPP3, 5.8][fpp-accuracy]), written $e_t$. The same holds for any predicted number, e.g. an imputed value.
+
+Accuracy "can only be determined by considering how well a model performs on new data" ([FPP3, 5.8][fpp-accuracy]).
+
+The errors are summarized by:
 
 | Measure | Formula | Note |
 |---|---|---|
@@ -16,7 +20,9 @@ A **forecast error** is "the difference between an observed value and its foreca
 
 ## Scale dependence
 
-Both are **scale-dependent**: they "cannot be used to make comparisons between series that involve different units" ([FPP3, 5.8][fpp-accuracy]). This is one reason series are usually rescaled before modeling ([normalization](../time-series/data-preparation/normalization.md)).
+Both are **scale-dependent**: they "cannot be used to make comparisons between series that involve different units" ([FPP3, 5.8][fpp-accuracy]).
+
+This is one reason series are usually rescaled before modeling ([normalization](../time-series/data-preparation/normalization.md)).
 
 ## Key points
 

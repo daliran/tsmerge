@@ -42,15 +42,21 @@ Everything a computer stores, and everything this project works with, is digital
 
 Sampling throws away what happens between samples. How fast must you sample to lose nothing important?
 
-The **Nyquist–Shannon sampling theorem** answers it: a signal with no frequencies above $B$ hertz is completely determined by its samples if you take more than $2B$ samples per second ([Nyquist–Shannon][nyquist]). Half the sampling rate, $f_s/2$, is called the **Nyquist frequency** ([Nyquist–Shannon][nyquist]).
+The **Nyquist–Shannon sampling theorem** answers it: a signal with no frequencies above $B$ hertz is completely determined by its samples if you take more than $2B$ samples per second ([Nyquist–Shannon][nyquist]).
 
-Sample too slowly, and fast changes don't just disappear: they **disguise themselves as slow ones**. This is called **aliasing**: "any frequency component above $f_s/2$ is indistinguishable from a lower-frequency component" ([Nyquist–Shannon][nyquist]).
+Half the sampling rate, $f_s/2$, is called the **Nyquist frequency** ([Nyquist–Shannon][nyquist]).
+
+Sample too slowly, and fast changes don't just disappear: they **disguise themselves as slow ones**.
+
+This is called **aliasing**: "any frequency component above $f_s/2$ is indistinguishable from a lower-frequency component" ([Nyquist–Shannon][nyquist]).
 
 ![A 9 Hz wave sampled 10 times per second looks exactly like a 1 Hz wave](assets/aliasing.png)
 
 The blue dots are 10 samples per second of a wave that repeats 9 times per second. Looking only at the dots, you'd draw the red dashed wave, which repeats once per second. The samples can't tell the two apart.
 
-**Why it matters for us:** the sampling rate of a dataset limits what a model can ever see in it. A series sampled once an hour can't show a pattern that repeats every 30 minutes. That pattern either vanishes or shows up disguised as a slower one. So choosing, or changing, the sampling rate is a real modeling choice.
+**Why it matters for us:** the sampling rate of a dataset limits what a model can ever see in it. A series sampled once an hour can't show a pattern that repeats every 30 minutes.
+
+That pattern either vanishes or shows up disguised as a slower one. So choosing, or changing, the sampling rate is a real modeling choice.
 
 ## Key points
 

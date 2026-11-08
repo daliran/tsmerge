@@ -8,8 +8,12 @@
 ## Problem
 
 - [ED-0002](ED-0002-cluster-partition.md) keeps the project off `boost_usr_prod`, but `all_usr_prod` contains the same high-end nodes (L40S, A40). The GPU list decides which nodes a job may use.
-- The choice sets how many GPUs are available (queue times), how much memory a job can count on, and how comparable runs are: Ampere and newer GPUs use TF32 for convolutions by default, older ones don't, so a difference between two runs could come from the node rather than the method (first expert review, item M4).
-- **A cluster rule found on 2026-11-02:** on `all_usr_prod`, a job whose GPU list asks for more than 24 GB of GPU memory is refused ("Jobs requiring > 24G VRAM must be run on the 'boost_usr_prod' partition"). The cluster computes the minimum memory over the list: a mixed list (minimum 8 GB) is accepted; a list of only L40S or A40 is not.
+- The choice sets:
+  - how many GPUs are available (queue times),
+  - how much memory a job can count on,
+  - and how comparable runs are: Ampere and newer GPUs use TF32 for convolutions by default, older ones don't, so a difference between two runs could come from the node rather than the method (first expert review, item M4).
+- **A cluster rule found on 2026-11-02:** on `all_usr_prod`, a job whose GPU list asks for more than 24 GB of GPU memory is refused ("Jobs requiring > 24G VRAM must be run on the 'boost_usr_prod' partition").
+  - The cluster computes the minimum memory over the list: a mixed list (minimum 8 GB) is accepted; a list of only L40S or A40 is not.
 
 ## Options
 
@@ -26,7 +30,8 @@
 
 - **Option B:** every GPU except Blackwell, for the most nodes and the shortest queues ([defaults.sh](../../../scripts/cluster/defaults.sh)).
 - **Numerics are explicit:** the experiment code sets TF32 and the other determinism flags itself, and records them in `config.json` ([ED-0009](ED-0009-run-records.md)), so results don't depend on which GPU a job landed on.
-- **For a sweep that needs strictly comparable hardware,** narrow the GPU list for that sweep to one family. Because of the 24 GB rule, on `all_usr_prod` that means a family of at most 24 GB: Turing (2080, 2080 Ti, RTX 5000, RTX 6000) or the RTX A5000.
+- **For a sweep that needs strictly comparable hardware,** narrow the GPU list for that sweep to one family.
+  - Because of the 24 GB rule, on `all_usr_prod` that means a family of at most 24 GB: Turing (2080, 2080 Ti, RTX 5000, RTX 6000) or the RTX A5000.
 
 ## Consequences
 

@@ -14,8 +14,12 @@
 
 ### Where the code lives, and how it's imported
 
-- **A. A `tsmerge/` package at the repository root, run as `python -m tsmerge.<module>`, not installed.** Python finds the package in the folder the run starts from: the run's frozen `code/`. A script started by path fails at once with "No module named tsmerge".
-- **B. An installed package (`src/` layout, editable install).** Importable from anywhere, but on the cluster the environment is built from the code mirror, which every submission overwrites: a script started by path would silently import the mirror's newer code instead of its frozen copy.
+- **A. A `tsmerge/` package at the repository root, run as `python -m tsmerge.<module>`, not installed.**
+  - Python finds the package in the folder the run starts from: the run's frozen `code/`.
+  - A script started by path fails at once with "No module named tsmerge".
+- **B. An installed package (`src/` layout, editable install).**
+  - Importable from anywhere, but on the cluster the environment is built from the code mirror, which every submission overwrites.
+  - A script started by path would silently import the mirror's newer code instead of its frozen copy.
 
 ### A shared helper
 
@@ -32,7 +36,10 @@
   - `write_config()` and `write_metrics()`: the two records in their fixed formats; metrics outside the format are refused.
 - **The template and smoke test:** [tsmerge/hello.py](../../../tsmerge/hello.py) fits a linear model to synthetic data through every step a real experiment takes; it replaces `scripts/cluster/hello.py`.
 
-**Verified** (2026-11-02): `python -m tsmerge.hello` as a recorded run locally (RTX 2070 SUPER) and on the cluster (job 178372, RTX 2080 Ti): both imported their frozen copy and wrote `config.json` and `metrics.json`; with the same seeds, both reached the same validation error (0.0096).
+**Verified** (2026-11-02): `python -m tsmerge.hello` as a recorded run locally (RTX 2070 SUPER) and on the cluster (job 178372, RTX 2080 Ti):
+
+- both imported their frozen copy and wrote `config.json` and `metrics.json`;
+- with the same seeds, both reached the same validation error (0.0096).
 
 ## Consequences
 

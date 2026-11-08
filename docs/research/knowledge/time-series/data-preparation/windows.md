@@ -87,14 +87,19 @@ In forecasting, each window has two parts:
 
 So the window size is $W = L + H$. During training, the model sees the context and its prediction is compared with the true horizon. Then the window slides on.
 
-The common benchmark setting, used by the time-series survey and benchmark we read, is a **context of 96 steps** with **horizons of 96, 192, 336 and 720 steps** (on the small ILI dataset: context 36, horizons 24–60) ([wang2026deep](../../../literature/wang2026deep.md), p. 12). The same paper notes that results depend strongly on the context length, and reruns its experiments searching over it ([wang2026deep](../../../literature/wang2026deep.md), p. 12).
+The common benchmark setting, used by the time-series survey and benchmark we read, is a **context of 96 steps** with **horizons of 96, 192, 336 and 720 steps** (on the small ILI dataset: context 36, horizons 24–60) ([wang2026deep](../../../literature/wang2026deep.md), p. 12).
+
+The same paper notes that results depend strongly on the context length, and reruns its experiments searching over it ([wang2026deep](../../../literature/wang2026deep.md), p. 12).
 
 ## Windows for anomaly detection
 
 In anomaly detection there is no horizon: the model looks at a whole window and judges how normal it is. A common approach reconstructs the window and uses the reconstruction error as the anomaly score.
 
 - TimesNet, for example, splits each dataset "into consecutive non-overlapping segments by sliding window", with windows of 100 steps ([wu2023timesnet](../../../literature/wu2023timesnet.md), p. 8; Table 6, p. 14).
-- **Scores must come back to time steps.** An anomaly happens at specific steps, not in a window. With non-overlapping windows each step belongs to one window. With overlapping windows each step gets several scores, one per window that contains it, and they must be combined, e.g. averaged. The TimesNet paper doesn't say how it maps window errors back to steps ([wu2023timesnet](../../../literature/wu2023timesnet.md)); it's a choice we'll have to make and write down.
+- **Scores must come back to time steps.** An anomaly happens at specific steps, not in a window.
+  - With non-overlapping windows each step belongs to one window.
+  - With overlapping windows each step gets several scores, one per window that contains it, and they must be combined, e.g. averaged.
+  - The TimesNet paper doesn't say how it maps window errors back to steps ([wu2023timesnet](../../../literature/wu2023timesnet.md)); it's a choice we'll have to make and write down.
 
 ## Key points
 

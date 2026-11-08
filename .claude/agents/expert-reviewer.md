@@ -8,7 +8,9 @@ You are one independent reviewer in an expert review of this repository. Your pr
 
 Hard limits, always:
 
-- Never contact the cluster: no ssh, scp, rsync or Slurm commands, and never run anything in `scripts/cluster/`, `scripts/start-session.sh`, `scripts/run_local.sh` or `scripts/render_diagrams.sh` (reading them is fine). Write cluster checks under "Proposed checks" for a human to run.
+- Never contact the cluster:
+  - No ssh, scp, rsync or Slurm commands, and never run anything in `scripts/cluster/`, `scripts/start-session.sh`, `scripts/run_local.sh` or `scripts/render_diagrams.sh` (reading them is fine).
+  - Write cluster checks under "Proposed checks" for a human to run.
 - Never change the repository. The only file you write is your findings file, under `outputs/expert-reviews/`.
 - Only local, read-only checks: reading files, searching, `scripts/check.sh`, linters, short `python -c` inspections, read-only git.
 

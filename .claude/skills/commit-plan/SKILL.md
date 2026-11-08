@@ -10,7 +10,8 @@ The user owns git in this repository. Your job is to **check and propose** commi
 
 ## Hard rules
 
-- **Read-only git only:** `status`, `diff`, `log`, `show`, `ls-files`, `branch`, `check-ignore`. Never run `add`, `commit`, `restore`, `reset`, `stash`, `checkout`, `switch`, `rm`, `push`, or anything else that changes the index, the working tree, branches or the remote.
+- **Read-only git only:** `status`, `diff`, `log`, `show`, `ls-files`, `branch`, `check-ignore`.
+  - Never run `add`, `commit`, `restore`, `reset`, `stash`, `checkout`, `switch`, `rm`, `push`, or anything else that changes the index, the working tree, branches or the remote.
 - **Don't edit files** while preparing the plan, `.gitignore` included. Report problems in the plan instead of fixing them.
 - **Describe only what the diff shows.**
 - Only prepare a plan when the user asks for one.
@@ -28,7 +29,10 @@ The user owns git in this repository. Your job is to **check and propose** commi
    - **secrets:** tokens, passwords, keys, `.env` files;
    - **large files:** anything over ~5 MB (`find . -size +5M -not -path './.git/*' -not -path './.venv/*'`);
    - leftover debug output, commented-out code, temporary `TODO`s.
-4. **Propose `.gitignore` additions** for untracked files that shouldn't be committed (caches, editor state, local settings, generated output). Check `.gitignore` and `git check-ignore -v <path>` first. If such a file is already tracked, add `git rm --cached <path>`. The user edits `.gitignore`; put a `chore: update gitignore` commit first.
+4. **Propose `.gitignore` additions** for untracked files that shouldn't be committed (caches, editor state, local settings, generated output).
+   - Check `.gitignore` and `git check-ignore -v <path>` first.
+   - If such a file is already tracked, add `git rm --cached <path>`.
+   - The user edits `.gitignore`; put a `chore: update gitignore` commit first.
 5. **Group into commits.** One commit = one logical change that could be reverted alone. Group by intent, not by file.
    - Split: feature vs refactor vs fix; docs vs code; formatting-only (`style`) vs logic; dependency changes vs behavior changes.
    - Keep together: tests with the code they test; a lockfile with the dependency change that produced it; a source and what is generated from it.

@@ -7,7 +7,9 @@
 
 ## The task
 
-**Purpose:** imputation "focuses on reconstructing missing values using the available contextual information" ([wang2026deep](../../../literature/wang2026deep.md), p. 3). More generally, "imputation is the process of replacing missing data with substituted values" ([Imputation][imputation]).
+**Purpose:** imputation "focuses on reconstructing missing values using the available contextual information" ([wang2026deep](../../../literature/wang2026deep.md), p. 3).
+
+More generally, "imputation is the process of replacing missing data with substituted values" ([Imputation][imputation]).
 
 **Examples:** sensor dropouts, lost transmissions, a broken meter for a few hours.
 
@@ -18,7 +20,10 @@
 
 Unlike forecasting, the model can usually use what comes **both before and after** a gap.
 
-**How it's judged:** in benchmarks, values are hidden on purpose from a complete series ("time steps masked at random"), then the estimates are compared with the hidden truth, with MSE and MAE ([regression errors](../../evaluation/regression-errors.md); [wang2026deep](../../../literature/wang2026deep.md), pp. 11–12).
+**How it's judged:** in benchmarks:
+
+- values are hidden on purpose from a complete series ("time steps masked at random"),
+- then the estimates are compared with the hidden truth, with MSE and MAE ([regression errors](../../evaluation/regression-errors.md); [wang2026deep](../../../literature/wang2026deep.md), pp. 11–12).
 
 **What makes it hard:** long gaps, and gaps that aren't random (a sensor that fails exactly when conditions are extreme).
 

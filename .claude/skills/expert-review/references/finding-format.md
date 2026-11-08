@@ -50,7 +50,9 @@ Each reviewer writes one Markdown file, `roles/<role>.md`, in this shape:
 ## Evidence
 
 - **Location** is a path relative to the repository root and a line number: `scripts/cluster/submit.sh:42`. A problem in several places lists every location, separated by commas; the evidence quotes the first.
-- **Evidence** is **one line copied exactly** from the file at the first location, between double quotes. Shorten a long line with `…` at either end, never in the middle. A script checks every quote against the file: a finding whose quote isn't there is reported as unverified.
+- **Evidence** is **one line copied exactly** from the file at the first location, between double quotes.
+  - Shorten a long line with `…` at either end, never in the middle.
+  - A script checks every quote against the file: a finding whose quote isn't there is reported as unverified.
 - A missing thing ("there is no …") cites where it should be, and quotes the nearest line.
 
 ## Severity

@@ -18,7 +18,9 @@ The time-series survey we read groups the main tasks into four ([wang2026deep](.
 
 ![The four tasks: forecast the future, fill the gaps, flag the abnormal value, label the whole series](assets/tasks.png)
 
-This project works on two of them, **[forecasting](forecasting.md)** and **[anomaly detection](anomaly-detection.md)**. The other two, [imputation](imputation.md) and [classification](classification.md), are described for completeness: they share the same ideas, and they explain why many methods treat all four as one family.
+This project works on two of them, **[forecasting](forecasting.md)** and **[anomaly detection](anomaly-detection.md)**.
+
+The other two, [imputation](imputation.md) and [classification](classification.md), are described for completeness: they share the same ideas, and they explain why many methods treat all four as one family.
 
 ## One family
 
@@ -29,7 +31,10 @@ The four tasks look different, but they rest on the same skill: **understanding 
 - **Anomaly detection** uses it to measure how far the data are from normal.
 - **Classification** uses it to tell kinds of behavior apart.
 
-That's why the survey and benchmark we read evaluates its models across all four tasks ([wang2026deep](../../../literature/wang2026deep.md)), and why [windows](../data-preparation/windows.md) can describe one common way of preparing the data, with small differences per task.
+That's why:
+
+- the survey and benchmark we read evaluates its models across all four tasks ([wang2026deep](../../../literature/wang2026deep.md)),
+- and why [windows](../data-preparation/windows.md) can describe one common way of preparing the data, with small differences per task.
 
 ## Key points
 

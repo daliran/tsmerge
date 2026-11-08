@@ -1,6 +1,8 @@
 # Knowledge
 
-General theory for people, one concept per doc: what a signal and a time series are, how series change over time, how results are judged, the models, and how models learn and are combined. Nothing here is specific to our experiments: it's the shared vocabulary they rely on ([method/](../method/README.md) holds what's specific).
+General theory for people, one concept per doc: what a signal and a time series are, how series change over time, how results are judged, the models, and how models learn and are combined.
+
+Nothing here is specific to our experiments: it's the shared vocabulary they rely on ([method/](../method/README.md) holds what's specific).
 
 ## How it's organized
 
@@ -38,7 +40,9 @@ Read top-down the first time; the numbers are a suggested path, not a requiremen
 
 ## Figures
 
-Each folder with pictures has an `assets/` folder beside its docs, holding the figures and the script that draws them; its README lists each figure and where it's shown. The figures are synthetic and illustrative, drawn from simple formulas with a fixed random seed.
+Each folder with pictures has an `assets/` folder beside its docs, holding the figures and the script that draws them.
+
+Its README lists each figure and where it's shown. The figures are synthetic and illustrative, drawn from simple formulas with a fixed random seed.
 
 To redraw one folder's figures, from the repository root (matplotlib runs in a temporary uv environment, so it isn't a project dependency):
 

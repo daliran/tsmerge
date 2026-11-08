@@ -8,7 +8,10 @@
 ## Problem
 
 - Nothing said where datasets go.
-- The natural first move, downloading a benchmark into the repository, would have been harmful: `submit.sh` copies every non-ignored file into each run's frozen code and into the cluster's code mirror; the cluster home limits the number of files ([ED-0005](ED-0005-uv-cache-on-the-cluster.md)), and the work area asks for few large files ([cluster.md](../cluster.md#storage)).
+- The natural first move, downloading a benchmark into the repository, would have been harmful:
+  - `submit.sh` copies every non-ignored file into each run's frozen code and into the cluster's code mirror;
+  - the cluster home limits the number of files ([ED-0005](ED-0005-uv-cache-on-the-cluster.md)),
+  - and the work area asks for few large files ([cluster.md](../cluster.md#storage)).
 - `config.json` must record each dataset's identity and checksum ([ED-0009](ED-0009-run-records.md)), so data needs a known, stable location.
 
 ## Options

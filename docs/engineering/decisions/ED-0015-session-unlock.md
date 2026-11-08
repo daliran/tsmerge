@@ -29,7 +29,10 @@
 Option A:
 
 - `~/.bashrc` uses `keychain --eval --quiet --noask`: terminals join the SSH agent but never prompt;
-- **[scripts/start-session.sh](../../../scripts/start-session.sh)** loads the keys listed in `.env` (asking only for those not loaded yet), opens the shared cluster connection (`ssh -fN ailb`, asking the cluster password only if needed), and checks GitHub and the cluster;
+- **[scripts/start-session.sh](../../../scripts/start-session.sh)**
+  - loads the keys listed in `.env` (asking only for those not loaded yet),
+  - opens the shared cluster connection (`ssh -fN ailb`, asking the cluster password only if needed),
+  - and checks GitHub and the cluster;
 - safe to rerun.
 
 ## Consequences

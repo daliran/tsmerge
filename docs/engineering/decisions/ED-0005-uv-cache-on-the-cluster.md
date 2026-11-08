@@ -9,9 +9,15 @@
 **The problem.** The first build of the environment on the Unimore cluster (`setup_remote.sh`) failed twice with `Disk quota exceeded` in the home folder, while uv was unpacking PyTorch.
 
 - **Space was not the cause:** about 25 of 100 GB were used.
-- **The number of files is the likely cause:** the home held about 186,000 files when the build failed, and the failure always came while *creating* files. `squota` reports usage in "chunks" but shows no limit for them, and the documentation states no file limit. A limit on the number of files is therefore a **hypothesis**, consistent with every observation but not confirmed.
+- **The number of files is the likely cause:**
+  - the home held about 186,000 files when the build failed, and the failure always came while *creating* files.
+  - `squota` reports usage in "chunks" but shows no limit for them, and the documentation states no file limit.
+  - A limit on the number of files is therefore a **hypothesis**, consistent with every observation but not confirmed.
 
-**Why uv creates so many files there.** uv keeps every downloaded package **unpacked** in its cache (17,165 small files for this project's environment). On the cluster's home file system uv **copies** files from the cache into the environment instead of linking them, so every installed file existed twice: once in the cache, once in the environment.
+**Why uv creates so many files there.**
+
+- uv keeps every downloaded package **unpacked** in its cache (17,165 small files for this project's environment).
+- On the cluster's home file system uv **copies** files from the cache into the environment instead of linking them, so every installed file existed twice: once in the cache, once in the environment.
 
 **When the cache is used.** Only while installing packages: `uv sync` in `setup_remote.sh`, on the login node, once per change of `uv.lock` or of uv. Jobs never use it: they run the environment's Python directly.
 

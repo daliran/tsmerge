@@ -27,7 +27,9 @@ Why: results must be traceable months later, by you and by examiners; cluster st
 | `.python-version` | Pins Python 3.12.16 | Not just "3.12": every machine runs the identical build |
 
 - Locally the environment is `.venv/` (`uv sync`); on the cluster it's built by `setup_remote.sh` ([section 4](#4-running-on-the-cluster)).
-- **Why CUDA 12.6:** the newest PyTorch build the cluster's drivers (535) support; it covers 72 of the cluster's 87 GPUs. Blackwell GPUs can't run it, so they're always excluded ([ED-0001](decisions/ED-0001-python-and-pytorch.md), [ED-0004](decisions/ED-0004-gpu-allow-list.md)).
+- **Why CUDA 12.6:** the newest PyTorch build the cluster's drivers (535) support.
+  - It covers 72 of the cluster's 87 GPUs.
+  - Blackwell GPUs can't run it, so they're always excluded ([ED-0001](decisions/ED-0001-python-and-pytorch.md), [ED-0004](decisions/ED-0004-gpu-allow-list.md)).
 
 Reference: [setup.md](setup.md#4-python-with-uv).
 
@@ -106,13 +108,17 @@ Reference: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## 7. The editor
 
-`.vscode/` holds shared settings, tasks and debug configurations: run, submit, pull and debug from the editor, with the same Ruff and ShellCheck as the checks ([ED-0031](decisions/ED-0031-vs-code.md)). Setting it up: [setup.md](setup.md#9-vs-code); using it: [running.md](running.md#from-vs-code).
+`.vscode/` holds shared settings, tasks and debug configurations: run, submit, pull and debug from the editor, with the same Ruff and ShellCheck as the checks ([ED-0031](decisions/ED-0031-vs-code.md)).
+
+Setting it up: [setup.md](setup.md#9-vs-code); using it: [running.md](running.md#from-vs-code).
 
 ## 8. The knowledge system: decisions, questions, diagrams
 
 - **Decisions** (`ED-NNNN`, [decisions/](decisions/README.md)): why things are the way they are, with the options considered and when to revisit. Updated in place when new information emerges.
 - **Questions** (`EQ-NNNN`, [questions/](questions/README.md)): what isn't known or decided yet. The goal is zero: answered questions become decisions or docs, and their files are deleted.
-- **Diagrams and other pictures** live in an `assets/` folder beside the docs that show them ([docs/README.md](../README.md#assets); diagrams: [assets/README.md](assets/README.md)): Mermaid sources rendered to PNG with Docker; a check fails when an image is out of date with its source ([ED-0028](decisions/ED-0028-diagrams.md)).
+- **Diagrams and other pictures** live in an `assets/` folder beside the docs that show them ([docs/README.md](../README.md#assets); diagrams: [assets/README.md](assets/README.md)).
+  - Mermaid sources rendered to PNG with Docker.
+  - A check fails when an image is out of date with its source ([ED-0028](decisions/ED-0028-diagrams.md)).
 - **Docs are the reference; decisions explain why.** Operational facts always live in a doc ([ED-0016](decisions/ED-0016-engineering-docs.md)).
 
 ![How a question becomes a decision](assets/questions-and-decisions.png)
@@ -120,11 +126,13 @@ Reference: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 ## 9. AI agent tooling
 
 - `CLAUDE.md`: the rules AI agents follow in this repository.
-- `.claude/`: two skills (commit plans; expert reviews by a panel of independent reviewers), their agents, and a guard hook that keeps review agents off the cluster and read-only ([ED-0011](decisions/ED-0011-expert-review-guard.md), [ED-0019](decisions/ED-0019-expert-reviews.md)). Details: [.claude/README.md](../../.claude/README.md).
+- `.claude/`: two skills (commit plans; expert reviews by a panel of independent reviewers), their agents, and a guard hook that keeps review agents off the cluster and read-only ([ED-0011](decisions/ED-0011-expert-review-guard.md), [ED-0019](decisions/ED-0019-expert-reviews.md)).
+  - Details: [.claude/README.md](../../.claude/README.md).
 
 ## 10. The research: literature, knowledge, method
 
-- `docs/research/literature/`: one verified distillation note per paper, the source of truth for what it says, and code references (a checklist per library); `references.bib` there is the bibliography, one entry per source, keyed by bibkey (`ilharco2023editing`).
+- `docs/research/literature/`: one verified distillation note per paper, the source of truth for what it says, and code references (a checklist per library).
+  - `references.bib` there is the bibliography, one entry per source, keyed by bibkey (`ilharco2023editing`).
 - `docs/research/knowledge/`: general theory for people, one concept per doc (signals, time series, change over time, evaluation, models, learning); figures drawn by one script per `assets/` folder.
 - `docs/research/method/`: everything specific to this work (protocol, experiments, findings), created as it's needed.
 - `docs/research/decisions/` and `docs/research/questions/`: research decisions (`RD-`) and open research questions (`RQ-`), including how the research docs themselves work.

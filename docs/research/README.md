@@ -35,6 +35,8 @@ Each area answers a different question:
 
 ## Rules
 
-- **Papers are sources, read-only.** Their PDFs stay on your machine, in the git-ignored `literature/papers/` folder, named `<bibkey>.pdf`; they're never committed (size, and most can't be redistributed). Each entry in `references.bib` says where to get the paper.
+- **Papers are sources, read-only.**
+  - Their PDFs stay on your machine, in the git-ignored `literature/papers/` folder, named `<bibkey>.pdf`; they're never committed (size, and most can't be redistributed).
+  - Each entry in `references.bib` says where to get the paper.
 - **No earlier notes are copied in:** knowledge enters this area only through notes written from, and checked against, the sources.
 - **Public sources can be cited and linked** (papers, books, reference pages, public code); every choice is still justified on its own merits ([ED-0018](../engineering/decisions/ED-0018-self-contained-repository.md)).

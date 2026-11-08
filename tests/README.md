@@ -13,4 +13,12 @@ The tests run with `scripts/check.sh` (and so on every commit), or alone with `u
 | [test_expert_review_guard.py](test_expert_review_guard.py) | the expert-review guard: what it blocks (cluster commands, scripts that write files) and allows (reading, checks) |
 | [test_inventory.py](test_inventory.py) | every file the repository tracks is listed in the inventory of [overview.md](../docs/engineering/overview.md#every-file-in-the-repository) |
 
-Not tested automatically, because they need the cluster: `submit.sh`, `job.sbatch`, `setup_remote.sh`, `pull.sh`, `status.sh`, `logs.sh`. They were verified by hand on the cluster (2026-11-01 and 2026-11-02), as recorded in their decisions ([ED-0006](../docs/engineering/decisions/ED-0006-run-endings.md), [ED-0007](../docs/engineering/decisions/ED-0007-run-provenance.md), [ED-0008](../docs/engineering/decisions/ED-0008-environment-integrity.md), [ED-0010](../docs/engineering/decisions/ED-0010-safe-submissions.md), [ED-0029](../docs/engineering/decisions/ED-0029-local-runs.md)).
+Not tested automatically, because they need the cluster: `submit.sh`, `job.sbatch`, `setup_remote.sh`, `pull.sh`, `status.sh`, `logs.sh`.
+
+They were verified by hand on the cluster (2026-11-01 and 2026-11-02), as recorded in their decisions:
+
+- [ED-0006](../docs/engineering/decisions/ED-0006-run-endings.md)
+- [ED-0007](../docs/engineering/decisions/ED-0007-run-provenance.md)
+- [ED-0008](../docs/engineering/decisions/ED-0008-environment-integrity.md)
+- [ED-0010](../docs/engineering/decisions/ED-0010-safe-submissions.md)
+- [ED-0029](../docs/engineering/decisions/ED-0029-local-runs.md)

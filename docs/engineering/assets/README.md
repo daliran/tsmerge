@@ -1,6 +1,10 @@
 # Assets of the engineering docs, and how diagrams work
 
-This folder holds the pictures shown in the engineering docs. It's also the reference for **how diagrams work anywhere in the repository**: every `assets/` folder that holds diagrams follows the rules below. The convention itself (one `assets/` folder beside the docs it serves) is in [docs/README.md](../../README.md#assets).
+This folder holds the pictures shown in the engineering docs.
+
+It's also the reference for **how diagrams work anywhere in the repository**: every `assets/` folder that holds diagrams follows the rules below.
+
+The convention itself (one `assets/` folder beside the docs it serves) is in [docs/README.md](../../README.md#assets).
 
 Why this format and renderer: [ED-0028](../decisions/ED-0028-diagrams.md).
 
@@ -15,7 +19,10 @@ Why this format and renderer: [ED-0028](../decisions/ED-0028-diagrams.md).
 | [run-statuses](run-statuses.mmd) | The statuses in `run.json`, and what moves a run from one to the next | [runs.md](../runs.md#how-a-run-ended-status), [overview.md](../overview.md) |
 | [questions-and-decisions](questions-and-decisions.mmd) | How a question becomes a decision, and how a decision changes over time | [decisions/README.md](../decisions/README.md#rules), [overview.md](../overview.md) |
 
-Diagrams elsewhere: [repository-map](../../assets/repository-map.mmd) in `docs/assets/` (shown in [docs/README.md](../../README.md#contents) and [overview.md](../overview.md)); [expert-review](../../../.claude/assets/expert-review.mmd) in `.claude/assets/` (shown in [.claude/README.md](../../../.claude/README.md#the-expert-review-in-short)).
+Diagrams elsewhere:
+
+- [repository-map](../../assets/repository-map.mmd) in `docs/assets/` (shown in [docs/README.md](../../README.md#contents) and [overview.md](../overview.md))
+- [expert-review](../../../.claude/assets/expert-review.mmd) in `.claude/assets/` (shown in [.claude/README.md](../../../.claude/README.md#the-expert-review-in-short))
 
 ## How a diagram is stored
 
@@ -25,7 +32,9 @@ Diagrams elsewhere: [repository-map](../../assets/repository-map.mmd) in `docs/a
 
 ## Keeping them accurate
 
-A diagram that no longer matches the docs misleads more than no diagram. So every time the docs change, check the diagrams that show the same thing (each folder's table says where each is shown): if one is out of date, update its `.mmd` and re-render it in the same change.
+A diagram that no longer matches the docs misleads more than no diagram.
+
+So every time the docs change, check the diagrams that show the same thing (each folder's table says where each is shown): if one is out of date, update its `.mmd` and re-render it in the same change.
 
 `scripts/check.sh` only catches an image that is out of date with its own source; whether the source still matches the docs is up to whoever changes the docs.
 
@@ -49,5 +58,7 @@ Without Docker, you can still edit the docs and commit, as long as no `.mmd` cha
 ## Writing Mermaid
 
 - In sequence diagrams, write `<` and `>` as `#lt;` and `#gt;`; in flowchart labels, as `&lt;` and `&gt;`. Otherwise they are read as HTML and disappear.
-- **Avoid arrows into groups nested inside other groups:** the default layout then routes them around the whole picture. Keep groups one level deep and let the flow go one way (e.g. left to right). The ELK layout engine, which handles nesting better, isn't included in the pinned renderer image (`layout: elk` is silently ignored).
+- **Avoid arrows into groups nested inside other groups:** the default layout then routes them around the whole picture.
+  - Keep groups one level deep and let the flow go one way (e.g. left to right).
+  - The ELK layout engine, which handles nesting better, isn't included in the pinned renderer image (`layout: elk` is silently ignored).
 - Preview while editing: GitHub and Obsidian show Mermaid natively; VS Code needs a Mermaid preview extension. The committed PNG is what readers see.

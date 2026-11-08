@@ -50,7 +50,7 @@ One subagent per role plus the aggregator: 6 with the default `project` set, eac
 7. **Spawn the aggregator:** one `Agent` call, `subagent_type: expert-review-aggregator`, with the prompt from [references/aggregator-prompt.md](references/aggregator-prompt.md) and the run folder. Subagents can't write report files, so it **returns** the report as text, following [references/report-template.md](references/report-template.md), after a short summary: the counts, the five most important items and the number of proposed checks.
 8. **Save the report** without reading it into your context: `uv run --locked python .claude/skills/expert-review/scripts/save_report.py <run dir> <aggregator output file>`, where the output file is the path the `Agent` tool gave when the aggregator was launched. It writes `report.md` unchanged.
 9. **Check the guard's log:** `outputs/expert-reviews/guard.log` lists every call the review agents made, allowed or blocked. Note in `run.md` how many were blocked, if any, and mention them to the user.
-10. **Report to the user:** relay the aggregator's summary, the report's path as a clickable link, the counts by severity, and the proposed checks that need their approval. Offer, in one line, to turn verified findings into fixes, questions (`EQ-NNN`) or decisions; do nothing until the user picks.
+10. **Report to the user:** relay the aggregator's summary, the report's path as a clickable link, the counts by severity, and the proposed checks that need their approval. Offer, in one line, to turn verified findings into fixes, questions (`EQ-NNNN`) or decisions; do nothing until the user picks.
 
 ## When the Agent tool is unavailable
 

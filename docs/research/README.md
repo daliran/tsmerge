@@ -2,7 +2,7 @@
 
 What the research is about and how it's done. How the repository's machinery works (setup, the cluster, runs, checks) is in [engineering/](../engineering/README.md).
 
-The area is built step by step, and every part is checked against its sources before it's marked done. How it's organized, and why: [ED-036](../engineering/decisions/ED-036-research-docs.md).
+The area is built step by step, and every part is checked against its sources before it's marked done. How it's organized, and why: [ED-0036](../engineering/decisions/ED-0036-research-docs.md).
 
 ## Contents
 
@@ -23,9 +23,9 @@ Each area answers a different question:
 | Type | Id | Example |
 |---|---|---|
 | Paper or code reference | bibkey: first author's surname (or the organization) + year + first meaningful title word, lowercase ASCII | `ilharco2023editing` |
-| Research question | `RQ-NNN` | — |
-| Research decision | `RD-NNN` | — |
-| Experiment | `e<NNN>-<slug>` ([ED-032](../engineering/decisions/ED-032-experiment-ids.md)) | `e001-joint-vs-merge` |
+| Research question | `RQ-NNNN` | — |
+| Research decision | `RD-NNNN` | — |
+| Experiment | `e<NNNN>-<slug>` ([ED-0032](../engineering/decisions/ED-0032-experiment-ids.md)) | `e0001-joint-vs-merge` |
 
 - **Anonymous submissions** get `anon<year><word>` (e.g. `anon2026quasi`), renamed once their authors are known; the old key is then recorded in the entry's `note`.
 - A bibkey never changes otherwise, and is never reused.
@@ -35,4 +35,4 @@ Each area answers a different question:
 
 - **Papers are sources, read-only.** Their PDFs stay on your machine, in the git-ignored `literature/papers/` folder, named `<bibkey>.pdf`; they're never committed (size, and most can't be redistributed). Each entry in `references.bib` says where to get the paper.
 - **No earlier notes are copied in:** knowledge enters this area only through notes written from, and checked against, the sources.
-- **Public sources can be cited and linked** (papers, books, reference pages, public code); every choice is still justified on its own merits ([ED-018](../engineering/decisions/ED-018-self-contained-repository.md)).
+- **Public sources can be cited and linked** (papers, books, reference pages, public code); every choice is still justified on its own merits ([ED-0018](../engineering/decisions/ED-0018-self-contained-repository.md)).

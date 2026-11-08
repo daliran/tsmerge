@@ -2,7 +2,7 @@
 
 This folder holds the pictures shown in the engineering docs. It's also the reference for **how diagrams work anywhere in the repository**: every `assets/` folder that holds diagrams follows the rules below. The convention itself (one `assets/` folder beside the docs it serves) is in [docs/README.md](../../README.md#assets).
 
-Why this format and renderer: [ED-028](../decisions/ED-028-diagrams.md).
+Why this format and renderer: [ED-0028](../decisions/ED-0028-diagrams.md).
 
 ## The diagrams in this folder
 

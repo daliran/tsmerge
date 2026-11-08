@@ -2,7 +2,7 @@
 
 What this repository's machinery does, why each piece exists, and where to read more. Read it top to bottom once; afterwards, the [inventory](#every-file-in-the-repository) at the end says what any file is for.
 
-- **This page is a map, not the reference:** each part links to the doc that holds the details, and to the decision (`ED-NNN`) that explains why.
+- **This page is a map, not the reference:** each part links to the doc that holds the details, and to the decision (`ED-NNNN`) that explains why.
 - Nothing here is about the research itself: that lives in the [research area](../research/README.md).
 
 ![The repository's folders, what each holds, and where to start reading](../assets/repository-map.png)
@@ -15,19 +15,19 @@ What this repository's machinery does, why each piece exists, and where to read 
 - Every run, local or on the cluster, gets **its own folder with a full record**: what code ran (commit plus uncommitted changes), with which settings, on which machine, and how it ended.
 - Every choice that shapes the setup is a **decision** with its reasons; every fact you need day to day is in a **doc**.
 
-Why: results must be traceable months later, by you and by examiners; cluster storage isn't backed up and disappears when the account ends ([ED-003](decisions/ED-003-runs-and-jobs.md), [ED-025](decisions/ED-025-run-safety.md)).
+Why: results must be traceable months later, by you and by examiners; cluster storage isn't backed up and disappears when the account ends ([ED-0003](decisions/ED-0003-runs-and-jobs.md), [ED-0025](decisions/ED-0025-run-safety.md)).
 
 ## 2. The environment: the same Python everywhere
 
 | Piece | What it does | Why |
 |---|---|---|
-| **uv** | Installs Python and every package, locally and on the cluster | One tool, one lockfile: identical environments on every machine ([ED-001](decisions/ED-001-python-and-pytorch.md)) |
+| **uv** | Installs Python and every package, locally and on the cluster | One tool, one lockfile: identical environments on every machine ([ED-0001](decisions/ED-0001-python-and-pytorch.md)) |
 | `pyproject.toml` | Lists the dependencies (PyTorch 2.14.1 for CUDA 12.6, numpy; pytest and ruff for development) and the tools' settings | The single place where dependencies are chosen |
 | `uv.lock` | Pins the exact version of every package | Reproducibility: the same lockfile gives the same environment |
 | `.python-version` | Pins Python 3.12.16 | Not just "3.12": every machine runs the identical build |
 
 - Locally the environment is `.venv/` (`uv sync`); on the cluster it's built by `setup_remote.sh` ([section 4](#4-running-on-the-cluster)).
-- **Why CUDA 12.6:** the newest PyTorch build the cluster's drivers (535) support; it covers 72 of the cluster's 87 GPUs. Blackwell GPUs can't run it, so they're always excluded ([ED-001](decisions/ED-001-python-and-pytorch.md), [ED-004](decisions/ED-004-gpu-allow-list.md)).
+- **Why CUDA 12.6:** the newest PyTorch build the cluster's drivers (535) support; it covers 72 of the cluster's 87 GPUs. Blackwell GPUs can't run it, so they're always excluded ([ED-0001](decisions/ED-0001-python-and-pytorch.md), [ED-0004](decisions/ED-0004-gpu-allow-list.md)).
 
 Reference: [setup.md](setup.md#4-python-with-uv).
 
@@ -35,10 +35,10 @@ Reference: [setup.md](setup.md#4-python-with-uv).
 
 | Piece | What it does | Why |
 |---|---|---|
-| [`tsmerge/`](../../tsmerge/README.md) | The experiment code, run as `python -m tsmerge.<module>`, **not installed** | Each run imports exactly its own frozen copy of the code ([ED-030](decisions/ED-030-experiment-code.md)) |
-| `tsmerge/run.py` | The helper every experiment uses: folders, device, seeds, numeric settings, and the records (`config.json`, `metrics.json`, `history.jsonl`) | Every experiment writes the same records, in the same formats ([ED-009](decisions/ED-009-run-records.md), [ED-026](decisions/ED-026-results-format.md), [ED-033](decisions/ED-033-training-curves.md)) |
+| [`tsmerge/`](../../tsmerge/README.md) | The experiment code, run as `python -m tsmerge.<module>`, **not installed** | Each run imports exactly its own frozen copy of the code ([ED-0030](decisions/ED-0030-experiment-code.md)) |
+| `tsmerge/run.py` | The helper every experiment uses: folders, device, seeds, numeric settings, and the records (`config.json`, `metrics.json`, `history.jsonl`) | Every experiment writes the same records, in the same formats ([ED-0009](decisions/ED-0009-run-records.md), [ED-0026](decisions/ED-0026-results-format.md), [ED-0033](decisions/ED-0033-training-curves.md)) |
 | `tsmerge/hello.py` | The smallest complete experiment: fits a linear model, with every step a real one takes | The template for new experiments, and the smoke test of a new setup |
-| `scripts/run_local.sh` | Runs a command as a **recorded local run**: run folder in `outputs/runs/`, `run.json`, provenance, `output.log`, end status | Local results are as traceable as cluster ones ([ED-029](decisions/ED-029-local-runs.md)) |
+| `scripts/run_local.sh` | Runs a command as a **recorded local run**: run folder in `outputs/runs/`, `run.json`, provenance, `output.log`, end status | Local results are as traceable as cluster ones ([ED-0029](decisions/ED-0029-local-runs.md)) |
 
 - A recorded local run executes from a **frozen copy** of the code, deleted at the end, so you can keep editing while it runs.
 - A quick try (`uv run python -m tsmerge.<module>`) or a debugger session isn't recorded: its outputs go to `outputs/scratch/`.
@@ -53,18 +53,18 @@ Reference: [running.md](running.md#running-locally).
 
 | Script (`scripts/cluster/`) | What it does | Why |
 |---|---|---|
-| `setup_remote.sh` | Builds the cluster's environment from `uv.lock`, as a Slurm step on the free `all_serial` partition | The same environment as yours; never heavy work on the shared login node ([ED-008](decisions/ED-008-environment-integrity.md)) |
-| `submit.sh` | Creates the run folder, freezes the code, records provenance, writes `run.json`, submits the job | One command per run, every Slurm option preset ([ED-010](decisions/ED-010-safe-submissions.md), [ED-013](decisions/ED-013-default-job-resources.md)) |
-| `job.sbatch` | The generic job: checks the environment and the GPU, runs the command, **always records how it ended** | A run's status is reliable even on time-outs and cancels ([ED-006](decisions/ED-006-run-endings.md)) |
+| `setup_remote.sh` | Builds the cluster's environment from `uv.lock`, as a Slurm step on the free `all_serial` partition | The same environment as yours; never heavy work on the shared login node ([ED-0008](decisions/ED-0008-environment-integrity.md)) |
+| `submit.sh` | Creates the run folder, freezes the code, records provenance, writes `run.json`, submits the job | One command per run, every Slurm option preset ([ED-0010](decisions/ED-0010-safe-submissions.md), [ED-0013](decisions/ED-0013-default-job-resources.md)) |
+| `job.sbatch` | The generic job: checks the environment and the GPU, runs the command, **always records how it ended** | A run's status is reliable even on time-outs and cancels ([ED-0006](decisions/ED-0006-run-endings.md)) |
 | `status.sh`, `logs.sh` | Your queue or one job's state; the end of a job's output | Follow jobs without remembering Slurm commands |
-| `pull.sh` | Copies runs back into `outputs/runs/`, without code and (unless asked) checkpoints | Cluster storage isn't backed up ([ED-025](decisions/ED-025-run-safety.md)) |
-| `defaults.sh` | Every Slurm setting: partition, allowed GPU models, CPUs, time limit | Settings are decisions, so they're committed in one place ([ED-002](decisions/ED-002-cluster-partition.md), [ED-027](decisions/ED-027-gpu-pool.md)) |
+| `pull.sh` | Copies runs back into `outputs/runs/`, without code and (unless asked) checkpoints | Cluster storage isn't backed up ([ED-0025](decisions/ED-0025-run-safety.md)) |
+| `defaults.sh` | Every Slurm setting: partition, allowed GPU models, CPUs, time limit | Settings are decisions, so they're committed in one place ([ED-0002](decisions/ED-0002-cluster-partition.md), [ED-0027](decisions/ED-0027-gpu-pool.md)) |
 | `common.sh` | Shared helpers: loads `.env`, checks the connection, copies code, builds the provenance patch | Written once, used by every script |
 | `run_info.py` | Adds where and how a run ran (host, GPU, versions, start, end, status) to `run.json` | Used by cluster jobs and local runs alike |
-| `check_gpu.py` | Stops a job at once on a GPU this PyTorch can't use | A clear error instead of a cryptic one ([ED-004](decisions/ED-004-gpu-allow-list.md)) |
+| `check_gpu.py` | Stops a job at once on a GPU this PyTorch can't use | A clear error instead of a cryptic one ([ED-0004](decisions/ED-0004-gpu-allow-list.md)) |
 
-- **Before using the cluster each session:** `scripts/start-session.sh` unlocks your SSH keys and opens one shared connection, so scripts never ask for passwords ([ED-015](decisions/ED-015-session-unlock.md)).
-- **Personal values** (account, paths, keys) live in the git-ignored `.env`; its template is `.env.example` ([ED-014](decisions/ED-014-personal-values.md)).
+- **Before using the cluster each session:** `scripts/start-session.sh` unlocks your SSH keys and opens one shared connection, so scripts never ask for passwords ([ED-0015](decisions/ED-0015-session-unlock.md)).
+- **Personal values** (account, paths, keys) live in the git-ignored `.env`; its template is `.env.example` ([ED-0014](decisions/ED-0014-personal-values.md)).
 - **Lessons the cluster taught us** are in [cluster.md](cluster.md#observed-behavior): the file limit suspected on `/homes`, the 24 GB rule, no requeueing, the unreachable data node.
 
 ![One cluster run, from submit.sh to the pulled results](assets/cluster-run.png)
@@ -86,50 +86,50 @@ Every run folder, local or cluster, holds the same files ([runs.md](runs.md)):
 
 ![The statuses a run goes through](assets/run-statuses.png)
 
-Experiments are named `e<NNN>-<slug>`, e.g. `e001-joint-vs-merge` ([ED-032](decisions/ED-032-experiment-ids.md)).
+Experiments are named `e<NNNN>-<slug>`, e.g. `e0001-joint-vs-merge` ([ED-0032](decisions/ED-0032-experiment-ids.md)).
 
 ## 6. Quality gates: what keeps the repository clean
 
 | Piece | What it does | Why |
 |---|---|---|
-| `scripts/check.sh` | Runs every check: lockfile, ruff lint and format, shellcheck, the tests, the diagrams | One list of checks, used by people, hooks and agents ([ED-012](decisions/ED-012-code-checks.md)) |
+| `scripts/check.sh` | Runs every check: lockfile, ruff lint and format, shellcheck, the tests, the diagrams | One list of checks, used by people, hooks and agents ([ED-0012](decisions/ED-0012-code-checks.md)) |
 | `.githooks/pre-commit` | Runs `check.sh` on every commit | No commit skips the checks |
 | `.githooks/commit-msg` | Rejects messages that aren't Conventional Commits | A readable history |
 | `.shellcheckrc` | ShellCheck's options, shared by `check.sh` and the editor | Both check scripts the same way |
 | [`tests/`](../../tests/README.md) | The tests of the scripts and the helper | Behavior that matters (run endings, the guard, GPU rules) can't silently break |
 | `.gitignore`, `.gitattributes` | What git never stores; line endings (LF) and binary files | No personal data, outputs or datasets in git; scripts that run on Linux |
 
-- People run every git command; AI agents only propose commits ([ED-017](decisions/ED-017-git-by-people.md)).
-- Committed files hold no personal data and no references to earlier implementations ([ED-018](decisions/ED-018-self-contained-repository.md)).
+- People run every git command; AI agents only propose commits ([ED-0017](decisions/ED-0017-git-by-people.md)).
+- Committed files hold no personal data and no references to earlier implementations ([ED-0018](decisions/ED-0018-self-contained-repository.md)).
 
 Reference: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## 7. The editor
 
-`.vscode/` holds shared settings, tasks and debug configurations: run, submit, pull and debug from the editor, with the same Ruff and ShellCheck as the checks ([ED-031](decisions/ED-031-vs-code.md)). Setting it up: [setup.md](setup.md#9-vs-code); using it: [running.md](running.md#from-vs-code).
+`.vscode/` holds shared settings, tasks and debug configurations: run, submit, pull and debug from the editor, with the same Ruff and ShellCheck as the checks ([ED-0031](decisions/ED-0031-vs-code.md)). Setting it up: [setup.md](setup.md#9-vs-code); using it: [running.md](running.md#from-vs-code).
 
 ## 8. The knowledge system: decisions, questions, diagrams
 
-- **Decisions** (`ED-NNN`, [decisions/](decisions/README.md)): why things are the way they are, with the options considered and when to revisit. Updated in place when new information emerges.
-- **Questions** (`EQ-NNN`, [questions/](questions/README.md)): what isn't known or decided yet. The goal is zero: answered questions become decisions or docs, and their files are deleted.
-- **Diagrams and other pictures** live in an `assets/` folder beside the docs that show them ([docs/README.md](../README.md#assets); diagrams: [assets/README.md](assets/README.md)): Mermaid sources rendered to PNG with Docker; a check fails when an image is out of date with its source ([ED-028](decisions/ED-028-diagrams.md)).
-- **Docs are the reference; decisions explain why.** Operational facts always live in a doc ([ED-016](decisions/ED-016-engineering-docs.md)).
+- **Decisions** (`ED-NNNN`, [decisions/](decisions/README.md)): why things are the way they are, with the options considered and when to revisit. Updated in place when new information emerges.
+- **Questions** (`EQ-NNNN`, [questions/](questions/README.md)): what isn't known or decided yet. The goal is zero: answered questions become decisions or docs, and their files are deleted.
+- **Diagrams and other pictures** live in an `assets/` folder beside the docs that show them ([docs/README.md](../README.md#assets); diagrams: [assets/README.md](assets/README.md)): Mermaid sources rendered to PNG with Docker; a check fails when an image is out of date with its source ([ED-0028](decisions/ED-0028-diagrams.md)).
+- **Docs are the reference; decisions explain why.** Operational facts always live in a doc ([ED-0016](decisions/ED-0016-engineering-docs.md)).
 
 ![How a question becomes a decision](assets/questions-and-decisions.png)
 
 ## 9. AI agent tooling
 
 - `CLAUDE.md`: the rules AI agents follow in this repository.
-- `.claude/`: two skills (commit plans; expert reviews by a panel of independent reviewers), their agents, and a guard hook that keeps review agents off the cluster and read-only ([ED-011](decisions/ED-011-expert-review-guard.md), [ED-019](decisions/ED-019-expert-reviews.md)). Details: [.claude/README.md](../../.claude/README.md).
+- `.claude/`: two skills (commit plans; expert reviews by a panel of independent reviewers), their agents, and a guard hook that keeps review agents off the cluster and read-only ([ED-0011](decisions/ED-0011-expert-review-guard.md), [ED-0019](decisions/ED-0019-expert-reviews.md)). Details: [.claude/README.md](../../.claude/README.md).
 
 ## 10. The research: literature, knowledge, method
 
 - `docs/research/literature/`: one verified distillation note per paper, the source of truth for what it says, and code references (a checklist per library); `references.bib` there is the bibliography, one entry per source, keyed by bibkey (`ilharco2023editing`).
 - `docs/research/knowledge/`: general theory for people, one concept per doc (signals, time series, change over time, evaluation, models, learning); figures drawn by one script per `assets/` folder.
 - `docs/research/method/`: everything specific to this work (questions `RQ-`, decisions `RD-`, protocol, experiments, findings), created as it's needed.
-- The PDFs themselves stay local, in the git-ignored `docs/research/literature/papers/` folder, beside their notes: the repository is public, and most papers can't be redistributed ([ED-034](decisions/ED-034-literature.md)).
+- The PDFs themselves stay local, in the git-ignored `docs/research/literature/papers/` folder, beside their notes: the repository is public, and most papers can't be redistributed ([ED-0034](decisions/ED-0034-literature.md)).
 
-Reference: [docs/research/README.md](../research/README.md) ([ED-036](decisions/ED-036-research-docs.md)).
+Reference: [docs/research/README.md](../research/README.md) ([ED-0036](decisions/ED-0036-research-docs.md)).
 
 ## 11. On your machine only (git-ignored)
 
@@ -140,8 +140,8 @@ Reference: [docs/research/README.md](../research/README.md) ([ED-036](decisions/
 | `outputs/jobs.log` | one line per submitted cluster job |
 | `outputs/expert-reviews/` | expert-review reports, and the guard's log |
 | `outputs/pages/` | papers' pages rendered as images |
-| `data/` | datasets ([ED-020](decisions/ED-020-dataset-location.md)) |
-| `docs/research/literature/papers/` | the papers' PDFs, named by bibkey ([ED-034](decisions/ED-034-literature.md)) |
+| `data/` | datasets ([ED-0020](decisions/ED-0020-dataset-location.md)) |
+| `docs/research/literature/papers/` | the papers' PDFs, named by bibkey ([ED-0034](decisions/ED-0034-literature.md)) |
 | `.env` | your personal values |
 | `.venv/` | the Python environment |
 | `CLAUDE.local.md` | personal context for AI agents |

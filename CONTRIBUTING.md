@@ -14,7 +14,7 @@ How a change gets into this repository: decisions, git, checks and commit messag
 - The default branch is `main`.
 - Small steps: each commit has one clear purpose.
 - Never commit `outputs/` (everything generated locally: runs, job records, review reports), `.env` (personal values), checkpoints (`*.pt`, `*.pth`, `*.ckpt`) or files over ~5 MB.
-- Nothing machine-specific in committed files: local paths and personal values stay in the git-ignored `.env` and `CLAUDE.local.md`, and nothing refers to the private material used to build the repository ([ED-018](docs/engineering/decisions/ED-018-self-contained-repository.md)).
+- Nothing machine-specific in committed files: local paths and personal values stay in the git-ignored `.env` and `CLAUDE.local.md`, and nothing refers to the private material used to build the repository ([ED-0018](docs/engineering/decisions/ED-0018-self-contained-repository.md)).
 
 ## Adding a file
 
@@ -39,9 +39,9 @@ It runs:
 
 `--locked` makes every step fail instead of silently rewriting `uv.lock` when it doesn't match `pyproject.toml`.
 
-In VS Code, the shared settings run the same Ruff (the one in `.venv`) with the same rules, formatting and sorting imports on save, so files are already clean when the hook checks them ([ED-031](docs/engineering/decisions/ED-031-vs-code.md)).
+In VS Code, the shared settings run the same Ruff (the one in `.venv`) with the same rules, formatting and sorting imports on save, so files are already clean when the hook checks them ([ED-0031](docs/engineering/decisions/ED-0031-vs-code.md)).
 
-The ruff rules are explicit in `pyproject.toml` (`E, W, F, I, UP, B, SIM, RUF`, line length 88), so a ruff upgrade can't change what is checked ([ED-012](docs/engineering/decisions/ED-012-code-checks.md)). `ruff` and `pytest` come with the project's environment (`uv sync`); `shellcheck` is a system package ([setup.md](docs/engineering/setup.md#1-base-tools)).
+The ruff rules are explicit in `pyproject.toml` (`E, W, F, I, UP, B, SIM, RUF`, line length 88), so a ruff upgrade can't change what is checked ([ED-0012](docs/engineering/decisions/ED-0012-code-checks.md)). `ruff` and `pytest` come with the project's environment (`uv sync`); `shellcheck` is a system package ([setup.md](docs/engineering/setup.md#1-base-tools)).
 
 ### Git hooks: the checks run by themselves
 
@@ -69,7 +69,7 @@ Commits follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 - **Types:** `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `build`, `ci`, `style`, `chore`, `revert`.
 - **Subject:** imperative, lowercase, no trailing period, at most 72 characters.
-- Mention the ids a change adds or answers when they fit, e.g. `docs(decisions): add cluster partition decision (ED-002)`.
+- Mention the ids a change adds or answers when they fit, e.g. `docs(decisions): add cluster partition decision (ED-0002)`.
 
 The full rules and examples are in the [commit-plan](.claude/skills/commit-plan/SKILL.md) skill.
 

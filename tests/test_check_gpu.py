@@ -1,4 +1,4 @@
-"""Tests for the GPU compatibility rule of scripts/cluster/check_gpu.py (ED-004)."""
+"""Tests for the GPU compatibility rule of scripts/cluster/check_gpu.py (ED-0004)."""
 
 import importlib.util
 from pathlib import Path
@@ -10,7 +10,7 @@ _spec = importlib.util.spec_from_file_location("check_gpu", SCRIPT)
 check_gpu = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(check_gpu)
 
-# The kernels of the project's PyTorch build (torch 2.14.1 + CUDA 12.6, ED-001).
+# The kernels of the project's PyTorch build (torch 2.14.1 + CUDA 12.6, ED-0001).
 BUILD = ["sm_50", "sm_60", "sm_70", "sm_75", "sm_80", "sm_86", "sm_90"]
 
 

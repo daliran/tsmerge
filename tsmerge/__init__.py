@@ -1,1 +1,1 @@
-"""tsmerge: the experiment code, run as `python -m tsmerge.<module>` (ED-030)."""
+"""tsmerge: the experiment code, run as `python -m tsmerge.<module>` (ED-0030)."""

@@ -14,8 +14,8 @@ This folder is only about the machinery. What the research is about lives in [re
 | [running.md](running.md) | Daily operation: running locally and on the cluster, debugging, getting results back | every working day |
 | [runs.md](runs.md) | What a run is: concepts, experiment names, run ids, folder layout, what each record holds (`run.json`, `config.json`, metrics, curves), statuses, provenance | when reading or analyzing runs |
 | [assets/](assets/README.md) | The diagrams shown in these docs (Mermaid sources and rendered images), and how diagrams work everywhere in the repository | when changing a diagram |
-| [decisions/](decisions/README.md) | Engineering decisions (`ED-NNN`): template, rules, index | before changing how things work |
-| [questions/](questions/README.md) | Open engineering questions (`EQ-NNN`): template, rules, index. The goal is zero: answered questions become decisions or docs | when something isn't decided yet |
+| [decisions/](decisions/README.md) | Engineering decisions (`ED-NNNN`): template, rules, index | before changing how things work |
+| [questions/](questions/README.md) | Open engineering questions (`EQ-NNNN`): template, rules, index. The goal is zero: answered questions become decisions or docs | when something isn't decided yet |
 
 How to change the repository (git, checks, commit messages) is in the root [CONTRIBUTING.md](../../CONTRIBUTING.md).
 

@@ -4,13 +4,13 @@ What a run is, where it lives and what it records. How to launch and follow runs
 
 ## Concepts
 
-- **Experiment:** a named study that groups runs. Its name is `e<NNN>-<slug>`, e.g. `e001-joint-vs-merge`: the id never changes and is never reused, and a short doc in the research area ([method/](../research/method/README.md)) says which research questions it answers ([ED-032](decisions/ED-032-experiment-ids.md)). Setup and smoke-test runs use plain names such as `hello`. Every name: lowercase letters, digits, `-`, `_`.
+- **Experiment:** a named study that groups runs. Its name is `e<NNNN>-<slug>`, e.g. `e0001-joint-vs-merge`: the id never changes and is never reused, and a short doc in the research area ([method/](../research/method/README.md)) says which research questions it answers ([ED-0032](decisions/ED-0032-experiment-ids.md)). Setup and smoke-test runs use plain names such as `hello`. Every name: lowercase letters, digits, `-`, `_`.
 - **Run:** one execution of one configuration, one seed included.
 - **Job:** one Slurm submission. One job runs exactly one run.
-- **Recorded run:** a run started by `scripts/run_local.sh` (locally) or `scripts/cluster/submit.sh` (on the cluster): it gets a run folder and the records below. A script started directly (`python -m …`, or the debugger) is not a recorded run: its outputs go to `outputs/scratch/`, overwritten each time ([ED-029](decisions/ED-029-local-runs.md)).
+- **Recorded run:** a run started by `scripts/run_local.sh` (locally) or `scripts/cluster/submit.sh` (on the cluster): it gets a run folder and the records below. A script started directly (`python -m …`, or the debugger) is not a recorded run: its outputs go to `outputs/scratch/`, overwritten each time ([ED-0029](decisions/ED-0029-local-runs.md)).
 - **Sweep:** a set of runs, each still one job, grouped by a sweep id given at submit time (`SWEEP=<id>`).
 
-Why one run per job: [ED-003](decisions/ED-003-runs-and-jobs.md).
+Why one run per job: [ED-0003](decisions/ED-0003-runs-and-jobs.md).
 
 ## Run id
 
@@ -18,7 +18,7 @@ Why one run per job: [ED-003](decisions/ED-003-runs-and-jobs.md).
 
 - Generated on your machine when the run is launched, never from the Slurm job id.
 - The same id names the run folder and, for cluster runs, its line in `outputs/jobs.log`.
-- A run folder is never reused: a submission fails if the folder already exists ([ED-010](decisions/ED-010-safe-submissions.md)).
+- A run folder is never reused: a submission fails if the folder already exists ([ED-0010](decisions/ED-0010-safe-submissions.md)).
 
 ## Run folder
 
@@ -56,14 +56,14 @@ Every recorded run gets these environment variables. The experiment code reads t
 | Variable | What it is | Cluster run | Local run (`run_local.sh`) | Started directly |
 |---|---|---|---|---|
 | `RUN_DIR` | this run's folder: write `results/` and `checkpoints/` here | the run folder | the run folder | `outputs/scratch/` |
-| `DATA_DIR` | the datasets folder ([ED-020](decisions/ED-020-dataset-location.md)) | `/work/<project account>/<username>/tsmerge/data/` | `DATA_DIR` in `.env`, or `data/` in the repository | `DATA_DIR` if set (the debugger loads `.env`; in a terminal, `uv run --env-file .env`), or `data/` |
-| `RUNS_ROOT` | the root of all runs, to read the outputs of the runs listed in `inputs` ([ED-021](decisions/ED-021-runs-and-their-inputs.md)) | `/work/<project account>/<username>/tsmerge/runs/` | `outputs/runs/` | `outputs/runs/` |
+| `DATA_DIR` | the datasets folder ([ED-0020](decisions/ED-0020-dataset-location.md)) | `/work/<project account>/<username>/tsmerge/data/` | `DATA_DIR` in `.env`, or `data/` in the repository | `DATA_DIR` if set (the debugger loads `.env`; in a terminal, `uv run --env-file .env`), or `data/` |
+| `RUNS_ROOT` | the root of all runs, to read the outputs of the runs listed in `inputs` ([ED-0021](decisions/ED-0021-runs-and-their-inputs.md)) | `/work/<project account>/<username>/tsmerge/runs/` | `outputs/runs/` | `outputs/runs/` |
 | `TMPDIR` | a temporary folder, deleted at the end of the job | `/work/…/tsmerge/tmp/<job id>/` | the system's | the system's |
 | `SLURM_CPUS_PER_TASK` | the CPU cores the job has, e.g. for data-loader workers | 6 by default | — | — |
 
 ## `run.json`: how the run was launched and how it went
 
-Written by `submit.sh` or `run_local.sh`, completed when the run starts and ends ([ED-009](decisions/ED-009-run-records.md)):
+Written by `submit.sh` or `run_local.sh`, completed when the run starts and ends ([ED-0009](decisions/ED-0009-run-records.md)):
 
 | Group | Fields |
 |---|---|
@@ -92,13 +92,13 @@ Written by `submit.sh` or `run_local.sh`, completed when the run starts and ends
 - Slurm warns the job **2 minutes before** its time limit, so the job script can record the ending and stop the command cleanly. A run therefore gets its time limit **minus 2 minutes**.
 - Slurm's own record (`sacct`, `status.sh <job id>`) shows such runs as `FAILED` with exit code 15, not `TIMEOUT`: trust `run.json`.
 - The program needs nothing special for this.
-- **Runs don't resume:** a run that times out is resubmitted from scratch, with a larger `CLUSTER_TIME` ([ED-021](decisions/ED-021-runs-and-their-inputs.md)).
+- **Runs don't resume:** a run that times out is resubmitted from scratch, with a larger `CLUSTER_TIME` ([ED-0021](decisions/ED-0021-runs-and-their-inputs.md)).
 
-Why it works this way: [ED-006](decisions/ED-006-run-endings.md).
+Why it works this way: [ED-0006](decisions/ED-0006-run-endings.md).
 
 ## `config.json`: what the run computed with
 
-Written by the experiment code when the run starts, before any computation, locally and on the cluster alike ([ED-009](decisions/ED-009-run-records.md)):
+Written by the experiment code when the run starts, before any computation, locally and on the cluster alike ([ED-0009](decisions/ED-0009-run-records.md)):
 
 | Field | Contents |
 |---|---|
@@ -111,7 +111,7 @@ Results are compared by reading these files, never by parsing commands or folder
 
 ## `results/metrics.json`: what the run measured
 
-Every run writes its metric values in one fixed format ([ED-026](decisions/ED-026-results-format.md)), with `run.write_metrics()`, which refuses records outside the format: a list of records, one per value.
+Every run writes its metric values in one fixed format ([ED-0026](decisions/ED-0026-results-format.md)), with `run.write_metrics()`, which refuses records outside the format: a list of records, one per value.
 
 ```json
 [
@@ -131,7 +131,7 @@ One aggregation script, written with the first experiment, joins `run.json`, `co
 
 ## `results/history.jsonl`: curves during the run
 
-Values logged during training, one JSON line per value, appended as the run goes ([ED-033](decisions/ED-033-training-curves.md)):
+Values logged during training, one JSON line per value, appended as the run goes ([ED-0033](decisions/ED-0033-training-curves.md)):
 
 ```json
 {"step": 50, "split": "train", "metric": "loss", "value": 0.0102}
@@ -148,4 +148,4 @@ Values logged during training, one JSON line per value, appended as the run goes
 - A run launched from a clean tree is exactly its commit; `submit.sh` warns when it isn't, `run_local.sh` notes it.
 - To rebuild a run's code: [running.md](running.md#rebuilding-a-runs-code).
 
-Why: [ED-007](decisions/ED-007-run-provenance.md).
+Why: [ED-0007](decisions/ED-0007-run-provenance.md).

@@ -2,7 +2,7 @@
 
 The same code works in a recorded run (local with scripts/run_local.sh, or on the
 cluster), where the runner sets RUN_DIR, and in a plain or debugger start, where it
-doesn't: then outputs go to outputs/scratch/, overwritten each time (ED-030).
+doesn't: then outputs go to outputs/scratch/, overwritten each time (ED-0030).
 Records: config.json, results/metrics.json (final values), results/history.jsonl
 (curves); their formats are in docs/engineering/runs.md.
 """
@@ -27,12 +27,12 @@ def run_dir() -> Path:
 
 
 def data_dir() -> Path:
-    """The datasets folder (ED-020): DATA_DIR, or data/ in the repository."""
+    """The datasets folder (ED-0020): DATA_DIR, or data/ in the repository."""
     return Path(os.environ.get("DATA_DIR") or REPO / "data")
 
 
 def runs_root() -> Path:
-    """The root of all runs, to read the runs listed in run.json's inputs (ED-021)."""
+    """The root of all runs, to read the runs listed in run.json's inputs (ED-0021)."""
     return Path(os.environ.get("RUNS_ROOT") or REPO / "outputs" / "runs")
 
 
@@ -50,7 +50,7 @@ def seed_everything(seed: int) -> None:
 
 
 def set_numerics(deterministic: bool = False, tf32: bool = False) -> dict:
-    """Set the numeric behavior explicitly, so it doesn't depend on the GPU (ED-027).
+    """Set the numeric behavior explicitly, so it doesn't depend on the GPU (ED-0027).
 
     TF32 is off by default: Ampere and newer GPUs would otherwise use it for
     convolutions, older ones can't, and results would differ by node.
@@ -71,7 +71,7 @@ def set_numerics(deterministic: bool = False, tf32: bool = False) -> dict:
 
 
 def write_config(config: dict, seeds: dict, data: list, determinism: dict) -> Path:
-    """Write config.json before any computation (ED-009): every setting with its
+    """Write config.json before any computation (ED-0009): every setting with its
     final value, the seeds, the datasets used, and the numeric settings.
     It marks the start of a run: a curve left in outputs/scratch/ by an earlier quick
     try is removed, so log_history() starts a new one."""
@@ -88,7 +88,7 @@ def write_config(config: dict, seeds: dict, data: list, determinism: dict) -> Pa
 
 
 def log_history(step: int, split: str, metric: str, value: float, **extra) -> None:
-    """Append one point of a curve to results/history.jsonl (ED-033): one JSON line
+    """Append one point of a curve to results/history.jsonl (ED-0033): one JSON line
     per value, written at once, so a stopped run keeps every point logged so far.
     `extra` may hold `phase` and `epoch`."""
     if split not in SPLITS:
@@ -104,7 +104,7 @@ def log_history(step: int, split: str, metric: str, value: float, **extra) -> No
 
 
 def write_metrics(records: list[dict]) -> Path:
-    """Write results/metrics.json (ED-026): one record per value, with `split`,
+    """Write results/metrics.json (ED-0026): one record per value, with `split`,
     `metric`, `value` and, when a run has several models, `phase`."""
     for record in records:
         missing = {"split", "metric", "value"} - record.keys()

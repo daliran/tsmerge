@@ -1,6 +1,6 @@
 # Literature
 
-One distillation note per paper. **The notes are the source of truth for what a paper says:** the PDFs stay local and uncommitted, so a note must hold everything this project needs from its paper, checked against it ([ED-034](../../engineering/decisions/ED-034-literature.md)).
+One distillation note per paper. **The notes are the source of truth for what a paper says:** the PDFs stay local and uncommitted, so a note must hold everything this project needs from its paper, checked against it ([ED-0034](../../engineering/decisions/ED-0034-literature.md)).
 
 ## Rules
 

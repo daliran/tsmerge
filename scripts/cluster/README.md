@@ -29,8 +29,8 @@ scripts/cluster/pull.sh hello
 
 - override a default with its variable, e.g. `CLUSTER_TIME=04:00:00 scripts/cluster/submit.sh …`;
 - group runs into a sweep: `SWEEP=<id> scripts/cluster/submit.sh …` (recorded in `run.json`);
-- run on one GPU family only (a subset of the allowed models): `CLUSTER_GPU_SUBSET="gpu_2080_11G gpu_2080Ti_11G" scripts/cluster/submit.sh …` (ED-027);
-- submit a CPU-only job, on `all_serial` by default: `CLUSTER_PROFILE=cpu scripts/cluster/submit.sh …` (ED-022);
+- run on one GPU family only (a subset of the allowed models): `CLUSTER_GPU_SUBSET="gpu_2080_11G gpu_2080Ti_11G" scripts/cluster/submit.sh …` (ED-0027);
+- submit a CPU-only job, on `all_serial` by default: `CLUSTER_PROFILE=cpu scripts/cluster/submit.sh …` (ED-0022);
 - name the earlier runs this run reads: `INPUTS="<experiment>/<run id> …" scripts/cluster/submit.sh …` (recorded in `run.json`);
 - add any other option with `SBATCH_OPTS`, e.g. `SBATCH_OPTS="--mem=32G" scripts/cluster/submit.sh …`.
 
@@ -52,13 +52,13 @@ scripts/cluster/pull.sh hello
 
 | File | What | Why |
 |---|---|---|
-| `defaults.sh` | Project-wide settings: every Slurm option the scripts set (partition, GPU models, nodes, GPUs, time limit) | They are decisions (ED-002, ED-004), so they are committed, unlike the personal values in `.env`; one place instead of options scattered across scripts |
+| `defaults.sh` | Project-wide settings: every Slurm option the scripts set (partition, GPU models, nodes, GPUs, time limit) | They are decisions (ED-0002, ED-0004), so they are committed, unlike the personal values in `.env`; one place instead of options scattered across scripts |
 | `common.sh` | Shared helpers: loads `.env` and `defaults.sh`, checks the connection, copies code, checks the GPU lists against the cluster | One place for what every script needs |
-| `setup_remote.sh` | Folders, the cluster's uv version, the environment (built as a Slurm step on `all_serial`, with a temporary cache on the login node's local disk; the lock hash is removed during the build) | The cluster runs the same Python, PyTorch and uv as your machine (ED-001); no cache files pile up in the home, which seems to limit the number of files (ED-005) |
-| `submit.sh` | Creates the run id and its folder (never reusing an existing one), freezes the code, records uncommitted changes in `provenance/` (warning when there are any), writes `run.json`, submits; on failure, removes the half-created folder | Every run is traceable to its exact code (ED-007), and no run can overwrite another (ED-010) |
+| `setup_remote.sh` | Folders, the cluster's uv version, the environment (built as a Slurm step on `all_serial`, with a temporary cache on the login node's local disk; the lock hash is removed during the build) | The cluster runs the same Python, PyTorch and uv as your machine (ED-0001); no cache files pile up in the home, which seems to limit the number of files (ED-0005) |
+| `submit.sh` | Creates the run id and its folder (never reusing an existing one), freezes the code, records uncommitted changes in `provenance/` (warning when there are any), writes `run.json`, submits; on failure, removes the half-created folder | Every run is traceable to its exact code (ED-0007), and no run can overwrite another (ED-0010) |
 | `job.sbatch` | The generic job: temporary folder, environment check, GPU check, runs the command, records the outcome | The same steps for every run; the experiment itself lives in the command |
 | `run_info.py` | Adds host, GPU model and capability, driver, Python/PyTorch/CUDA/cuDNN versions, start, end, exit code and status to `run.json` | Every run records where and how it ran, and how it ended; local runs use it too (`scripts/run_local.sh`) |
-| `check_gpu.py` | Stops the job if the node's GPU can't run the installed PyTorch | A clear failure in seconds instead of a cryptic CUDA error (ED-004) |
+| `check_gpu.py` | Stops the job if the node's GPU can't run the installed PyTorch | A clear failure in seconds instead of a cryptic CUDA error (ED-0004) |
 | `pull.sh`, `status.sh`, `logs.sh` | Bring runs back (skipping each run's own `code/`, and `checkpoints/` unless asked); show jobs | Cluster storage is not backed up and is deleted when access ends |
 
 ## What each job does, in order

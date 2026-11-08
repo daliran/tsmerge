@@ -10,13 +10,13 @@
 
 # --- Where jobs run ---
 
-# Partition for GPU work (docs/engineering/decisions/ED-002).
+# Partition for GPU work (docs/engineering/decisions/ED-0002).
 CLUSTER_PARTITION=${CLUSTER_PARTITION:-all_usr_prod}
 
-# The partition's GPU models, sorted into two explicit lists (ED-004). Every model in
+# The partition's GPU models, sorted into two explicit lists (ED-0004). Every model in
 # the partition must be in exactly one; submit.sh checks this before every submission.
 
-# Allowed: jobs may run on these (--constraint): every GPU except Blackwell (ED-027).
+# Allowed: jobs may run on these (--constraint): every GPU except Blackwell (ED-0027).
 # On all_usr_prod, a list asking for more than 24 GB is refused: keep at least one model
 # of 24 GB or less in it. For one submission, CLUSTER_GPU_SUBSET="<features>" narrows it
 # to a subset (e.g. one family, for strictly comparable hardware).
@@ -33,10 +33,10 @@ CLUSTER_GPU_FEATURES=(
 
 # Excluded, each with its reason.
 CLUSTER_GPU_EXCLUDED=(
-  gpu_RTXPro6000B_96G # Blackwell: no kernels in this PyTorch build (ED-001)
+  gpu_RTXPro6000B_96G # Blackwell: no kernels in this PyTorch build (ED-0001)
 )
 
-# --- GPU jobs (the default) or CPU-only jobs (ED-022) ---
+# --- GPU jobs (the default) or CPU-only jobs (ED-0022) ---
 
 # CLUSTER_PROFILE=cpu scripts/cluster/submit.sh … submits a CPU-only job: no GPU request,
 # no GPU list, no GPU check. By default it runs on all_serial: the login nodes, but
@@ -47,7 +47,7 @@ CLUSTER_CPU_PARTITION=${CLUSTER_CPU_PARTITION:-all_serial}
 
 # --- What each job gets ---
 
-# One run per job, on one node (ED-003).
+# One run per job, on one node (ED-0003).
 CLUSTER_NODES=${CLUSTER_NODES:-1}
 CLUSTER_NTASKS=${CLUSTER_NTASKS:-1}
 
@@ -67,7 +67,7 @@ CLUSTER_TIME=${CLUSTER_TIME:-01:00:00}
 # seconds before killing the job, so job.sbatch can record "timeout" in run.json and stop
 # the command cleanly. Without it, a timed-out run would stay "running" forever.
 # Consequences: a run effectively gets CLUSTER_TIME minus 2 minutes, and sacct shows such
-# runs as FAILED (signal 15) rather than TIMEOUT: run.json is the reliable record (ED-006).
+# runs as FAILED (signal 15) rather than TIMEOUT: run.json is the reliable record (ED-0006).
 CLUSTER_SIGNAL=${CLUSTER_SIGNAL:-B:TERM@120}
 
 # Never requeue a job (--no-requeue). A requeued job would run again in the same run

@@ -65,7 +65,7 @@ working_tree_patch() {
 }
 
 # The GPU features for --constraint: the allowed list, or the subset of it given in
-# CLUSTER_GPU_SUBSET for one submission (e.g. one GPU family for a comparable sweep, ED-027).
+# CLUSTER_GPU_SUBSET for one submission (e.g. one GPU family for a comparable sweep, ED-0027).
 gpu_constraint() {
   local features=("${CLUSTER_GPU_FEATURES[@]}") feature
   if [[ -n ${CLUSTER_GPU_SUBSET:-} ]]; then
@@ -81,7 +81,7 @@ gpu_constraint() {
 
 # Compare the two lists in defaults.sh with the partition's actual GPU models.
 # An allowed model that is gone is an error. A model in neither list is new: it is
-# reported, so the lists (and ED-001, ED-027) get reviewed.
+# reported, so the lists (and ED-0001, ED-0027) get reviewed.
 check_gpu_features() {
   local available feature missing=() new=()
   local known=" ${CLUSTER_GPU_FEATURES[*]} ${CLUSTER_GPU_EXCLUDED[*]} "
@@ -99,7 +99,7 @@ check_gpu_features() {
   done <<<"$available"
   if [[ ${#new[@]} -gt 0 ]]; then
     echo "warning: new GPU models in $CLUSTER_PARTITION, neither allowed nor excluded: ${new[*]}" >&2
-    echo "         not used until added to scripts/cluster/defaults.sh (review ED-001 and ED-027)" >&2
+    echo "         not used until added to scripts/cluster/defaults.sh (review ED-0001 and ED-0027)" >&2
   fi
   [[ ${#missing[@]} -eq 0 ]] \
     || die "allowed GPU models no longer in $CLUSTER_PARTITION: ${missing[*]}: update scripts/cluster/defaults.sh"

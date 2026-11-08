@@ -14,7 +14,7 @@ shift 4
 tmp_root="$work_dir/tmp"
 
 # --- Recording how the run ends --------------------------------------------------------
-# run.json must always end with a real status, whatever stops the job (ED-003):
+# run.json must always end with a real status, whatever stops the job (ED-0003):
 #   completed   the command exited with 0
 #   failed      the command, or a check before it, exited with another code
 #   timeout     Slurm stopped the job at its time limit
@@ -101,8 +101,8 @@ export VIRTUAL_ENV="$venv"
 export PATH="$venv/bin:$PATH"
 # What the command can rely on (docs/engineering/runs.md#what-a-run-provides):
 #   RUN_DIR    this run's folder: write results/ and checkpoints/ here
-#   DATA_DIR   the datasets folder (ED-020)
-#   RUNS_ROOT  the root of all runs, to read other runs' outputs listed in "inputs" (ED-021)
+#   DATA_DIR   the datasets folder (ED-0020)
+#   RUNS_ROOT  the root of all runs, to read other runs' outputs listed in "inputs" (ED-0021)
 export RUN_DIR="$run_dir"
 export DATA_DIR="$work_dir/data"
 export RUNS_ROOT="$work_dir/runs"

@@ -6,7 +6,7 @@
 #   SWEEP=<id>             group this run with others of the same sweep (recorded in run.json)
 #   INPUTS="<exp>/<run id> ..."  the earlier runs whose outputs this run reads (recorded in
 #                          run.json; the job finds them under RUNS_ROOT)
-#   CLUSTER_PROFILE=cpu    a CPU-only job, on all_serial by default (ED-022)
+#   CLUSTER_PROFILE=cpu    a CPU-only job, on all_serial by default (ED-0022)
 #   CLUSTER_TIME=04:00:00  override a default from defaults.sh
 #   SBATCH_OPTS="--mem=32G" add any other sbatch option
 # Don't edit files while a submission runs (a few seconds): the run records the working
@@ -98,7 +98,7 @@ echo "run $run_id ($experiment), commit ${commit:0:7}"
 # point to nothing. Checked against the remote-tracking branches, without contacting GitHub.
 if git remote get-url origin >/dev/null 2>&1 && [[ -z $(git branch -r --contains "$commit" 2>/dev/null) ]]; then
   echo "warning: commit ${commit:0:7} isn't pushed yet: push it, so this run's commit can't" \
-    "disappear (ED-025)." >&2
+    "disappear (ED-0025)." >&2
 fi
 if [[ $dirty == true ]]; then
   echo "warning: uncommitted changes: this run can be rebuilt only from commit ${commit:0:7}" \
@@ -113,7 +113,7 @@ remote "mkdir -p $(q "$CLUSTER_WORK_DIR/runs/$experiment") && mkdir $(q "$run_di
 folder_created=true
 
 # 2. Freeze the code this run uses, and record every difference from the commit, new files
-# included, in provenance/: outside code/, so pull.sh brings it back (ED-007).
+# included, in provenance/: outside code/, so pull.sh brings it back (ED-0007).
 step="copying the code"
 send_code "$run_dir/code"
 remote "cat > $(q "$run_dir/provenance/patch.diff")" <"$patch_file"

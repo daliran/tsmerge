@@ -195,8 +195,8 @@ Seen on this cluster in practice, but not in its documentation:
 - An explicit `sbatch --export=VAR=value` gets the job canceled within seconds, with no log. Pass variables as an environment prefix instead: `VAR=value sbatch …`.
 - Node-local `/tmp` can fill up: point `TMPDIR` to a per-job folder under `/work`.
 - The folder of a job's log file must exist before submitting.
-- **`/homes` seems to limit the number of files, not only their size.** With about 186,000 files in a home using 25 of 100 GB, creating more files failed with `Disk quota exceeded` (2026-11-01). `squota` shows a "chunks" count with no limit, and the documentation states none: the limit and its value are unconfirmed ([EQ-012](questions/EQ-012-home-file-limit.md)). Keep the home lean:
-  - no caches there: uv's (see [ED-005](decisions/ED-005-uv-cache-on-the-cluster.md)), pip's (`pip cache purge`), Hugging Face's (set `HF_HOME` to a `/work` folder);
+- **`/homes` seems to limit the number of files, not only their size.** With about 186,000 files in a home using 25 of 100 GB, creating more files failed with `Disk quota exceeded` (2026-11-01). `squota` shows a "chunks" count with no limit, and the documentation states none: the limit and its value are unconfirmed ([EQ-0012](questions/EQ-0012-home-file-limit.md)). Keep the home lean:
+  - no caches there: uv's (see [ED-0005](decisions/ED-0005-uv-cache-on-the-cluster.md)), pip's (`pip cache purge`), Hugging Face's (set `HF_HOME` to a `/work` folder);
   - `uv cache prune` removes uv cache entries nothing uses anymore;
   - VS Code's *Remote-SSH* server (`~/.vscode-server`) keeps a copy per VS Code version, tens of thousands of files: old versions can be removed while VS Code isn't connected;
   - count files with `find ~ | wc -l`, or per folder with `find <folder> | wc -l`;

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Render the Mermaid diagrams of every assets/ folder (docs/**/assets/, .claude/assets/)
-# to PNG, with Docker (ED-028).
+# to PNG, with Docker (ED-0028).
 # usage: scripts/render_diagrams.sh           render every diagram whose source changed
 #        scripts/render_diagrams.sh --all     render every diagram
 #        scripts/render_diagrams.sh --check   only check that every PNG is up to date

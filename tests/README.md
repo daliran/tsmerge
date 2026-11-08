@@ -3,7 +3,7 @@
 The tests run with `scripts/check.sh` (and so on every commit), or alone with `uv run --locked pytest`.
 
 - **Scripts are tested as they run for real:** as subprocesses, with temporary folders; nothing touches the cluster or your `outputs/`.
-- **The experiment code** is imported as `tsmerge`, from the repository root (`pythonpath` in `pyproject.toml`, [ED-030](../docs/engineering/decisions/ED-030-experiment-code.md)).
+- **The experiment code** is imported as `tsmerge`, from the repository root (`pythonpath` in `pyproject.toml`, [ED-0030](../docs/engineering/decisions/ED-0030-experiment-code.md)).
 
 | File | What it protects |
 |---|---|
@@ -13,4 +13,4 @@ The tests run with `scripts/check.sh` (and so on every commit), or alone with `u
 | [test_expert_review_guard.py](test_expert_review_guard.py) | the expert-review guard: what it blocks (cluster commands, scripts that write files) and allows (reading, checks) |
 | [test_inventory.py](test_inventory.py) | every file the repository tracks is listed in the inventory of [overview.md](../docs/engineering/overview.md#every-file-in-the-repository) |
 
-Not tested automatically, because they need the cluster: `submit.sh`, `job.sbatch`, `setup_remote.sh`, `pull.sh`, `status.sh`, `logs.sh`. They were verified by hand on the cluster (2026-11-01 and 2026-11-02), as recorded in their decisions ([ED-006](../docs/engineering/decisions/ED-006-run-endings.md), [ED-007](../docs/engineering/decisions/ED-007-run-provenance.md), [ED-008](../docs/engineering/decisions/ED-008-environment-integrity.md), [ED-010](../docs/engineering/decisions/ED-010-safe-submissions.md), [ED-029](../docs/engineering/decisions/ED-029-local-runs.md)).
+Not tested automatically, because they need the cluster: `submit.sh`, `job.sbatch`, `setup_remote.sh`, `pull.sh`, `status.sh`, `logs.sh`. They were verified by hand on the cluster (2026-11-01 and 2026-11-02), as recorded in their decisions ([ED-0006](../docs/engineering/decisions/ED-0006-run-endings.md), [ED-0007](../docs/engineering/decisions/ED-0007-run-provenance.md), [ED-0008](../docs/engineering/decisions/ED-0008-environment-integrity.md), [ED-0010](../docs/engineering/decisions/ED-0010-safe-submissions.md), [ED-0029](../docs/engineering/decisions/ED-0029-local-runs.md)).

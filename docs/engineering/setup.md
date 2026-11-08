@@ -248,7 +248,7 @@ uv python pin 3.12            # pin a project to a version (writes .python-versi
 uv self update                # update uv itself
 ```
 
-You rarely need `uv python install` by hand: `uv sync` downloads the version the repository pins the first time. This repository pins an exact version, **3.12.16** (`.python-version`), so every machine runs the identical build ([ED-001](decisions/ED-001-python-and-pytorch.md)). The repository's own tooling uses the same Python: scripts run with `uv run`, and the expert-review guard hook uses the project environment's Python (`.venv/bin/python`), so `uv sync` must have been run. The cluster uses uv the same way, so local and cluster runs use the same Python build regardless of each machine's system Python.
+You rarely need `uv python install` by hand: `uv sync` downloads the version the repository pins the first time. This repository pins an exact version, **3.12.16** (`.python-version`), so every machine runs the identical build ([ED-0001](decisions/ED-0001-python-and-pytorch.md)). The repository's own tooling uses the same Python: scripts run with `uv run`, and the expert-review guard hook uses the project environment's Python (`.venv/bin/python`), so `uv sync` must have been run. The cluster uses uv the same way, so local and cluster runs use the same Python build regardless of each machine's system Python.
 
 ## 5. GPU and CUDA (optional)
 
@@ -312,8 +312,8 @@ Prepares your account on the Unimore cluster ([cluster.md](cluster.md)) to run t
    - creates the project's folders in your cluster home and work areas, including the `data/` folder for datasets;
    - sets the cluster's uv to the same version as yours, so both read `uv.lock` the same way;
    - copies the code and builds the Python environment from `uv.lock`, as a Slurm step on the free `all_serial` partition, not directly on the shared login node (a few minutes, about 2.5 GB of downloads when packages change; no GPU);
-   - refuses a `uv.lock` that doesn't match `pyproject.toml`, and while it builds, jobs refuse to start ([ED-008](decisions/ED-008-environment-integrity.md));
-   - downloads into a temporary cache on the login node's local disk, deleted at the end, so no cache files pile up in your cluster home ([ED-005](decisions/ED-005-uv-cache-on-the-cluster.md)).
+   - refuses a `uv.lock` that doesn't match `pyproject.toml`, and while it builds, jobs refuse to start ([ED-0008](decisions/ED-0008-environment-integrity.md));
+   - downloads into a temporary cache on the login node's local disk, deleted at the end, so no cache files pile up in your cluster home ([ED-0005](decisions/ED-0005-uv-cache-on-the-cluster.md)).
 
    Rerun it whenever `uv.lock` or your uv version changes: jobs refuse to run against an outdated environment.
 5. **Check:** submit the smoke test, as in [running.md](running.md#the-cycle):
@@ -326,7 +326,7 @@ What each script does: [scripts/cluster/README.md](../../scripts/cluster/README.
 
 ## 8. Diagrams (optional)
 
-Only needed to change or add the Mermaid diagrams in the docs' `assets/` folders ([how diagrams work](assets/README.md)): reading the docs and committing other changes work without it. The diagrams are rendered by a pinned Docker image, `minlag/mermaid-cli` (about 1 GB), that bundles everything the renderer needs ([ED-028](decisions/ED-028-diagrams.md)).
+Only needed to change or add the Mermaid diagrams in the docs' `assets/` folders ([how diagrams work](assets/README.md)): reading the docs and committing other changes work without it. The diagrams are rendered by a pinned Docker image, `minlag/mermaid-cli` (about 1 GB), that bundles everything the renderer needs ([ED-0028](decisions/ED-0028-diagrams.md)).
 
 | | Native Linux | WSL2 on Windows |
 |---|---|---|
@@ -348,7 +348,7 @@ The first render downloads the image; later renders take a few seconds per diagr
 
 ## 9. VS Code
 
-The repository's editor settings, tasks and debug configurations are in `.vscode/` ([ED-031](decisions/ED-031-vs-code.md)). They make the editor check code exactly as `scripts/check.sh` and the git hooks do.
+The repository's editor settings, tasks and debug configurations are in `.vscode/` ([ED-0031](decisions/ED-0031-vs-code.md)). They make the editor check code exactly as `scripts/check.sh` and the git hooks do.
 
 ### Install the extensions
 

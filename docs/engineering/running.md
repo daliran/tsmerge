@@ -42,7 +42,7 @@ scripts/start-session.sh
 
 ## Running locally
 
-Experiment code lives in the [`tsmerge/`](../../tsmerge/README.md) package and runs as a module, `python -m tsmerge.<module>`, always from the repository root ([ED-030](decisions/ED-030-experiment-code.md)). There are two ways to run it:
+Experiment code lives in the [`tsmerge/`](../../tsmerge/README.md) package and runs as a module, `python -m tsmerge.<module>`, always from the repository root ([ED-0030](decisions/ED-0030-experiment-code.md)). There are two ways to run it:
 
 | | A recorded run | A quick try |
 |---|---|---|
@@ -68,11 +68,11 @@ scripts/run_local.sh hello python -m tsmerge.hello
 - Experiments use the local GPU when PyTorch sees one (`--device auto`, the default), the CPU otherwise.
 - **WSL2:** the GPU's memory is shared with Windows apps; check `nvidia-smi` before a long local run ([setup.md](setup.md#5-gpu-and-cuda-optional)).
 
-Why it works this way: [ED-029](decisions/ED-029-local-runs.md).
+Why it works this way: [ED-0029](decisions/ED-0029-local-runs.md).
 
 ### From VS Code
 
-The repository's tasks and debug configurations run all of the above from the editor ([ED-031](decisions/ED-031-vs-code.md)):
+The repository's tasks and debug configurations run all of the above from the editor ([ED-0031](decisions/ED-0031-vs-code.md)):
 
 - **Tasks** (*Terminal* → *Run Task…*): run locally, submit to the cluster, status, logs, pull, set up the cluster environment, start the session, checks, render diagrams, runs summary. They ask for the experiment, the module or the job id.
 - **Debugging** (*Run and Debug*): *Debug a module* (asks e.g. `tsmerge.hello`) or *Debug current file*, from the working tree, with breakpoints. Debug sessions are quick tries: their outputs go to `outputs/scratch/`.
@@ -81,7 +81,7 @@ The repository's tasks and debug configurations run all of the above from the ed
 
 ## Datasets
 
-Datasets live outside the code ([ED-020](decisions/ED-020-dataset-location.md)):
+Datasets live outside the code ([ED-0020](decisions/ED-0020-dataset-location.md)):
 
 - **locally:** in `data/` at the repository root (git-ignored), or wherever `DATA_DIR` in `.env` points. Recorded runs (`run_local.sh`) and the VS Code debugger read `.env` by themselves; for a quick try in a terminal, add `--env-file .env`: `uv run --env-file .env python -m tsmerge.<module>`;
 - **on the cluster:** in the work area's `data/` folder; jobs find it as `DATA_DIR`.
@@ -92,7 +92,7 @@ Upload a dataset once, preferably as a few large files:
 rsync -az --partial data/<dataset>/ ailb:/work/<project account>/<username>/tsmerge/data/<dataset>/
 ```
 
-`--partial` makes an interrupted upload resume instead of restarting. Large copies go through the login node: the cluster's data-transfer node isn't reachable from outside the Unimore network ([ED-024](decisions/ED-024-large-transfers.md)).
+`--partial` makes an interrupted upload resume instead of restarting. Large copies go through the login node: the cluster's data-transfer node isn't reachable from outside the Unimore network ([ED-0024](decisions/ED-0024-large-transfers.md)).
 
 ## Running on the cluster
 
@@ -100,14 +100,14 @@ rsync -az --partial data/<dataset>/ ailb:/work/<project account>/<username>/tsme
 
 | Work | Partition | Why |
 |---|---|---|
-| GPU training and evaluation | `all_usr_prod` | [ED-002](decisions/ED-002-cluster-partition.md) |
-| CPU-only work (data preparation, aggregating results) | `all_serial`, free: `CLUSTER_PROFILE=cpu scripts/cluster/submit.sh …` | [ED-002](decisions/ED-002-cluster-partition.md), [ED-022](decisions/ED-022-cpu-jobs.md) |
-| Very light GPU work, free | `all_serial`, on its P100 GPUs only (the K80s are too old): `CLUSTER_PROFILE=cpu SBATCH_OPTS="--constraint=gpu_P100_16G --gres=gpu:1" scripts/cluster/submit.sh …`. Not verified yet: [EQ-013](questions/EQ-013-p100-driver.md) | [ED-002](decisions/ED-002-cluster-partition.md) |
-| Never | `boost_usr_prod` | reserved for projects that need high-memory GPUs ([ED-002](decisions/ED-002-cluster-partition.md)) |
+| GPU training and evaluation | `all_usr_prod` | [ED-0002](decisions/ED-0002-cluster-partition.md) |
+| CPU-only work (data preparation, aggregating results) | `all_serial`, free: `CLUSTER_PROFILE=cpu scripts/cluster/submit.sh …` | [ED-0002](decisions/ED-0002-cluster-partition.md), [ED-0022](decisions/ED-0022-cpu-jobs.md) |
+| Very light GPU work, free | `all_serial`, on its P100 GPUs only (the K80s are too old): `CLUSTER_PROFILE=cpu SBATCH_OPTS="--constraint=gpu_P100_16G --gres=gpu:1" scripts/cluster/submit.sh …`. Not verified yet: [EQ-0013](questions/EQ-0013-p100-driver.md) | [ED-0002](decisions/ED-0002-cluster-partition.md) |
+| Never | `boost_usr_prod` | reserved for projects that need high-memory GPUs ([ED-0002](decisions/ED-0002-cluster-partition.md)) |
 
-- **CPU-only jobs** (data preparation, aggregating results): `CLUSTER_PROFILE=cpu scripts/cluster/submit.sh …`. No GPU is requested or checked, and the job runs on `all_serial` (free, at most 4 hours), with the same run folder and records as GPU runs. For heavy or long CPU work, add `CLUSTER_CPU_PARTITION=all_usr_prod` (billed, up to 24 hours). Why: [ED-022](decisions/ED-022-cpu-jobs.md).
+- **CPU-only jobs** (data preparation, aggregating results): `CLUSTER_PROFILE=cpu scripts/cluster/submit.sh …`. No GPU is requested or checked, and the job runs on `all_serial` (free, at most 4 hours), with the same run folder and records as GPU runs. For heavy or long CPU work, add `CLUSTER_CPU_PARTITION=all_usr_prod` (billed, up to 24 hours). Why: [ED-0022](decisions/ED-0022-cpu-jobs.md).
 
-- **GPU models:** jobs run only on the models allowed in `scripts/cluster/defaults.sh`; Blackwell is always excluded, because this PyTorch build can't run on it ([ED-004](decisions/ED-004-gpu-allow-list.md)). All other models are allowed, high-memory ones included as part of the mixed list ([ED-027](decisions/ED-027-gpu-pool.md)). To compare runs on identical hardware, narrow the list for a sweep to one family of at most 24 GB, e.g. `CLUSTER_GPU_SUBSET="gpu_2080_11G gpu_2080Ti_11G" scripts/cluster/submit.sh …` (only allowed models are accepted).
+- **GPU models:** jobs run only on the models allowed in `scripts/cluster/defaults.sh`; Blackwell is always excluded, because this PyTorch build can't run on it ([ED-0004](decisions/ED-0004-gpu-allow-list.md)). All other models are allowed, high-memory ones included as part of the mixed list ([ED-0027](decisions/ED-0027-gpu-pool.md)). To compare runs on identical hardware, narrow the list for a sweep to one family of at most 24 GB, e.g. `CLUSTER_GPU_SUBSET="gpu_2080_11G gpu_2080Ti_11G" scripts/cluster/submit.sh …` (only allowed models are accepted).
 - **Every Slurm option** (account, partition, GPUs, time limit, …) is preset: you pass only the experiment name and the command. Defaults and how to override them: [scripts/cluster/README.md](../../scripts/cluster/README.md#commands).
 
 ### The cycle
@@ -131,7 +131,7 @@ scripts/cluster/pull.sh hello        # bring the experiment's runs back into out
 - `submit.sh` returns at once: the job runs on its own, even if you close your machine.
 - **Don't edit files during the few seconds a submission takes:** the run records the working tree as it was when the submission started.
 - **If a submission fails** (for example `sbatch` rejects an option, or the budget is spent), `submit.sh` says which step failed and removes the half-created run folder, so no run is left marked "submitted" without a job.
-- Before submitting, it checks the GPU lists against the cluster, and warns if a GPU model appeared or disappeared ([ED-004](decisions/ED-004-gpu-allow-list.md)).
+- Before submitting, it checks the GPU lists against the cluster, and warns if a GPU model appeared or disappeared ([ED-0004](decisions/ED-0004-gpu-allow-list.md)).
 - Each run's `run.json` records what ran, where and how it ended; `output.log` holds the job's output.
 - **How a run ended** is always recorded in `run.json`'s `status` (`completed`, `failed`, `timeout`, `canceled`, `stopped`; meanings in [runs.md](runs.md#how-a-run-ended-status)). A run gets its time limit **minus 2 minutes**, and `sacct` shows runs stopped at the limit as `FAILED`: trust `run.json`.
 - **Sweeps:** give the runs of one comparison the same sweep id, so they can be grouped later: `SWEEP=<id> scripts/cluster/submit.sh …`. It's recorded in each run's `run.json`.
@@ -147,7 +147,7 @@ scripts/cluster/pull.sh hello        # bring the experiment's runs back into out
 
 *Source: [assets/environment-build.mmd](assets/environment-build.mmd)*
 
-Why it works this way: [ED-008](decisions/ED-008-environment-integrity.md) (the lock-hash guard) and [ED-005](decisions/ED-005-uv-cache-on-the-cluster.md) (the temporary cache).
+Why it works this way: [ED-0008](decisions/ED-0008-environment-integrity.md) (the lock-hash guard) and [ED-0005](decisions/ED-0005-uv-cache-on-the-cluster.md) (the temporary cache).
 
 ### Rebuilding a run's code
 
@@ -172,7 +172,7 @@ uv run --locked python scripts/runs_summary.py <experiment>
 - **Choosing `CLUSTER_TIME`:** take the durations of similar runs, add a margin, and remember a run gets its limit minus 2 minutes. A run that hits its limit restarts from scratch.
 - **Cost:** the `stdh` column estimates the standard hours billed (one GPU-hour costs at least 6; `all_serial` and local runs are free). The official figure is `susage` on the cluster.
 
-Why: [ED-023](decisions/ED-023-durations-and-budget.md).
+Why: [ED-0023](decisions/ED-0023-durations-and-budget.md).
 
 ## Interactive work and debugging on the cluster
 
@@ -206,4 +206,4 @@ Most debugging happens locally. When it must happen on the cluster:
   Drop `--exclude 'checkpoints/'` to include model weights.
 - **Push before submitting runs you'll report:** a run records its commit; an unpushed commit that is later amended or rebased disappears. `submit.sh` warns about unpushed commits.
 
-Why: [ED-025](decisions/ED-025-run-safety.md).
+Why: [ED-0025](decisions/ED-0025-run-safety.md).

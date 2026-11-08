@@ -8,9 +8,9 @@ Every experiment answers a question, every result supports or refutes a claim, a
 
 | Type | Id |
 |---|---|
-| Question | `EQ-NNN` (engineering), `RQ-NNN` (research) |
-| Decision | `ED-NNN` (engineering), `RD-NNN` (research) |
-| Experiment | `eNNN-<slug>`, e.g. `e001-joint-vs-merge` ([ED-032](engineering/decisions/ED-032-experiment-ids.md)) |
+| Question | `EQ-NNNN` (engineering), `RQ-NNNN` (research) |
+| Decision | `ED-NNNN` (engineering), `RD-NNNN` (research) |
+| Experiment | `eNNNN-<slug>`, e.g. `e0001-joint-vs-merge` ([ED-0032](engineering/decisions/ED-0032-experiment-ids.md)) |
 | Claim | to be defined, with the domain docs |
 | Paper | bibkey |
 

@@ -4,7 +4,7 @@ answers.
 usage: python3 check_hygiene.py <run dir>
 
 Checks every file git would commit (tracked, plus untracked files not ignored) for:
-- personal data: absolute paths of a personal machine (ED-018);
+- personal data: absolute paths of a personal machine (ED-0018);
 - likely secrets;
 - Markdown links whose file or heading doesn't exist;
 - decision and question ids (ED-, EQ-, RD-, RQ-) with no matching file, and files
@@ -36,7 +36,7 @@ SECRETS = re.compile(
     r"|^-----BEGIN [A-Z ]*PRIVATE KEY-----"
 )
 LINK = re.compile(r"\]\(([^)#\s]*)(#[^)\s]+)?\)")
-ID = re.compile(r"\b((?:ED|EQ|RD|RQ)-\d{3})\b")
+ID = re.compile(r"\b((?:ED|EQ|RD|RQ)-\d{4})\b")
 # UK spellings, anchored to their British endings so US words (optimistic, organism,
 # cancellation, analyses) don't match.
 UK = re.compile(
@@ -73,7 +73,7 @@ def highest_question_ids() -> dict[str, int]:
         index = REPO / ID_FOLDERS[prefix] / "README.md"
         if index.is_file():
             m = re.search(
-                rf"\*\*Highest id used:\*\* {prefix}-(\d{{3}})", index.read_text()
+                rf"\*\*Highest id used:\*\* {prefix}-(\d{{4}})", index.read_text()
             )
             if m:
                 found[prefix] = int(m.group(1))
@@ -84,7 +84,7 @@ HIGHEST_QUESTIONS = highest_question_ids()
 
 
 def is_closed_question(question_id: str) -> bool:
-    """Closed questions are deleted (ED-016), but their ids, up to the highest id used,
+    """Closed questions are deleted (ED-0016), but their ids, up to the highest id used,
     remain valid in history (e.g. a decision's "Answers:" line)."""
     prefix, number = question_id[:2], int(question_id[3:])
     return prefix in HIGHEST_QUESTIONS and number <= HIGHEST_QUESTIONS[prefix]

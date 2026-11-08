@@ -16,7 +16,7 @@ dev = [
 ]
 
 [tool.uv]
-# tsmerge/ runs as modules (`python -m tsmerge.<module>`) and isn't installed (ED-030):
+# tsmerge/ runs as modules (`python -m tsmerge.<module>`) and isn't installed (ED-0030):
 # uv only manages the environment.
 package = false
 # Always use a uv-managed Python, never the system one, so every machine runs the same build.
@@ -25,7 +25,7 @@ python-preference = "only-managed"
 [tool.uv.sources]
 torch = { index = "pytorch-cu126" }
 
-# PyTorch wheels built for CUDA 12.6 (ED-001).
+# PyTorch wheels built for CUDA 12.6 (ED-0001).
 [[tool.uv.index]]
 name = "pytorch-cu126"
 url = "https://download.pytorch.org/whl/cu126"
@@ -34,12 +34,12 @@ explicit = true
 [tool.pytest.ini_options]
 # Tests live in tests/. Scripts are tested as subprocesses, the way they run for real;
 # the experiment code is imported as `tsmerge`, from the repository root, which is how
-# `python -m tsmerge.<module>` finds it too (ED-030: the package isn't installed).
+# `python -m tsmerge.<module>` finds it too (ED-0030: the package isn't installed).
 testpaths = ["tests"]
 pythonpath = ["."]
 
 [tool.ruff.lint]
-# An explicit rule set, so a ruff upgrade can't change what is checked (ED-012):
+# An explicit rule set, so a ruff upgrade can't change what is checked (ED-0012):
 # E/W pycodestyle errors and warnings, F pyflakes, I import order, UP modern syntax,
 # B likely bugs, SIM simplifications, RUF ruff's own rules. Line length: ruff's default (88).
 select = ["E", "W", "F", "I", "UP", "B", "SIM", "RUF"]

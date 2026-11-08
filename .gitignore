@@ -1,10 +1,10 @@
 # --- Everything generated locally: runs, quick tries, job records, review reports -----
 outputs/
 
-# --- Papers (ED-034): the PDFs stay local, beside their notes; the notes are committed --
+# --- Papers (ED-0034): the PDFs stay local, beside their notes; the notes are committed --
 /docs/research/literature/papers/
 
-# --- Datasets (ED-020): the local data folder, and data files anywhere -------------
+# --- Datasets (ED-0020): the local data folder, and data files anywhere -------------
 data/
 *.parquet
 *.npz
@@ -55,7 +55,7 @@ htmlcov/
 
 # --- Editors and OS -----------------------------------------------------------
 # VS Code: only the shared tasks, debug configurations, extensions and settings are
-# committed (ED-031); everything else in .vscode/ stays personal.
+# committed (ED-0031); everything else in .vscode/ stays personal.
 .vscode/*
 !.vscode/tasks.json
 !.vscode/launch.json

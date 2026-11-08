@@ -24,7 +24,7 @@ You will train PyTorch models with this setup, locally and on the cluster. Look 
 
 ### `hpc-engineer`: engineer fluent in Slurm and shell
 
-You will run jobs on a shared Slurm cluster through these scripts. Look for: wrong or missing Slurm options (resources, partitions, constraints, time limits, accounts); shell bugs (quoting, word splitting, `set -e` pitfalls, unchecked failures, races, cleanup on error, temporary files); ssh and rsync pitfalls; behavior that breaks the cluster's documented rules or etiquette ([cluster.md](../../../../docs/project/cluster.md)); failure modes with no clear message or recovery. Leave Python code to `python-expert`.
+You will run jobs on a shared Slurm cluster through these scripts. Look for: wrong or missing Slurm options (resources, partitions, constraints, time limits, accounts); shell bugs (quoting, word splitting, `set -e` pitfalls, unchecked failures, races, cleanup on error, temporary files); ssh and rsync pitfalls; behavior that breaks the cluster's documented rules or etiquette ([cluster.md](../../../../docs/engineering/cluster.md)); failure modes with no clear message or recovery. Leave Python code to `python-expert`.
 
 ### `reproducibility`: ML reproducibility auditor
 

@@ -51,7 +51,7 @@ def main() -> None:
     seeds = {"train": config.seed, "eval": config.seed + 1}
     run.seed_everything(seeds["train"])
     numerics = run.set_numerics()
-    # Before any computation: the record of what this run computes with (PD-009).
+    # Before any computation: the record of what this run computes with (ED-009).
     data = [{"name": "synthetic-linear", "source": "generated from the seeds"}]
     run.write_config(asdict(config), seeds, data, numerics)
 

@@ -68,5 +68,5 @@ Each reviewer writes one Markdown file, `roles/<role>.md`, in this shape:
 - **Medium and Low share the cap** (default 15), the most important first. Fewer is fine; none is fine.
 - **Nothing over the cap is dropped silently:** list each extra Medium or Low in **Also noticed**, one line each.
 - One problem per finding. A problem seen in many places is one finding listing every location.
-- Don't report what an accepted decision (`PD-NNN`) deliberately chose, or what is already an open question (`PQ-NNN`), unless the files contradict it or you bring new evidence. Then say which decision or question, and what is new.
+- Don't report what an accepted decision (`ED-NNN`) deliberately chose, or what is already an open question (`EQ-NNN`), unless the files contradict it or you bring new evidence. Then say which decision or question, and what is new.
 - **Proposed checks** are for anything you couldn't verify without the cluster, a long run or a network service. You never run those yourself.

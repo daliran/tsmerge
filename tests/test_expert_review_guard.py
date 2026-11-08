@@ -79,7 +79,7 @@ def test_blocks_cluster_commands_for_reviewers(command):
 @pytest.mark.parametrize(
     "command",
     [
-        "grep -c ssh docs/project/cluster.md",
+        "grep -c ssh docs/engineering/cluster.md",
         "cat scripts/cluster/submit.sh",
         "shellcheck -x scripts/cluster/submit.sh scripts/cluster/pull.sh",
         "bash -n scripts/cluster/job.sbatch",
@@ -113,7 +113,7 @@ def test_fails_closed_on_unreadable_input():
 
 def test_logs_every_checked_call():
     LOG.unlink(missing_ok=True)
-    run_guard(bash("grep -c ssh docs/project/cluster.md"))
+    run_guard(bash("grep -c ssh docs/engineering/cluster.md"))
     run_guard(bash("ssh ailb hostname"))
     run_guard(bash("ssh ailb hostname", agent=None))  # not a review agent: not logged
     lines = LOG.read_text().splitlines()

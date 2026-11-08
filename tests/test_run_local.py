@@ -1,4 +1,4 @@
-"""Tests for scripts/run_local.sh: recorded local runs, run as subprocesses (PD-029)."""
+"""Tests for scripts/run_local.sh: recorded local runs, run as subprocesses (ED-029)."""
 
 import json
 import os

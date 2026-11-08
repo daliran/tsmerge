@@ -1,0 +1,26 @@
+%% How the cluster's Python environment is built, and how every job checks it.
+%% Shown in docs/engineering/running.md.
+sequenceDiagram
+  autonumber
+  actor You
+  participant Setup as setup_remote.sh<br/>(your machine)
+  participant Login as Login node
+  participant Serial as all_serial<br/>(Slurm step)
+  participant Job as A job<br/>(later)
+
+  You->>Setup: setup_remote.sh, after uv.lock changes
+  Setup->>Login: create folders, set the cluster's uv to your version
+  Setup->>Login: copy the code
+  Setup->>Serial: srun: build the environment
+  Serial->>Serial: delete the lock hash: from now on, jobs refuse to start
+  Serial->>Serial: uv sync --locked, with a temporary cache in the node's /tmp
+  Serial->>Serial: write the hash of uv.lock, delete the cache
+  Serial-->>Setup: done
+  Note over Login,Serial: a failed build leaves no hash: jobs keep refusing until a build succeeds
+
+  Job->>Job: compare the run's uv.lock hash with the environment's
+  alt they match
+    Job->>Job: run the command
+  else they differ, or no hash
+    Job->>Job: stop: "run setup_remote.sh" (status: failed)
+  end

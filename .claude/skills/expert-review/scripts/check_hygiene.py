@@ -5,11 +5,11 @@ usage: python3 check_hygiene.py <run dir>
 
 Checks every file git would commit (tracked, plus untracked files not ignored) for:
 - personal data: the patterns in PRIVATE_PATTERNS (from the git-ignored .env), except in
-  bibliographic content, where authors' names belong (PD-034); and absolute paths of a
+  bibliographic content, where authors' names belong (ED-034); and absolute paths of a
   personal machine, everywhere;
 - likely secrets;
 - Markdown links whose file or heading doesn't exist;
-- decision and question ids (PD-, PQ-, DD-, DQ-) with no matching file, and files
+- decision and question ids (ED-, EQ-, DD-, DQ-) with no matching file, and files
   missing from their folder's index;
 - common UK spellings, in Markdown files.
 Writes <run dir>/checks/hygiene.md.
@@ -38,7 +38,7 @@ SECRETS = re.compile(
     r"|^-----BEGIN [A-Z ]*PRIVATE KEY-----"
 )
 LINK = re.compile(r"\]\(([^)#\s]*)(#[^)\s]+)?\)")
-ID = re.compile(r"\b((?:PD|PQ|DD|DQ)-\d{3})\b")
+ID = re.compile(r"\b((?:ED|EQ|DD|DQ)-\d{3})\b")
 # UK spellings, anchored to their British endings so US words (optimistic, organism,
 # cancellation, analyses) don't match.
 UK = re.compile(
@@ -50,14 +50,14 @@ UK = re.compile(
     r")\b"
 )
 ID_FOLDERS = {
-    "PD": "docs/project/decisions",
-    "PQ": "docs/project/questions",
+    "ED": "docs/engineering/decisions",
+    "EQ": "docs/engineering/questions",
     "DD": "docs/domain/decisions",
     "DQ": "docs/domain/questions",
 }
 
 
-# Bibliographic content may name authors (PD-034): PRIVATE_PATTERNS isn't applied here.
+# Bibliographic content may name authors (ED-034): PRIVATE_PATTERNS isn't applied here.
 BIBLIOGRAPHIC = ("docs/domain/references.bib", "docs/domain/literature/", "thesis/")
 
 
@@ -87,9 +87,9 @@ def private_patterns() -> re.Pattern | None:
 
 
 def highest_question_ids() -> dict[str, int]:
-    """The "highest id used" recorded in each questions index, e.g. {"PQ": 10}."""
+    """The "highest id used" recorded in each questions index, e.g. {"EQ": 14}."""
     found = {}
-    for prefix in ("PQ", "DQ"):
+    for prefix in ("EQ", "DQ"):
         index = REPO / ID_FOLDERS[prefix] / "README.md"
         if index.is_file():
             m = re.search(
@@ -104,7 +104,7 @@ HIGHEST_QUESTIONS = highest_question_ids()
 
 
 def is_closed_question(question_id: str) -> bool:
-    """Closed questions are deleted (PD-016), but their ids, up to the highest id used,
+    """Closed questions are deleted (ED-016), but their ids, up to the highest id used,
     remain valid in history (e.g. a decision's "Answers:" line)."""
     prefix, number = question_id[:2], int(question_id[3:])
     return prefix in HIGHEST_QUESTIONS and number <= HIGHEST_QUESTIONS[prefix]

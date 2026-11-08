@@ -2,7 +2,7 @@
 
 Called by job.sbatch before the run's command. Without this check, a job on an
 unsupported GPU looks healthy until its first CUDA operation fails with "no kernel image
-is available" (PD-004).
+is available" (ED-004).
 """
 
 import sys

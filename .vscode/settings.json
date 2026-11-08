@@ -1,5 +1,5 @@
 {
-  // Shared workspace settings (PD-031). Personal preferences go in your user settings.
+  // Shared workspace settings (ED-031). Personal preferences go in your user settings.
   // The project's environment, built by `uv sync`.
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   // Ruff in the editor = Ruff in scripts/check.sh and the pre-commit hook:

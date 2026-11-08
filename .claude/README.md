@@ -42,9 +42,9 @@ Mechanical steps of the skill, run by the orchestrating session, never by the re
 
 ## The expert review in short
 
-![The expert review: independent reviewers, mechanical checks, one verifier, guarded by the hook](../docs/project/diagrams/expert-review.png)
+![The expert review: independent reviewers, mechanical checks, one verifier, guarded by the hook](assets/expert-review.png)
 
-*Source: [../docs/project/diagrams/expert-review.mmd](../docs/project/diagrams/expert-review.mmd)*
+*Source: [assets/expert-review.mmd](assets/expert-review.mmd)*
 
 ```
 /expert-review [project | all | <path>] [--roles python-expert,hpc-engineer,…] [--max-findings 15]

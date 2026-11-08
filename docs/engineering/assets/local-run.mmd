@@ -1,0 +1,27 @@
+%% A recorded local run, and how it differs from a quick try or a debug session.
+%% Shown in docs/engineering/running.md.
+sequenceDiagram
+  autonumber
+  actor You
+  participant Runner as run_local.sh
+  participant Folder as outputs/runs/#lt;experiment#gt;/#lt;run id#gt;/
+  participant Command as the command<br/>(from code/)
+
+  You->>Runner: run_local.sh #lt;experiment#gt; python -m tsmerge.#lt;module#gt;
+  Runner->>Runner: check the environment matches uv.lock
+  Runner->>Folder: create the run folder (never reused)
+  Runner->>Folder: provenance/: commit, uncommitted changes
+  Runner->>Folder: code/: frozen copy of the working tree
+  Runner->>Folder: run.json (launcher: local), then start facts (status: running)
+  Runner->>Command: start, with RUN_DIR, DATA_DIR, RUNS_ROOT
+  Command->>Folder: config.json, then results/history.jsonl (curves) and results/metrics.json
+  Command-->>Runner: output, also saved in output.log
+  alt the command ends
+    Runner->>Folder: status: completed, or failed
+  else Ctrl-C
+    Runner->>Folder: status: canceled
+  end
+  Runner->>Folder: delete code/ (commit + patch rebuild it)
+  Runner-->>You: run id and status
+
+  Note over You,Command: Quick try or debugger: python -m tsmerge.#lt;module#gt; from the working tree, outputs in outputs/scratch/, no record

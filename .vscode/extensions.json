@@ -1,5 +1,5 @@
 {
-  // Recommended extensions for this repository (PD-031). VS Code offers them when the
+  // Recommended extensions for this repository (ED-031). VS Code offers them when the
   // folder is opened; the tasks and debug configurations need the first three.
   "recommendations": [
     "ms-python.python",

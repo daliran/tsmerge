@@ -1,8 +1,9 @@
-"""Every file the repository tracks is listed in docs/project/overview.md.
+"""Every file the repository tracks is listed in docs/engineering/overview.md.
 
 The overview ends with an inventory of every file that isn't documentation, so nobody
 loses track of what a file is for. This test fails when a file is added without a line
-there. Docs, decisions, questions and diagrams are listed in their own indexes instead.
+there. Docs, decisions and questions are listed in their own indexes instead, and the
+files of every assets/ folder (pictures and what draws them) in that folder's README.
 """
 
 import subprocess
@@ -11,7 +12,7 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[1]
-OVERVIEW = REPO / "docs" / "project" / "overview.md"
+OVERVIEW = REPO / "docs" / "engineering" / "overview.md"
 
 
 def repository_files() -> list[str]:
@@ -32,7 +33,8 @@ def repository_files() -> list[str]:
 def needs_listing(path: str) -> bool:
     if path.endswith(".md"):
         return False  # docs: indexed by the folder READMEs
-    return not path.startswith("docs/project/diagrams/") or path.endswith(".sha256")
+    # Pictures and what generates them: listed in their assets/ folder's README.
+    return "assets" not in path.split("/")[:-1]
 
 
 def test_every_file_is_in_the_overview():

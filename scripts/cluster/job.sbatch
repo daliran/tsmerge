@@ -14,7 +14,7 @@ shift 4
 tmp_root="$work_dir/tmp"
 
 # --- Recording how the run ends --------------------------------------------------------
-# run.json must always end with a real status, whatever stops the job (PD-003):
+# run.json must always end with a real status, whatever stops the job (ED-003):
 #   completed   the command exited with 0
 #   failed      the command, or a check before it, exited with another code
 #   timeout     Slurm stopped the job at its time limit
@@ -26,7 +26,7 @@ tmp_root="$work_dir/tmp"
 #     the time limit (--signal=B:TERM@120 in defaults.sh), and on scancel. The handler
 #     notes why, stops the command, and exits; the exit handler then writes the record.
 # The command itself needs nothing special: it is stopped like any program. (To save a
-# checkpoint first, it could catch SIGTERM itself; see docs/project/running.md.)
+# checkpoint first, it could catch SIGTERM itself; see docs/engineering/running.md.)
 
 stop_reason=""  # set by the signal handler: "timeout" or "canceled"
 child=""        # the command's process id, once it runs
@@ -99,10 +99,10 @@ fi
 
 export VIRTUAL_ENV="$venv"
 export PATH="$venv/bin:$PATH"
-# What the command can rely on (docs/project/runs.md#what-a-run-provides):
+# What the command can rely on (docs/engineering/runs.md#what-a-run-provides):
 #   RUN_DIR    this run's folder: write results/ and checkpoints/ here
-#   DATA_DIR   the datasets folder (PD-020)
-#   RUNS_ROOT  the root of all runs, to read other runs' outputs listed in "inputs" (PD-021)
+#   DATA_DIR   the datasets folder (ED-020)
+#   RUNS_ROOT  the root of all runs, to read other runs' outputs listed in "inputs" (ED-021)
 export RUN_DIR="$run_dir"
 export DATA_DIR="$work_dir/data"
 export RUNS_ROOT="$work_dir/runs"

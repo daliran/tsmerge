@@ -6,7 +6,7 @@ tsmerge is a master's thesis repo (AI Engineering, Unimore) on joint training vs
 
 - [README.md](README.md), then the `README.md` of every folder you work in: they describe what the folder holds and how it is used.
 - `CLAUDE.local.md` (git-ignored, if present): personal and machine-specific context.
-- [docs/project/decisions/README.md](docs/project/decisions/README.md): why things are the way they are. Read the relevant decision before changing what it covers.
+- [docs/engineering/decisions/README.md](docs/engineering/decisions/README.md): why things are the way they are. Read the relevant decision before changing what it covers.
 
 ## Rules
 
@@ -15,17 +15,17 @@ tsmerge is a master's thesis repo (AI Engineering, Unimore) on joint training vs
 - **Plan before acting.** Analyze first, present a plan, and act only once the user approves it. Only minor changes skip this: typos, formatting, or an edit the user has just described exactly.
 - **Small steps, clean commits.** One concept per change; every commit has one clear purpose. No new dependencies and no cross-module refactors unasked.
 - **Humans own git.** Only read-only git (`status`, `diff`, `log`, `show`). Propose commits with the [commit-plan](.claude/skills/commit-plan/SKILL.md) skill, only when asked; the user runs them. Before proposing a commit, run `scripts/check.sh` ([CONTRIBUTING.md](CONTRIBUTING.md#checks-before-committing)).
-- **No personal data in committed files:** no personal names, graduation date, links to other repositories, or paths outside the repo. Those live in `CLAUDE.local.md`. One exception: authors' names in bibliographic content (`docs/domain/references.bib`, `docs/domain/literature/`, and the future `thesis/` folder), since citing a paper names its authors ([PD-034](docs/project/decisions/PD-034-literature.md)).
+- **No personal data in committed files:** no personal names, graduation date, links to other repositories, or paths outside the repo. Those live in `CLAUDE.local.md`. One exception: authors' names in bibliographic content (`docs/domain/references.bib`, `docs/domain/literature/`, and the future `thesis/` folder), since citing a paper names its authors ([ED-034](docs/engineering/decisions/ED-034-literature.md)).
 - **This repo is the source of truth.** Committed files never refer to earlier or external implementations it takes inspiration from; any context on them lives in `CLAUDE.local.md`.
-- **Cluster login nodes are shared.** Run only short, light commands there. Anything long or blocking, Python included, goes through `srun` or `sbatch` ([cluster.md](docs/project/cluster.md), [running.md](docs/project/running.md)).
+- **Cluster login nodes are shared.** Run only short, light commands there. Anything long or blocking, Python included, goes through `srun` or `sbatch` ([cluster.md](docs/engineering/cluster.md), [running.md](docs/engineering/running.md)).
 - **Code changes only locally**, never on the cluster, wherever the code runs or is debugged.
 - **Sources are read-only:** never edit papers or external repositories used as reference.
 - **US English** in everything written to the repository. Give bash commands, never PowerShell.
 - **Readable Markdown, written for humans.** A blank line between blocks, short paragraphs, one idea per line, and bullet lists for anything that enumerates. Split long sections with headings. When presenting options, give numbers where they exist (counts, percentages, costs) and what each option gains and costs.
 - **Folder `CLAUDE.md` files:** none yet. When a folder first needs rules that only agents need, propose adding one there (starting with `@README.md`).
-- **Document what and why, as you go.** Every script, configuration file and folder says what it does and why it exists: in the folder's README, a decision, or a short comment. Write it together with the change, not afterwards; a new file also gets its line in the inventory of [docs/project/overview.md](docs/project/overview.md#every-file-in-the-repository) (a test checks it).
+- **Document what and why, as you go.** Every script, configuration file and folder says what it does and why it exists: in the folder's README, a decision, or a short comment. Write it together with the change, not afterwards; a new file also gets its line in the inventory of [docs/engineering/overview.md](docs/engineering/overview.md#every-file-in-the-repository) (a test checks it).
 - **Record problems with their solutions.** When a problem is found (a review, a failed run, a bug), write down the problem, why it mattered and how it was solved, in a decision or the relevant doc; what isn't solved yet becomes an open question. Never leave it only in the conversation.
-- **Docs are the reference; decisions explain why.** Every operational fact lives in a project doc or folder README, which may link to the decision behind it. A decision is history and rationale, never the only place a fact is written.
+- **Docs are the reference; decisions explain why.** Every operational fact lives in an engineering or research doc, or a folder README, which may link to the decision behind it. A decision is history and rationale, never the only place a fact is written.
 - **Docs follow decisions.** When a decision is made or changed, update every Markdown file it affects in the same step: committed files, untracked docs, and `CLAUDE.local.md`. Never leave a file stating something a decision has changed.
-- **Diagrams follow the docs.** Every time you update the docs, check whether the diagrams in [docs/project/diagrams/](docs/project/diagrams/README.md) still match them. If not, update the `.mmd` sources and re-render the images (`scripts/render_diagrams.sh`) in the same step.
+- **Diagrams follow the docs.** Every time you update the docs, check whether the pictures that illustrate them still match: each doc folder keeps its pictures, and what generates them, in an `assets/` folder beside it ([docs/README.md](docs/README.md#assets)). If not, update the `.mmd` sources or drawing scripts and regenerate the images (`scripts/render_diagrams.sh` for diagrams) in the same step.
 - **Knowledge is written down.** When the user asks you to remember a rule, write it here or in the README it belongs to (personal or machine-specific context: `CLAUDE.local.md`), never only in session memory, so fresh sessions follow it too.

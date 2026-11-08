@@ -1,0 +1,40 @@
+%% Where code, environments, runs and data live, and which script moves them.
+%% Left: your machine; middle: the cluster; right: what comes back. Shown in docs/engineering/running.md.
+flowchart LR
+  subgraph local["Your machine"]
+    direction TB
+    tree["Working tree<br/>git repository"]
+    venvL[".venv/<br/>built from uv.lock"]
+    dataL["data/<br/>datasets, git-ignored"]
+  end
+
+  subgraph homes["Cluster: /homes/&lt;user&gt;/tsmerge<br/>100 GB, file-count limit suspected (EQ-012)"]
+    direction TB
+    venvC["venv/<br/>built from uv.lock"]
+    mirror["code/<br/>latest submitted code"]
+  end
+
+  subgraph work["Cluster: /work/&lt;project account&gt;/&lt;user&gt;/tsmerge<br/>100 GB, deleted when the project ends"]
+    direction TB
+    runs["runs/&lt;experiment&gt;/&lt;run id&gt;/<br/>one folder per run,<br/>with its frozen code"]
+    dataC["data/<br/>datasets"]
+  end
+
+  subgraph compute["Cluster: where jobs run"]
+    direction TB
+    gpu["all_usr_prod: GPU nodes<br/>billed, at most 24 h<br/>Blackwell never used"]
+    serial["all_serial: login nodes<br/>free, CPU jobs and<br/>environment builds, at most 4 h"]
+  end
+
+  subgraph back["Your machine"]
+    outL["outputs/runs/<br/>local and pulled runs, git-ignored"]
+  end
+
+  tree -- "setup_remote.sh" --> venvC
+  tree -- "submit.sh" --> mirror
+  tree -- "submit.sh" --> runs
+  dataL -- "rsync, once" --> dataC
+  homes -. "environment" .-> compute
+  work -. "run folder, data" .-> compute
+  runs -- "pull.sh" --> outL
+  tree -- "run_local.sh" --> outL

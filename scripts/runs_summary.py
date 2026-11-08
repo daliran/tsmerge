@@ -4,9 +4,9 @@ the time limit, estimated cost.
 usage: uv run --locked python scripts/runs_summary.py [<experiment>]
 
 Reads every outputs/runs/<experiment>/<run id>/run.json. Mainly useful for choosing time
-limits (how close runs come to theirs) and, secondarily, for the budget (PD-023).
+limits (how close runs come to theirs) and, secondarily, for the budget (ED-023).
 
-The cost estimates the cluster's billing (docs/project/cluster.md): standard hours =
+The cost estimates the cluster's billing (docs/engineering/cluster.md): standard hours =
 max(CPUs x 0.39, memory GB x 0.06, GPUs x 6.0) x elapsed hours. Memory defaults to
 3 GB per CPU, so CPUs or GPUs decide. `all_serial` and local runs are free.
 """

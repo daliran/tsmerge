@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2317  # finish runs from `trap`, which shellcheck can't follow
 # Run one command as a recorded local run: the same run folder and records as a cluster
-# run, in outputs/runs/ (PD-029).
+# run, in outputs/runs/ (ED-029).
 # usage: scripts/run_local.sh <experiment> <command> [args...]
 #   e.g. scripts/run_local.sh hello python -m tsmerge.hello
 # Optional, for one run: SWEEP=<id>, INPUTS="<exp>/<run id> ..." (as for submit.sh).
@@ -26,7 +26,7 @@ for input in "${inputs[@]}"; do
 done
 
 cd "$REPO_ROOT" || exit
-# DATA_DIR may be set in .env (PD-020); nothing else from it is needed here.
+# DATA_DIR may be set in .env (ED-020); nothing else from it is needed here.
 # Read in a separate shell, so nothing else from .env leaks into this script.
 if [[ -f .env ]]; then
   # shellcheck disable=SC2016  # expanded by the inner shell, after sourcing .env
@@ -48,7 +48,7 @@ mkdir -p "$RUNS_ROOT/$experiment"
 mkdir "$run_dir" || die "run folder $run_dir already exists"
 mkdir "$run_dir/provenance"
 
-# 2. Provenance first, then the frozen code, both from the same working tree (PD-007).
+# 2. Provenance first, then the frozen code, both from the same working tree (ED-007).
 working_tree_patch >"$run_dir/provenance/patch.diff" || die "could not record uncommitted changes"
 git status --porcelain=v1 -uall >"$run_dir/provenance/git-status.txt"
 dirty=false

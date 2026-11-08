@@ -1,4 +1,4 @@
-"""Tests for tsmerge/run.py: the records every experiment writes (PD-009, PD-026)."""
+"""Tests for tsmerge/run.py: the records every experiment writes (ED-009, ED-026)."""
 
 import json
 

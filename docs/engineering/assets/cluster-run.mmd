@@ -1,0 +1,37 @@
+%% One cluster run from submission to pulled results.
+%% Shown in docs/engineering/running.md.
+sequenceDiagram
+  autonumber
+  actor You
+  participant Submit as submit.sh<br/>(your machine)
+  participant Login as Login node
+  participant Slurm
+  participant Job as job.sbatch<br/>(compute node)
+  participant Pull as pull.sh<br/>(your machine)
+
+  You->>Submit: submit.sh #lt;experiment#gt; #lt;command#gt;
+  Submit->>Submit: record commit and uncommitted changes (patch)
+  Submit->>Login: create runs/#lt;experiment#gt;/#lt;run id#gt;/
+  Submit->>Login: copy code/ and provenance/, update the code mirror
+  Submit->>Login: write run.json (status: submitted)
+  Submit->>Slurm: sbatch, with every option from defaults.sh and .env
+  Slurm-->>Submit: job id
+  Submit-->>You: run id and job id, then returns
+  Note over Submit,Login: if any step fails, the run folder is removed
+
+  Slurm->>Job: start, when a node is free
+  Job->>Job: check the environment matches the run's uv.lock
+  Job->>Job: record host, GPU, versions in run.json (status: running)
+  Job->>Job: check the GPU can run this PyTorch (GPU jobs)
+  Job->>Job: run the command, from the run's frozen code
+  alt the command ends
+    Job->>Job: status: completed, or failed
+  else 2 minutes before the time limit, or scancel
+    Slurm->>Job: TERM signal
+    Job->>Job: stop the command, status: timeout, canceled, or stopped
+  end
+  Job->>Job: record end time and exit code in run.json
+
+  You->>Pull: pull.sh #lt;experiment#gt;
+  Pull->>Login: copy the run folders, without code/ and checkpoints/
+  Login-->>Pull: outputs/runs/#lt;experiment#gt;/#lt;run id#gt;/

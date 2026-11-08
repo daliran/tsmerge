@@ -1,6 +1,6 @@
 # tsmerge
 
-The experiment code. Every module runs as `python -m tsmerge.<module>`, from the repository root, or from a run's frozen `code/` copy: the package isn't installed, so each run imports exactly its own code ([PD-030](../docs/project/decisions/PD-030-experiment-code.md)).
+The experiment code. Every module runs as `python -m tsmerge.<module>`, from the repository root, or from a run's frozen `code/` copy: the package isn't installed, so each run imports exactly its own code ([ED-030](../docs/engineering/decisions/ED-030-experiment-code.md)).
 
 | Module | What it is |
 |---|---|
@@ -15,11 +15,11 @@ scripts/cluster/submit.sh <experiment> python -m tsmerge.<module> [args…]     
 uv run python -m tsmerge.<module> [args…]                                     # quick try: outputs in outputs/scratch/
 ```
 
-How runs work: [running.md](../docs/project/running.md); what they record: [runs.md](../docs/project/runs.md).
+How runs work: [running.md](../docs/engineering/running.md); what they record: [runs.md](../docs/engineering/runs.md).
 
 ## A new experiment
 
-Name it `e<NNN>-<slug>` when you run it ([PD-032](../docs/project/decisions/PD-032-experiment-ids.md)). Start from a copy of `hello.py`, and keep its steps in order:
+Name it `e<NNN>-<slug>` when you run it ([ED-032](../docs/engineering/decisions/ED-032-experiment-ids.md)). Start from a copy of `hello.py`, and keep its steps in order:
 
 1. all settings in one dataclass, every one a command-line option;
 2. seeds and numeric settings, then `run.write_config()`, before any computation;

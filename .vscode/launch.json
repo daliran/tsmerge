@@ -1,5 +1,5 @@
 {
-  // Debug configurations (PD-031). Both run from the working tree, so breakpoints work;
+  // Debug configurations (ED-031). Both run from the working tree, so breakpoints work;
   // they are quick tries, not recorded runs: outputs go to outputs/scratch/.
   "version": "0.2.0",
   "configurations": [

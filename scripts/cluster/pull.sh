@@ -30,6 +30,6 @@ esac
 excludes=(--exclude="${anchor}code/")
 $with_checkpoints || excludes+=(--exclude="${anchor}checkpoints/")
 
-# --partial: an interrupted copy keeps what it transferred, and resumes from there (PD-024).
+# --partial: an interrupted copy keeps what it transferred, and resumes from there (ED-024).
 rsync -az --partial "${excludes[@]}" "$CLUSTER_HOST:$src" "$dest"
 echo "pulled into ${dest#"$REPO_ROOT"/}"

@@ -2,7 +2,7 @@
 
 Technical and organizational decisions: how the repository, the environment and the compute setup work.
 
-Research decisions (methods, datasets, metrics) belong to the domain area. They get `DD-` ids, in their own folder, created with the first one.
+Research decisions (methods, datasets, metrics) belong to the research area. They get `RD-` ids, in [docs/research/method/](../../research/method/README.md), in their own folder created with the first one.
 
 **Decisions are history and rationale, not the documentation.** How things work is always described in the engineering docs ([setup](../setup.md), [cluster](../cluster.md), [running](../running.md), [runs](../runs.md), [CONTRIBUTING](../../../CONTRIBUTING.md), the folder READMEs), which link to the decisions for the *why*. A decision never holds the only copy of an operational fact.
 
@@ -94,7 +94,7 @@ What we chose, and why. How it was verified, if it was.
 | [ED-015](ED-015-session-unlock.md) | One session step unlocks SSH keys and the cluster | accepted | 2026-11-01 |
 | [ED-016](ED-016-engineering-docs.md) | Engineering docs split by concern; questions end as decisions or docs | accepted | 2026-11-02 |
 | [ED-017](ED-017-git-by-people.md) | People run git; AI agents propose commits | accepted | 2026-11-01 |
-| [ED-018](ED-018-self-contained-repository.md) | A self-contained repository: no personal data, no references to earlier implementations | accepted | 2026-11-01 |
+| [ED-018](ED-018-self-contained-repository.md) | A self-contained repository: no local paths or personal values, no references to the material used to build it | accepted | 2026-11-01 |
 | [ED-019](ED-019-expert-reviews.md) | In-depth reviews by a panel of independent expert agents | accepted | 2026-11-01 |
 | [ED-020](ED-020-dataset-location.md) | Datasets live in a data folder outside the code: `data/` locally, the work area on the cluster | accepted | 2026-11-02 |
 | [ED-021](ED-021-runs-and-their-inputs.md) | Runs don't resume; a run names the earlier runs it reads | accepted | 2026-11-02 |
@@ -112,3 +112,4 @@ What we chose, and why. How it was verified, if it was.
 | [ED-033](ED-033-training-curves.md) | Training curves go in the run folder (`results/history.jsonl`); no wandb for now | accepted | 2026-11-02 |
 | [ED-034](ED-034-literature.md) | Papers: bibkeys, PDFs kept local, verified distillation notes as the source of truth | accepted | 2026-11-02 |
 | [ED-035](ED-035-engineering-folder.md) | The technical docs are "engineering": `docs/engineering/`, with ids `ED-`/`EQ-` | accepted | 2026-11-08 |
+| [ED-036](ED-036-research-docs.md) | The research docs: literature, knowledge (generic above, time-series below), method; ids `RD-`/`RQ-` | accepted | 2026-11-08 |

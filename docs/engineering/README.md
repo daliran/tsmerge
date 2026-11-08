@@ -2,7 +2,7 @@
 
 How this repository works: setting it up, running experiments, and making changes.
 
-This folder is only about the machinery. What the research is about will live in the domain area (not written yet).
+This folder is only about the machinery. What the research is about lives in [research/](../research/README.md).
 
 ## Contents
 

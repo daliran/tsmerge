@@ -4,7 +4,7 @@ What a run is, where it lives and what it records. How to launch and follow runs
 
 ## Concepts
 
-- **Experiment:** a named study that groups runs. Its name is `e<NNN>-<slug>`, e.g. `e001-joint-vs-merge`: the id never changes and is never reused, and a short doc in the domain area says which research questions it answers ([ED-032](decisions/ED-032-experiment-ids.md)). Setup and smoke-test runs use plain names such as `hello`. Every name: lowercase letters, digits, `-`, `_`.
+- **Experiment:** a named study that groups runs. Its name is `e<NNN>-<slug>`, e.g. `e001-joint-vs-merge`: the id never changes and is never reused, and a short doc in the research area ([method/](../research/method/README.md)) says which research questions it answers ([ED-032](decisions/ED-032-experiment-ids.md)). Setup and smoke-test runs use plain names such as `hello`. Every name: lowercase letters, digits, `-`, `_`.
 - **Run:** one execution of one configuration, one seed included.
 - **Job:** one Slurm submission. One job runs exactly one run.
 - **Recorded run:** a run started by `scripts/run_local.sh` (locally) or `scripts/cluster/submit.sh` (on the cluster): it gets a run folder and the records below. A script started directly (`python -m …`, or the debugger) is not a recorded run: its outputs go to `outputs/scratch/`, overwritten each time ([ED-029](decisions/ED-029-local-runs.md)).

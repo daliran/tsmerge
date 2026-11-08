@@ -19,11 +19,11 @@ flowchart LR
     diagrams["assets/<br/>pictures, beside each doc folder"]
   end
 
-  subgraph domain["docs/domain/: the research"]
+  subgraph research["docs/research/: the research"]
     direction TB
-    background["background/<br/>concept guide"]
-    bib["references.bib<br/>the bibliography"]
-    literature["literature/<br/>one verified note per paper"]
+    literature["literature/<br/>paper notes, references.bib"]
+    knowledge["knowledge/<br/>one concept per doc"]
+    method["method/<br/>questions, decisions, experiments"]
   end
 
   subgraph code["Code"]
@@ -51,7 +51,7 @@ flowchart LR
   end
 
   start ~~~ docs
-  docs ~~~ domain
-  domain ~~~ code
+  docs ~~~ research
+  research ~~~ code
   code ~~~ tooling
   tooling ~~~ local

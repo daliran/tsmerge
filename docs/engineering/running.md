@@ -24,7 +24,7 @@ How to run things day to day: on your machine, and on the Unimore cluster.
   - `scratch/`: outputs of quick tries and debug sessions, overwritten each time;
   - `jobs.log`: one line per submitted job: job id, run id, experiment, date, command;
   - `expert-reviews/`: the reports of the expert-review skill ([.claude/README.md](../../.claude/README.md));
-  - `pages/`: papers' pages rendered as images, for their notes ([literature README](../domain/literature/README.md)).
+  - `pages/`: papers' pages rendered as images, for their notes ([literature README](../research/literature/README.md)).
 
 The run folder layout, and what each run records: [runs.md](runs.md).
 

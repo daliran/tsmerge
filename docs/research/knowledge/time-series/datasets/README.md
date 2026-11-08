@@ -1,0 +1,14 @@
+# Datasets
+
+**Status:** placeholder, not written yet.
+
+**Will cover:** one file per dataset used in this research: what it measures, its size, channels and sampling, its labels, its known issues, and a link to how this thesis uses it.
+
+- **Builds on:** [Time series](../time-series.md), [Tasks](../tasks/tasks.md).
+- **Used by:** the [method](../../../method/README.md).
+
+## Sources to use
+
+- [mathur2016swat](../../../literature/mathur2016swat.md): the SWaT testbed.
+- [wu2023timesnet](../../../literature/wu2023timesnet.md): benchmark dataset table.
+- The papers of the other datasets (e.g. ETT, PSM, SMD). Not in the bibliography yet: to find, verify and add to [references.bib](../../../literature/references.bib).

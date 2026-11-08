@@ -4,6 +4,8 @@
 - **Date:** 2026-11-02
 - **Decided by:** the author
 - **Answers:** question EQ-003 (opened 2026-11-01, raised by the first expert review)
+- **History:**
+  - 2026-11-08: the research area is `docs/research/`; experiment docs and research questions (`RQ-`) live in its `method/` folder ([ED-036](ED-036-research-docs.md)). Was: the domain area, with `DQ-` ids.
 
 ## Problem
 
@@ -21,13 +23,13 @@
 Option A:
 
 - **an experiment's name is `e<NNN>-<slug>`:** `NNN` is three digits, never changed and never reused, like decision ids; the slug says what it studies in a few words (`e001-joint-vs-merge`);
-- **each experiment has a short doc,** written before its first run, in the domain area (created with the first experiment): what it tests, which research questions it answers, which runs or sweeps belong to it;
+- **each experiment has a short doc,** written before its first run, in [docs/research/method/](../../research/method/README.md) (created with the first experiment): what it tests, which research questions it answers, which runs or sweeps belong to it;
 - **names that aren't experiments stay allowed,** for setup and smoke tests (`hello`): the scripts accept any valid name; only experiment runs use the `e<NNN>-` form.
 
 ## Consequences
 
 - Runs of an experiment are found by name everywhere: `outputs/runs/e001-…/`, `run.json`'s `experiment`, `outputs/jobs.log`.
-- Research questions get `DQ-` ids in the domain area ([docs/README.md](../../README.md)); each experiment doc links its questions.
+- Research questions get `RQ-` ids in [docs/research/method/](../../research/method/README.md); each experiment doc links its questions.
 - Documented in [runs.md](../runs.md#concepts).
 
 ## Revisit if

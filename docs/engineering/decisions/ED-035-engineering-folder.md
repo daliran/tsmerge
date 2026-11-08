@@ -27,7 +27,7 @@ Option C:
 ## Consequences
 
 - Commit messages before 2026-11-08 still use `PD-`/`PQ-`: read `PD-NNN` as `ED-NNN` and `PQ-NNN` as `EQ-NNN`.
-- The research area gets its own prefixes when it gets its first questions and decisions.
+- The research area's prefixes are `RD-`/`RQ-` ([ED-036](ED-036-research-docs.md)).
 - The hygiene check of the expert review now looks for `ED-`/`EQ-` ids in `docs/engineering/`.
 
 ## Revisit if

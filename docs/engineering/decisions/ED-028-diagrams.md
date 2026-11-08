@@ -4,7 +4,7 @@
 - **Date:** 2026-11-02
 - **Decided by:** the author
 - **History:**
-  - 2026-11-08: pictures moved beside the docs that show them: each doc folder has an `assets/` folder (`docs/assets/`, `docs/engineering/assets/`, `.claude/assets/`, `docs/domain/background/assets/`), with one `rendered.sha256` per folder; `scripts/render_diagrams.sh` finds them all. Was: one central `docs/engineering/diagrams/` folder.
+  - 2026-11-08: pictures moved beside the docs that show them: each doc folder has an `assets/` folder (`docs/assets/`, `docs/engineering/assets/`, `.claude/assets/`, and one beside each knowledge folder with figures under `docs/research/knowledge/`), with one `rendered.sha256` per folder; `scripts/render_diagrams.sh` finds them all. Was: one central `docs/engineering/diagrams/` folder.
 
 ## Problem
 

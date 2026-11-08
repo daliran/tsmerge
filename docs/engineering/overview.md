@@ -3,7 +3,7 @@
 What this repository's machinery does, why each piece exists, and where to read more. Read it top to bottom once; afterwards, the [inventory](#every-file-in-the-repository) at the end says what any file is for.
 
 - **This page is a map, not the reference:** each part links to the doc that holds the details, and to the decision (`ED-NNN`) that explains why.
-- Nothing here is about the research itself: that lives in the [domain area](../domain/README.md).
+- Nothing here is about the research itself: that lives in the [research area](../research/README.md).
 
 ![The repository's folders, what each holds, and where to start reading](../assets/repository-map.png)
 
@@ -122,14 +122,14 @@ Reference: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 - `CLAUDE.md`: the rules AI agents follow in this repository.
 - `.claude/`: two skills (commit plans; expert reviews by a panel of independent reviewers), their agents, and a guard hook that keeps review agents off the cluster and read-only ([ED-011](decisions/ED-011-expert-review-guard.md), [ED-019](decisions/ED-019-expert-reviews.md)). Details: [.claude/README.md](../../.claude/README.md).
 
-## 10. The research: papers and their notes
+## 10. The research: literature, knowledge, method
 
-- `docs/domain/background/`: a guide to the basic concepts for people, read top-down (signals, time series, windows), with figures drawn by a script.
-- `docs/domain/references.bib`: the bibliography, one entry per paper, keyed by bibkey (`ilharco2023editing`).
-- `docs/domain/literature/`: one verified distillation note per paper, the source of truth for what it says.
+- `docs/research/literature/`: one verified distillation note per paper, the source of truth for what it says, and code references (a checklist per library); `references.bib` there is the bibliography, one entry per source, keyed by bibkey (`ilharco2023editing`).
+- `docs/research/knowledge/`: general theory for people, one concept per doc (signals, time series, change over time, evaluation, models, learning); figures drawn by one script per `assets/` folder.
+- `docs/research/method/`: everything specific to this work (questions `RQ-`, decisions `RD-`, protocol, experiments, findings), created as it's needed.
 - The PDFs themselves stay local, in the git-ignored `papers/` folder: the repository is public, and most papers can't be redistributed ([ED-034](decisions/ED-034-literature.md)).
 
-Reference: [docs/domain/README.md](../domain/README.md).
+Reference: [docs/research/README.md](../research/README.md) ([ED-036](decisions/ED-036-research-docs.md)).
 
 ## 11. On your machine only (git-ignored)
 
@@ -219,4 +219,4 @@ Every tracked file that isn't a doc, decision, question or diagram, with what it
 | `.claude/skills/expert-review/scripts/check_hygiene.py` | review check: personal data, secrets, links, ids, US English |
 | `.claude/skills/expert-review/scripts/check_citations.py` | review check: every finding's quoted line exists |
 | `.claude/skills/expert-review/scripts/save_report.py` | saves the aggregator's report to its file |
-| `docs/domain/references.bib` | the bibliography of the papers the project reads |
+| `docs/research/literature/references.bib` | the bibliography of the papers the project reads |

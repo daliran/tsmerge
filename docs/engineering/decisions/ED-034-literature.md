@@ -3,6 +3,9 @@
 - **Status:** accepted
 - **Date:** 2026-11-02
 - **Decided by:** the author
+- **History:**
+  - 2026-11-08: the no-names rule was dropped ([ED-018](ED-018-self-contained-repository.md)), so author names need no exception.
+  - 2026-11-08: the research area moved from `docs/domain/` to `docs/research/`, and `references.bib` into `literature/` ([ED-036](ED-036-research-docs.md)); public code may be a reference too, as a pinned `@software` entry with a checklist note ([literature README](../../research/literature/README.md)).
 
 ## Problem
 
@@ -29,11 +32,11 @@
 - **Names: C.** First author's surname + year + first meaningful title word, lowercase ASCII; anonymous submissions get `anon<year><word>` until their authors are known.
 - **Location: B.**
   - PDFs in `papers/<bibkey>.pdf`, git-ignored.
-  - `docs/domain/references.bib` holds one entry per paper: identifiers, URL, the version read, the original file name.
-  - `docs/domain/literature/<bibkey>.md` holds one note per paper.
+  - `docs/research/literature/references.bib` holds one entry per paper: identifiers, URL, the version read, the original file name.
+  - `docs/research/literature/<bibkey>.md` holds one note per paper.
 - **The notes are the source of truth for what a paper says:** equations in LaTeX, setups and the numbers we may compare against, every item with its page; our own comments marked as such.
 - **Verified before done:** an independent agent compares each note with its paper; unsupported or misstated claims are fixed before the note is marked `verified`.
-- **Author names are allowed in bibliographic content:** `docs/domain/references.bib`, `docs/domain/literature/`, and the thesis text (a `thesis/` folder, created when the writing starts). The no-names rule holds everywhere else, and the hygiene check skips only these paths, and only for names.
+- **Author names are allowed in bibliographic content** (since 2026-11-08, names are allowed everywhere: [ED-018](ED-018-self-contained-repository.md)).
 - **Earlier notes are not imported:** the knowledge base is rebuilt from the sources, never copied from earlier notes, and committed files don't refer to them.
 - **Order:** the 8 model-merging and continual-learning papers first (a pilot note reviewed before the others), then the 6 background papers; the 10 other time-series papers only if found relevant.
 
@@ -41,7 +44,7 @@
 
 - Each machine needs its own copy of the PDFs; `references.bib` says where to get each one.
 - A note costs more than a summary (page references, transcribed equations, a verification pass), but it replaces the PDF for this project.
-- Documented in [docs/domain/README.md](../../domain/README.md) and [docs/domain/literature/README.md](../../domain/literature/README.md).
+- Documented in [docs/research/README.md](../../research/README.md) and [docs/research/literature/README.md](../../research/literature/README.md).
 
 ## Revisit if
 

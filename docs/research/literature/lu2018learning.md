@@ -8,7 +8,23 @@
 
 ## In one paragraph
 
-A review of over 130 publications (p. 1; 137 research articles after the selection process, p. 2) on learning when the data distribution of a stream changes over time ("concept drift"). It defines concept drift as a change of the joint distribution $P_t(X, y)$ (p. 2), splits it into three sources by which factor of $P_t(X)\,P_t(y|X)$ changes (p. 3), and names four types by how the change unfolds in time: sudden, gradual, incremental, reoccurring (Fig. 4, p. 3). Its main contribution is a framework with three components: **drift detection** (whether drift occurs), **drift understanding** (when, how severe, where), and **drift adaptation** (how to react) (pp. 1–2, Fig. 2). Detection methods are grouped by their test statistic into error rate-based, data distribution-based and multiple hypothesis tests (Section 3, Table 1, p. 8); adaptation methods into simple retraining, ensemble retraining and model adjusting (Section 5, p. 9). It reviews evaluation (validation procedures, metrics, statistical tests; Section 6.1), lists 10 synthetic and 14 real-world datasets (Tables 3–4, pp. 13–14), and closes with seven findings and four research directions (pp. 14–15).
+A review of over 130 publications (p. 1; 137 research articles after the selection process, p. 2) on learning when the data distribution of a stream changes over time ("concept drift").
+
+It:
+
+- defines concept drift as a change of the joint distribution $P_t(X, y)$ (p. 2);
+- splits it into three sources by which factor of $P_t(X)\,P_t(y|X)$ changes (p. 3); and
+- names four types by how the change unfolds in time: sudden, gradual, incremental, reoccurring (Fig. 4, p. 3).
+
+Its main contribution is a framework with three components: **drift detection** (whether drift occurs), **drift understanding** (when, how severe, where), and **drift adaptation** (how to react) (pp. 1–2, Fig. 2).
+
+Detection methods are grouped by their test statistic into error rate-based, data distribution-based and multiple hypothesis tests (Section 3, Table 1, p. 8); adaptation methods into simple retraining, ensemble retraining and model adjusting (Section 5, p. 9).
+
+It:
+
+- reviews evaluation (validation procedures, metrics, statistical tests; Section 6.1);
+- lists 10 synthetic and 14 real-world datasets (Tables 3–4, pp. 13–14); and
+- closes with seven findings and four research directions (pp. 14–15).
 
 ## Problem
 
@@ -21,7 +37,13 @@ A review of over 130 publications (p. 1; 137 research articles after the selecti
 - Four other surveys ([6], [7], [10], [11]) focus on data stream learning only (p. 2).
 - Since then, "a new category of drift detection methods has arisen, named multiple hypothesis tests drift detection" (p. 2).
 
-**Stated contributions** (p. 2): the three-category framework (detection, understanding, adaptation); "concept drift understanding" proposed as a new component, which "creates a connection between drift detection and drift adaptation"; coverage of new techniques (active learning under drift, fuzzy competence model-based detection); a systematic look at synthetic and real-world datasets; research directions.
+**Stated contributions** (p. 2):
+
+- the three-category framework (detection, understanding, adaptation);
+- "concept drift understanding" proposed as a new component, which "creates a connection between drift detection and drift adaptation";
+- coverage of new techniques (active learning under drift, fuzzy competence model-based detection);
+- a systematic look at synthetic and real-world datasets;
+- research directions.
 
 **How references were selected** (p. 2), in four steps:
 
@@ -32,13 +54,19 @@ A review of over 130 publications (p. 1; 137 research articles after the selecti
 
 Result: 137 research articles, 10 synthetic datasets, 14 real-world datasets (p. 2).
 
-**Setting throughout:** streaming data, a learner that predicts a label $y$ from features $X$, and true labels that (in most methods) arrive after prediction (finding 4, p. 14). Almost all methods and datasets are classification.
+**Setting throughout:** streaming data, a learner that predicts a label $y$ from features $X$, and true labels that (in most methods) arrive after prediction (finding 4, p. 14).
+
+Almost all methods and datasets are classification.
 
 ## Definitions
 
 ### Concept drift (p. 2)
 
-Concept drift is "a phenomenon in which the statistical properties of a target domain change over time in an arbitrary way" (p. 2). These changes "might be caused by changes in hidden variables which cannot be measured directly" (p. 2). The notion "was first proposed by [12] who aimed to point out that noise data may turn to non-noise information at different time" (p. 2).
+Concept drift is "a phenomenon in which the statistical properties of a target domain change over time in an arbitrary way" (p. 2).
+
+These changes "might be caused by changes in hidden variables which cannot be measured directly" (p. 2).
+
+The notion "was first proposed by [12] who aimed to point out that noise data may turn to non-noise information at different time" (p. 2).
 
 **Formal definition** (p. 2). Given a time period $[0, t]$ and a set of samples
 
@@ -54,7 +82,10 @@ $$\exists t : P_t(X, y) \neq P_{t+1}(X, y).$$
 
 So concept drift at time $t$ is "the change of joint probability of $X$ and $y$ at time $t$" (p. 3).
 
-**Other names** (pp. 2–3): dataset shift (ref. [15]), concept shift (ref. [1]). Ref. [16] treats concept drift (or shift) as one subcategory of dataset shift, which consists of covariate shift, prior probability shift and concept shift. The review instead follows the publications that call any change of $P_t(X, y)$ "concept drift", since "concept drift is usually associated with covariate shift and prior probability shift" (p. 3).
+**Other names** (pp. 2–3): dataset shift (ref. [15]), concept shift (ref. [1]).
+
+- Ref. [16] treats concept drift (or shift) as one subcategory of dataset shift, which consists of covariate shift, prior probability shift and concept shift.
+- The review instead follows the publications that call any change of $P_t(X, y)$ "concept drift", since "concept drift is usually associated with covariate shift and prior probability shift" (p. 3).
 
 ### Sources of drift (p. 3, Fig. 3)
 
@@ -72,7 +103,11 @@ concept drift can be triggered by three sources (p. 3):
 
 "In many real-world applications, Source I and Source II occur together, which creates Source III" (p. 3).
 
-**Fig. 3** (p. 3): two-dimensional data $X = \{x_1, x_2\}$ with two class labels $y = \{y_0, y_1\}$, shown at time $t$ and $t+1$. (a) Source I: the points move, the separating line stays. (b) Source II: the points stay, the separating line rotates. (c) Source III: both change.
+**Fig. 3** (p. 3): two-dimensional data $X = \{x_1, x_2\}$ with two class labels $y = \{y_0, y_1\}$, shown at time $t$ and $t+1$.
+
+- (a) Source I: the points move, the separating line stays.
+- (b) Source II: the points stay, the separating line rotates.
+- (c) Source III: both change.
 
 A drift of $P_t(y)$ as a source appears only in the description of the IV-Jac detector (p. 6), not in this list of sources; p. 13 uses "label-drift" in a different sense (class labels not known in advance).
 
@@ -92,7 +127,10 @@ What research on each type focuses on (p. 3):
 - **Types 1–3:** "how to minimize the drop in accuracy and achieve the fastest recovery rate during the concept transformation process".
 - **Type 4:** "the use of historical concepts, that is, how to find the best matched historical concepts with the shortest time". "The new concept may suddenly, incrementally, or gradually reoccur."
 
-**Intermediate concepts** (p. 3, citing [8] and [4]): drift "may not only take place at an exact timestamp, but may also last for a long period", so intermediate concepts may appear between the starting and the ending concept. An intermediate concept can be "a mixture of the starting concept and the ending concept, like the incremental drift, or one of the starting or ending concept, such as the gradual drift" (p. 3).
+**Intermediate concepts** (p. 3, citing [8] and [4]):
+
+- Drift "may not only take place at an exact timestamp, but may also last for a long period", so intermediate concepts may appear between the starting and the ending concept.
+- An intermediate concept can be "a mixture of the starting concept and the ending concept, like the incremental drift, or one of the starting or ending concept, such as the gradual drift" (p. 3).
 
 ## The framework: detection, understanding, adaptation (pp. 1–2, Fig. 2)
 
@@ -102,7 +140,12 @@ What research on each type focuses on (p. 3):
 - **Drift understanding:** when, how, where it occurs.
 - **Drift adaptation:** the reaction to the existence of drift.
 
-**Fig. 2** (p. 2): stream data → training and learning → prediction → concept drift detection. If no drift is detected, the loop continues; if a drift is detected → concept drift understanding → concept drift adaptation → an "Update" arrow back to training and learning. The caption notes that "some methods can do concept drift detection and concept drift understanding simultaneously" (p. 2).
+**Fig. 2** (p. 2): stream data → training and learning → prediction → concept drift detection.
+
+- If no drift is detected, the loop continues.
+- If a drift is detected → concept drift understanding → concept drift adaptation → an "Update" arrow back to training and learning.
+
+The caption notes that "some methods can do concept drift detection and concept drift understanding simultaneously" (p. 2).
 
 Understanding is described as the output of detection and the input of adaptation (p. 7).
 
@@ -112,12 +155,19 @@ Understanding is described as the output of detection and the input of adaptatio
 
 Drift detection "refers to the techniques and mechanisms that characterize and quantify concept drift via identifying change points or change time intervals" (p. 3).
 
-1. **Data retrieval:** retrieve data chunks from the stream, since "a single data instance cannot carry enough information to infer the overall distribution" (p. 3). Fig. 5 shows a "historical data" window and a "new data" window on the stream (p. 4).
-2. **Data modeling (optional):** abstract the retrieved data and extract the key features that most impact a system if they drift; mainly dimensionality or sample size reduction "to meet storage and online speed requirements" (p. 3).
-3. **Test statistics calculation:** a dissimilarity measurement or distance estimation that "quantifies the severity of the drift and forms test statistics for the hypothesis test". "It is considered to be the most challenging aspect of concept drift detection"; how to define "an accurate and robust dissimilarity measurement is still an open question" (p. 3).
-4. **Hypothesis test:** evaluates the statistical significance of the change from Stage 3, or the p-value (p. 4). Without it, the test statistics "are meaningless for drift detection", because they cannot say "how likely it is that the change is caused by concept drift and not noise or random sample selection bias" (p. 4). Common tests: estimating the distribution of the test statistics, bootstrapping, the permutation test, and Hoeffding's inequality-based bounds (p. 4).
+1. **Data retrieval:** retrieve data chunks from the stream, since "a single data instance cannot carry enough information to infer the overall distribution" (p. 3).
+   - Fig. 5 shows a "historical data" window and a "new data" window on the stream (p. 4).
+2. **Data modeling (optional):** abstract the retrieved data and extract the key features that most impact a system if they drift.
+   - Mainly dimensionality or sample size reduction "to meet storage and online speed requirements" (p. 3).
+3. **Test statistics calculation:** a dissimilarity measurement or distance estimation that "quantifies the severity of the drift and forms test statistics for the hypothesis test".
+   - "It is considered to be the most challenging aspect of concept drift detection"; how to define "an accurate and robust dissimilarity measurement is still an open question" (p. 3).
+4. **Hypothesis test:** evaluates the statistical significance of the change from Stage 3, or the p-value (p. 4).
+   - Without it, the test statistics "are meaningless for drift detection", because they cannot say "how likely it is that the change is caused by concept drift and not noise or random sample selection bias" (p. 4).
+   - Common tests: estimating the distribution of the test statistics, bootstrapping, the permutation test, and Hoeffding's inequality-based bounds (p. 4).
 
-Without Stage 1, detection can be seen as a **two-sample test** (are two sample sets from the same distribution?), so "any multivariate two-sample test is an option that can be adopted in Stages 2-4" (p. 4). But "the distribution drift may not be included in the target features", so selecting the target features is "a critical problem in concept drift detection" (p. 4).
+Without Stage 1, detection can be seen as a **two-sample test** (are two sample sets from the same distribution?), so "any multivariate two-sample test is an option that can be adopted in Stages 2-4" (p. 4).
+
+But "the distribution drift may not be included in the target features", so selecting the target features is "a critical problem in concept drift detection" (p. 4).
 
 **Window schemes** (pp. 4–5):
 
@@ -129,32 +179,64 @@ Without Stage 1, detection can be seen as a **two-sample test** (are two sample 
 
 "The largest category of algorithms" (p. 4). They track the online error rate of base classifiers; a statistically significant increase or decrease triggers a drift alarm (p. 4).
 
-- **DDM** (p. 4): "one of the most-referenced"; "the first algorithm to define the warning level and drift level". Stage 1 is a landmark window. At the warning level, DDM "starts to build a new learner while using the old learner for predictions"; at the drift level, the old learner is replaced by the new one (p. 4).
-- **Variants** (p. 4): LLDD splits detection into decision tree node-level problems (Stages 3–4); EDDM uses the distance between two correct classifications (Stage 3); HDDM uses Hoeffding's inequality (Stage 4); FW-DDM a fuzzy time window for gradual drift (Stage 1); DELM keeps DDM but uses an Extreme Learning Machine as base learner.
+- **DDM** (p. 4): "one of the most-referenced"; "the first algorithm to define the warning level and drift level".
+  - Stage 1 is a landmark window.
+  - At the warning level, DDM "starts to build a new learner while using the old learner for predictions"; at the drift level, the old learner is replaced by the new one (p. 4).
+- **Variants** (p. 4):
+  - LLDD splits detection into decision tree node-level problems (Stages 3–4);
+  - EDDM uses the distance between two correct classifications (Stage 3);
+  - HDDM uses Hoeffding's inequality (Stage 4);
+  - FW-DDM a fuzzy time window for gradual drift (Stage 1);
+  - DELM keeps DDM but uses an Extreme Learning Machine as base learner.
 - **ECDD** (pp. 4–5): an EWMA chart on the error rate with a dynamic mean $\hat{p}_{0,t}$ (online error rate within $[0, t]$) instead of the static $p_0$, and dynamic variance
 
   $$\sigma^2_{Z_t} = \hat{p}_{0,t}(1 - \hat{p}_{0,t}) \sqrt{\frac{\lambda}{2-\lambda}\left(1 - (1-\lambda)^{2t}\right)},$$
 
-  with $\lambda = 0.2$ recommended (p. 4). Warning if $Z_t > \hat{p}_{0,t} + 0.5 L \sigma_{Z_t}$, drift if $Z_t > \hat{p}_{0,t} + L \sigma_{Z_t}$; $L$ given by the authors "through experimental evaluation" (p. 5).
-- **STEPD** (p. 5): compares the most recent window with the overall window; $\theta_{\text{STEPD}} \sim \mathcal{N}(0, 1)$; warning and drift significance levels $\alpha_w = 0.05$, $\alpha_d = 0.003$.
-- **ADWIN** (p. 5): needs only the total size $n$ of a "sufficiently large" window $W$; examines all cuts of $W$ into $w_{\text{hist}}$ and $w_{\text{new}}$; test statistic $\theta_{\text{ADWIN}} = |\hat{\mu}_{\text{hist}} - \hat{\mu}_{\text{new}}|$; a cut is found when the difference exceeds a threshold with confidence $\delta$; false positive and false negative rates "are bounded by $\delta$". Many adaptation methods derive from or combine with ADWIN (p. 5).
+  with $\lambda = 0.2$ recommended (p. 4).
+
+  Warning if $Z_t > \hat{p}_{0,t} + 0.5 L \sigma_{Z_t}$, drift if $Z_t > \hat{p}_{0,t} + L \sigma_{Z_t}$; $L$ given by the authors "through experimental evaluation" (p. 5).
+- **STEPD** (p. 5):
+  - compares the most recent window with the overall window;
+  - $\theta_{\text{STEPD}} \sim \mathcal{N}(0, 1)$;
+  - warning and drift significance levels $\alpha_w = 0.05$, $\alpha_d = 0.003$.
+- **ADWIN** (p. 5):
+  - needs only the total size $n$ of a "sufficiently large" window $W$;
+  - examines all cuts of $W$ into $w_{\text{hist}}$ and $w_{\text{new}}$;
+  - test statistic $\theta_{\text{ADWIN}} = |\hat{\mu}_{\text{hist}} - \hat{\mu}_{\text{new}}|$;
+  - a cut is found when the difference exceeds a threshold with confidence $\delta$;
+  - false positive and false negative rates "are bounded by $\delta$".
+  - Many adaptation methods derive from or combine with ADWIN (p. 5).
 
 **Stated limit:** error rate-based detection "cannot directly measure the severity of concept drift, because it mainly focuses on monitoring the performance of the learning system, not the changes in the concept itself" (p. 7).
 
 ### Family 2: data distribution-based detection (p. 5)
 
-"The second largest category" (p. 5). A distance function quantifies the dissimilarity between the historical and the new data distribution; a statistically significant difference triggers model update (p. 5).
+"The second largest category" (p. 5).
 
-**Stated pros** (p. 5): they "address concept drift from the root sources, which is the distribution drift"; they identify the time of drift and "can also provide location information about the drift".
+A distance function quantifies the dissimilarity between the historical and the new data distribution; a statistically significant difference triggers model update (p. 5).
 
-**Stated cons** (p. 5): "usually reported as incurring higher computational cost than the algorithms mentioned in Section 3.2.1"; they "usually require users to predefine the historical time window and new data window".
+**Stated pros** (p. 5):
+
+- they "address concept drift from the root sources, which is the distribution drift";
+- they identify the time of drift and "can also provide location information about the drift".
+
+**Stated cons** (p. 5):
+
+- "usually reported as incurring higher computational cost than the algorithms mentioned in Section 3.2.1";
+- they "usually require users to predefine the historical time window and new data window".
 
 - **First formal treatment** (ref. [37], p. 5): total variation as the most natural distance,
 
   $$TV(P_1, P_2) = 2 \sup_{E \in \varepsilon} |P_1(E) - P_2(E)|,$$
 
-  or, with densities, $\text{dist}_{L^1} = \int |f_1(x) - f_2(x)|\,dx$ (notation as printed, p. 5). It proposes the Relativized Discrepancy (RD) family, with bounds on missed detections and false alarms via Chernoff bounds and the VC dimension; a suitable Stage 2 data model "is an open question" (p. 5).
-- **ITA** (p. 5): kdqTree partitions historical and new data into bins; KL divergence per bin; bootstrapping by merging $W_{\text{hist}}, W_{\text{new}}$ and resampling; drift confirmed when $P(\theta^*_{\text{ITA}} \geq \theta_{\text{ITA}}) < 1 - \alpha$.
+  or, with densities, $\text{dist}_{L^1} = \int |f_1(x) - f_2(x)|\,dx$ (notation as printed, p. 5).
+
+  It proposes the Relativized Discrepancy (RD) family, with bounds on missed detections and false alarms via Chernoff bounds and the VC dimension; a suitable Stage 2 data model "is an open question" (p. 5).
+- **ITA** (p. 5):
+  - kdqTree partitions historical and new data into bins;
+  - KL divergence per bin;
+  - bootstrapping by merging $W_{\text{hist}}, W_{\text{new}}$ and resampling;
+  - drift confirmed when $P(\theta^*_{\text{ITA}} \geq \theta_{\text{ITA}}) < 1 - \alpha$.
 - **Others** (p. 5): SCD, CM (competence model), SyncStream, PCA-CD, EDE, LSDD-CDT, LSDD-INC, LDD-DSDA.
 
 ### Family 3: multiple hypothesis test detection (pp. 5–7)
@@ -163,21 +245,33 @@ They use techniques of the first two families but "multiple hypothesis tests to 
 
 **Parallel** (Fig. 9, p. 6): $z$ test statistics and $z$ hypothesis tests on $W_{\text{hist}}$ and $W_{\text{new}}$ at once.
 
-- **JIT** (p. 6), the first of this kind: extends CUSUM (CI-CUSUM) to detect mean changes in features. Four configurations: (1) PCA features (drop eigenvalues whose sum is below a threshold, e.g. 0.001), (2) PCA features plus one generic component of the original features, (3) each feature individually, (4) all combinations of features. Config 2 is preferred; Config 1 "may have a high missing rate", Config 3 "suffers from a high false alarm rate", Config 4 "has exponential computational complexity" (p. 6).
+- **JIT** (p. 6), the first of this kind: extends CUSUM (CI-CUSUM) to detect mean changes in features.
+  - Four configurations:
+    - (1) PCA features (drop eigenvalues whose sum is below a threshold, e.g. 0.001);
+    - (2) PCA features plus one generic component of the original features;
+    - (3) each feature individually;
+    - (4) all combinations of features.
+  - Config 2 is preferred; Config 1 "may have a high missing rate", Config 3 "suffers from a high false alarm rate", Config 4 "has exponential computational complexity" (p. 6).
 - **LFR** (p. 6): tracks TP, TN, FP, FN rates online, with warning and drift levels.
-- **IV-Jac / three-layer** (p. 6): separate layers for label drift $P_t(y)$, feature space drift $P_t(X)$ and decision boundary drift $P_t(y|X)$; thresholds $\theta_{P_t(y)} = \theta_{P_t(X)} = \theta_{P_t(X|y)} = 0.5$ by default, chosen empirically (subscript as printed).
+- **IV-Jac / three-layer** (p. 6): separate layers for label drift $P_t(y)$, feature space drift $P_t(X)$ and decision boundary drift $P_t(y|X)$.
+  - Thresholds $\theta_{P_t(y)} = \theta_{P_t(X)} = \theta_{P_t(X|y)} = 0.5$ by default, chosen empirically (subscript as printed).
 - **e-Detector** (p. 6) and **DDE**: ensembles of heterogeneous detectors; e-Detector reports a drift as soon as any base detector does ("early-find-early-report").
 
 **Hierarchical** (Fig. 10, p. 6): "an emerging drift detection category that has a multiple verification schema": a detection layer, then a validation layer that re-tests a detected drift.
 
-- **HCDTs** (p. 6): the first hierarchical one; the detection layer can be any detector "that has a low drift delay rate and low computational burden"; validation by likelihood-based estimation of the test statistic's distribution, or by an existing test (Kolmogorov-Smirnov, Cramer-Von Mises).
+- **HCDTs** (p. 6): the first hierarchical one.
+  - The detection layer can be any detector "that has a low drift delay rate and low computational burden".
+  - Validation by likelihood-based estimation of the test statistic's distribution, or by an existing test (Kolmogorov-Smirnov, Cramer-Von Mises).
 - **HLFR** (p. 6): LFR as detection layer; validation by zero-one loss $E$ over the ordered train-test split, confirmed if above $\eta = 0.01$.
 - **TSMSD-EWMA** (p. 6): similar, not claimed as hierarchical by its authors.
-- **HHT-CU, HHT-AG** (pp. 6–7): "request and reverify". HHT-AG uses KS tests per feature, then $d$ two-dimensional KS tests on feature-label pairs; it "can handle concept drift with less true labels", useful "when dealing with high verification latency" (p. 7).
+- **HHT-CU, HHT-AG** (pp. 6–7): "request and reverify".
+  - HHT-AG uses KS tests per feature, then $d$ two-dimensional KS tests on feature-label pairs; it "can handle concept drift with less true labels", useful "when dealing with high verification latency" (p. 7).
 
 ### Table 1 and Table 2: detectors by stage and by what they understand
 
-**Table 1** (p. 8) lists each detector's implementation of the four stages; **Table 2** (p. 9) ticks whether it identifies When, How, Where. Merged here (every detector is ticked under When in Table 2; Table 2 names [52] "EWMA"):
+**Table 1** (p. 8) lists each detector's implementation of the four stages; **Table 2** (p. 9) ticks whether it identifies When, How, Where.
+
+Merged here (every detector is ticked under When in Table 2; Table 2 names [52] "EWMA"):
 
 | Category | Algorithm | Stage 1 | Stage 2 | Stage 3 | Stage 4 | How | Where |
 |---|---|---|---|---|---|---|---|
@@ -220,9 +314,11 @@ Retrieving "When" (the time a drift occurs and how long it lasts), "How" (its se
 ### When (p. 7)
 
 - The variable $t$ in $\exists t : P_t(X, y) \neq P_{t+1}(X, y)$ is the drift time; "a delay or a false alarm will lead to failure of the learning system to track new concepts" (p. 7).
-- Understanding should cover the start time, the change period and the end time (p. 7). **Fig. 11** (p. 7): an incremental drift from $t+1$ to $t+5$ and a sudden drift between $t+9$ and $t+10$, with the alarm triggered after the start of the drift.
+- Understanding should cover the start time, the change period and the end time (p. 7).
+- **Fig. 11** (p. 7): an incremental drift from $t+1$ to $t+5$ and a sudden drift between $t+9$ and $t+10$, with the alarm triggered after the start of the drift.
 - The alarm "is delayed compared to the actual drifting timestamp, since most drift detectors require a minimum number of new data to evaluate the status of the drift" (p. 7).
-- **Warning levels** (p. 7): DDM, EDDM, STEPD, HDDM use a relaxed threshold, e.g. warning at p-value 95% or $2\sigma$, drift at p-value 99% or $3\sigma$; "the data accumulated between the warning level and the drift level are used as the training set for updating a learning model".
+- **Warning levels** (p. 7): DDM, EDDM, STEPD, HDDM use a relaxed threshold, e.g. warning at p-value 95% or $2\sigma$, drift at p-value 99% or $3\sigma$.
+  - "the data accumulated between the warning level and the drift level are used as the training set for updating a learning model".
 
 ### How: severity (pp. 7–8)
 
@@ -232,9 +328,20 @@ $$\Delta = \delta\big(P_t(X, y), P_{t+1}(X, y)\big),$$
 
 where $\delta$ measures the discrepancy of two distributions; $\Delta$ is usually non-negative, and larger means more severe (p. 7).
 
-- **From error rate-based detectors** (p. 7), only indirectly: e.g. $\Delta \sim p_i - p_{\min}$ (DDM, DELM), $\Delta \sim \hat{p}_{\text{new}} - \hat{p}_{\text{hist}}$ (STEPD), $\Delta \sim E[\hat{Y}_{i-\text{cut}}] - E[\hat{X}_{\text{cut}}]$ (HDDM). "However, the meaning of these differences is not discussed in existing publications" (p. 7).
-- **From distribution-based detectors** (pp. 7–8), directly: a relaxation of total variation $d_{\mathcal{A}}(S_1, S_2)$ ([37]), a competence-based distance $d^{CB}$ ([3]), KL divergence $D(W_1 \| W_2)$ ([22]). "The range of these distances is $[0, 1]$": 1 means a completely different concept, 0 identical (p. 8).
-- **Use for adaptation** (p. 8): if severity is low, "adjusting the current learner by incremental learning will be adequate"; if high, "discarding the old learner and retraining a new one could be better than incrementally updating the old learner". But this information "is not yet widely utilized in drift adaptation" (p. 8).
+- **From error rate-based detectors** (p. 7), only indirectly:
+  - e.g. $\Delta \sim p_i - p_{\min}$ (DDM, DELM);
+  - $\Delta \sim \hat{p}_{\text{new}} - \hat{p}_{\text{hist}}$ (STEPD);
+  - $\Delta \sim E[\hat{Y}_{i-\text{cut}}] - E[\hat{X}_{\text{cut}}]$ (HDDM).
+  - "However, the meaning of these differences is not discussed in existing publications" (p. 7).
+- **From distribution-based detectors** (pp. 7–8), directly:
+  - a relaxation of total variation $d_{\mathcal{A}}(S_1, S_2)$ ([37]);
+  - a competence-based distance $d^{CB}$ ([3]);
+  - KL divergence $D(W_1 \| W_2)$ ([22]).
+  - "The range of these distances is $[0, 1]$": 1 means a completely different concept, 0 identical (p. 8).
+- **Use for adaptation** (p. 8):
+  - if severity is low, "adjusting the current learner by incremental learning will be adequate";
+  - if high, "discarding the old learner and retraining a new one could be better than incrementally updating the old learner".
+  - But this information "is not yet widely utilized in drift adaptation" (p. 8).
 
 ### Where: drift regions (pp. 8–9)
 
@@ -242,15 +349,25 @@ Drift regions are "the regions of conflict between a new concept and the previou
 
 **Fig. 12** (p. 8): data uniform in $[0, 10]^2$; boundary $x_1 + x_2 = 8$ at time $t$ and $x_1 + x_2 = 9$ at $t+1$; points with $8 \leq x_1 + x_2 < 9$ change class and form the drift region.
 
-Methods (p. 9): decision tree leaves with drift detectors (LLDD [25]); kdq-tree nodes with Kulldorff's spatial scan statistic ([22]); top-$p$-competence areas over hyperspheres of a competence model ([2]); local drift degree, a change in regional density (LDD-DSDA [4]).
+Methods (p. 9):
 
-Why it helps adaptation (p. 9): some regions of the feature space "will remain stable significantly longer than other regions" (ref. [56]), so old models stay useful there; drift regions help separate obsolete data from noise and from novel data (refs. [3], [2]).
+- decision tree leaves with drift detectors (LLDD [25]);
+- kdq-tree nodes with Kulldorff's spatial scan statistic ([22]);
+- top-$p$-competence areas over hyperspheres of a competence model ([2]);
+- local drift degree, a change in regional density (LDD-DSDA [4]).
+
+Why it helps adaptation (p. 9):
+
+- some regions of the feature space "will remain stable significantly longer than other regions" (ref. [56]), so old models stay useful there;
+- drift regions help separate obsolete data from noise and from novel data (refs. [3], [2]).
 
 **Summary** (p. 9, Table 2): all detectors identify When; most distribution-based ones also How; "only a few algorithms have the ability to locate drift regions (where)".
 
 ## Drift adaptation (Section 5, pp. 9–11)
 
-"Three main groups of drift adaptation methods, namely simple retraining, ensemble retraining and model adjusting, that aim to handle different types of drift" (p. 9). The section headings pair each group with a kind of drift: retraining "for global drift", ensembles "for recurring drift", adjusting "for regional drift" (pp. 9–11).
+"Three main groups of drift adaptation methods, namely simple retraining, ensemble retraining and model adjusting, that aim to handle different types of drift" (p. 9).
+
+The section headings pair each group with a kind of drift: retraining "for global drift", ensembles "for recurring drift", adjusting "for regional drift" (pp. 9–11).
 
 | Group | Idea | Stated pros | Stated cons or conditions |
 |---|---|---|---|
@@ -262,24 +379,51 @@ Why it helps adaptation (p. 9): some regions of the feature space "will remain s
 
 - A window strategy keeps the most recent data for retraining and/or old data for the distribution test (p. 9).
 - **Paired Learners** (p. 9): a stable and a reactive learner; if the stable one often misclassifies what the reactive one gets right, the reactive one replaces it.
-- **Window size trade-off** (p. 10): "A small window can better reflect the latest data distribution, but a large window provides more data for training a new model." ADWIN finds the cut automatically, drops the old window, and trains on the latest (p. 10).
-- **Integrated detection and retraining** (p. 10): DELM adds hidden nodes when the error rate increases; FP-ELM adds a forgetting parameter; a parallel ELM; OS-ELM ensembles with ordered aggregation.
-- **Lazy learners** (p. 10): JIT with kNN removes instances older than the last $T$ on drift; extensions handle recurrent concepts by comparing with stored concepts; NEFCS with competence-based detection and Stepwise Redundancy Removal.
+- **Window size trade-off** (p. 10): "A small window can better reflect the latest data distribution, but a large window provides more data for training a new model."
+  - ADWIN finds the cut automatically, drops the old window, and trains on the latest (p. 10).
+- **Integrated detection and retraining** (p. 10):
+  - DELM adds hidden nodes when the error rate increases;
+  - FP-ELM adds a forgetting parameter;
+  - a parallel ELM;
+  - OS-ELM ensembles with ordered aggregation.
+- **Lazy learners** (p. 10):
+  - JIT with kNN removes instances older than the last $T$ on drift;
+  - extensions handle recurrent concepts by comparing with stored concepts;
+  - NEFCS with competence-based detection and Stepwise Redundancy Removal.
 
 ### Ensembles (pp. 10–11)
 
-- Extensions of classical ensembles (p. 10): online bagging; Leveraging Bagging (with ADWIN: on drift, the worst classifier is replaced by one trained on the latest data); adaptive boosting with a hypothesis test; Adaptive Random Forest (ADWIN decides when to replace a tree).
+- Extensions of classical ensembles (p. 10):
+  - online bagging;
+  - Leveraging Bagging (with ADWIN: on drift, the worst classifier is replaced by one trained on the latest data);
+  - adaptive boosting with a hypothesis test;
+  - Adaptive Random Forest (ADWIN decides when to replace a tree).
 - **DWM** (p. 10): weights by individual and global performance; new classifier when the ensemble errs; weight reduced by a factor when a classifier errs; removed below a threshold.
-- **Learn++.NSE** (pp. 10–11): weights by error on the latest batch; a new classifier when the youngest one's error exceeds 50%. Stated benefits: works with almost any base classifier; "does not store history data, only the latest batch of data, which it only uses once […]"; handles sudden, gradual and recurrent drift "because underperforming classifiers can be reactivated or deactivated as needed by adjusting their weights" (p. 11).
+- **Learn++.NSE** (pp. 10–11): weights by error on the latest batch; a new classifier when the youngest one's error exceeds 50%.
+  - Stated benefits:
+    - works with almost any base classifier;
+    - "does not store history data, only the latest batch of data, which it only uses once […]";
+    - handles sudden, gradual and recurrent drift "because underperforming classifiers can be reactivated or deactivated as needed by adjusting their weights" (p. 11).
 - Other voting strategies (p. 11): hierarchical ensembles, short and long term memory, dynamic ensemble sizes.
-- For specific drift types (p. 11): AUE2 (sudden and gradual equally well: re-weighting reacts to sudden drift, incremental training of all members follows gradual drift); OWA; class evolution ([75]); recurring concepts by reactivating stored obsolete models ([76], [77]) or refining a concept pool ([78]).
+- For specific drift types (p. 11):
+  - AUE2 (sudden and gradual equally well: re-weighting reacts to sudden drift, incremental training of all members follows gradual drift);
+  - OWA;
+  - class evolution ([75]);
+  - recurring concepts by reactivating stored obsolete models ([76], [77]) or refining a concept pool ([78]).
 
 ### Adjusting models (p. 11)
 
-- **VFDT** (p. 11): Hoeffding bound limits the instances needed to split; advantages: each instance processed once and not stored; the tree stays small unless there is new information; low maintenance cost.
+- **VFDT** (p. 11): Hoeffding bound limits the instances needed to split; advantages:
+  - each instance processed once and not stored;
+  - the tree stays small unless there is new information;
+  - low maintenance cost.
 - **CVFDT** (p. 11): an alternative subtree trained on a sliding window replaces the original if it performs better.
-- **VFDTc** and extensions (p. 11): node-level drift detection (error rate, or distribution difference between a node and its sub-nodes); on drift the node becomes a leaf and its subtree is removed; adaptive leaves.
-- **Critique** (p. 11): "recent studies [84], [85] have shown that its foundation, the Hoeffding bound, may not be appropriate for the node splitting calculation because the variables it computes, the information gain, are not independent"; alternatives in [86], [87].
+- **VFDTc** and extensions (p. 11):
+  - node-level drift detection (error rate, or distribution difference between a node and its sub-nodes);
+  - on drift the node becomes a leaf and its subtree is removed;
+  - adaptive leaves.
+- **Critique** (p. 11): "recent studies [84], [85] have shown that its foundation, the Hoeffding bound, may not be appropriate for the node splitting calculation because the variables it computes, the information gain, are not independent".
+  - Alternatives in [86], [87].
 
 ## Evaluation, datasets and benchmarks (Section 6, pp. 11–13)
 
@@ -311,10 +455,14 @@ Three prequential error estimates: a landmark window (interleaved-test-then-trai
 **Statistical significance** (p. 12). The three tests most used to compare two learners:
 
 - **McNemar:** with $a$ instances misclassified by the first and correctly classified by the second, $b$ the opposite, $M = \text{sign}(a - b) \times (a - b)^2 / (a + b)$, following a $\chi^2$ distribution.
-- **Sign test:** with $B$ instances misclassified by the first and correct for the second, $T$ ties, one-sided $p = \sum_{k=B}^{N-T} \binom{N-T}{k} 0.5^k \times 0.5^{N-T-k}$; if $p$ is below the significance level, the second classifier is better.
-- **Wilcoxon signed-rank:** two classifiers on $N$ datasets, measurements $x_{i,1}, x_{i,2}$, $T$ ties, $N_r = N - T$, $W = \sum_{i=1}^{N_r} \big(\text{sign}(x_{i,1} - x_{i,2}) \times R_i\big)$ with $R_i$ the rank by $|x_{i,1} - x_{i,2}|$; equality rejected if $|W| > W_{\text{critical}, N_r}$ (two-sided).
+- **Sign test:** with $B$ instances misclassified by the first and correct for the second, $T$ ties, one-sided $p = \sum_{k=B}^{N-T} \binom{N-T}{k} 0.5^k \times 0.5^{N-T-k}$.
+  - If $p$ is below the significance level, the second classifier is better.
+- **Wilcoxon signed-rank:** two classifiers on $N$ datasets, measurements $x_{i,1}, x_{i,2}$, $T$ ties, $N_r = N - T$, $W = \sum_{i=1}^{N_r} \big(\text{sign}(x_{i,1} - x_{i,2}) \times R_i\big)$ with $R_i$ the rank by $|x_{i,1} - x_{i,2}|$.
+  - Equality rejected if $|W| > W_{\text{critical}, N_r}$ (two-sided).
 
-"All three tests are non-parametric" (p. 12). For more than two algorithms over multiple datasets, the **Nemenyi test** on average ranks: two differ if their average ranks differ by at least
+"All three tests are non-parametric" (p. 12).
+
+For more than two algorithms over multiple datasets, the **Nemenyi test** on average ranks: two differ if their average ranks differ by at least
 
 $$CD = q_\alpha \sqrt{k(k+1)/6N},$$
 
@@ -322,7 +470,11 @@ with $k$ learners, $N$ datasets, $q_\alpha$ from the Studentized range statistic
 
 ### Synthetic datasets (Table 3, p. 13)
 
-Generated by predefined rules, so "a good option for evaluating the performance of learning algorithms in different concept drift scenarios" (p. 12). "Custom" as printed (set by the generator). The "used by references" column is left out.
+Generated by predefined rules, so "a good option for evaluating the performance of learning algorithms in different concept drift scenarios" (p. 12).
+
+"Custom" as printed (set by the generator).
+
+The "used by references" column is left out.
 
 | # | Dataset | #Insts. | #Attrs. | #Cls. | Types | Sources |
 |---|---|---|---|---|---|---|
@@ -358,15 +510,29 @@ Publicly available, "including real-world datasets with synthetic drifts" (p. 12
 | 13 | ECUE drift dataset 1 [113] | 10983 | 287034 | 2 |
 | 14 | ECUE drift dataset 2 [113] | 11905 | 166047 | 2 |
 
-**Kinds of drift in them** (p. 12): temporal drift over different periods, e.g. daily (Sensor), seasonally (Electricity) or yearly (Airlines, NOAA weather); geographical (Covertype); categorical (Poker-Hand). Some, mainly text, target a specific type: sudden (Email_data), gradual (Spam assassin corpus), recurrent (Usenet), novel class (KDDCup'99, ECUE drift dataset 2).
+**Kinds of drift in them** (p. 12):
 
-**Two stated limitations of real-world datasets** (pp. 12–13): "1) the groud truth of precise start and end time of drifts is unknown; 2) some real datasets may include mixed drift types". These "make it difficult to evaluate methods for understanding the drift, and could introduce bias when comparing different machine learning models" (pp. 12–13).
+- Temporal drift over different periods, e.g. daily (Sensor), seasonally (Electricity) or yearly (Airlines, NOAA weather); geographical (Covertype); categorical (Poker-Hand).
+- Some, mainly text, target a specific type: sudden (Email_data), gradual (Spam assassin corpus), recurrent (Usenet), novel class (KDDCup'99, ECUE drift dataset 2).
+
+**Two stated limitations of real-world datasets** (pp. 12–13): "1) the groud truth of precise start and end time of drifts is unknown; 2) some real datasets may include mixed drift types".
+
+These "make it difficult to evaluate methods for understanding the drift, and could introduce bias when comparing different machine learning models" (pp. 12–13).
 
 ## Concept drift in other research areas (Section 7, pp. 13–14)
 
-- **Class imbalance** (p. 13): Learn++.CDS (Learn++.NSE with SMOTE), Learn++.NIE (bagging instead of SMOTE), ESOS-ELM with a drift detector that retrains on drift, OOB and UOB (resampling and time-decayed metrics).
+- **Class imbalance** (p. 13):
+  - Learn++.CDS (Learn++.NSE with SMOTE);
+  - Learn++.NIE (bagging instead of SMOTE);
+  - ESOS-ELM with a drift detector that retrains on drift;
+  - OOB and UOB (resampling and time-decayed metrics).
 - **Big data mining** (p. 13): velocity, volume and scalability; OMR-DDM (map-reduce error rate), MC-NN (micro-clusters).
-- **Active and semi-supervised learning** (pp. 13–14): active learning under a labeling budget with DDM-based adaptation; Gaussian mixture on labeled and unlabeled data for gradual drift; cluster-based semi-supervised ensembles; SAND; studies "that focus on adapting to concept drift in circumstances where true label data is completely unavailable" (p. 14).
+- **Active and semi-supervised learning** (pp. 13–14):
+  - active learning under a labeling budget with DDM-based adaptation;
+  - Gaussian mixture on labeled and unlabeled data for gradual drift;
+  - cluster-based semi-supervised ensembles;
+  - SAND;
+  - studies "that focus on adapting to concept drift in circumstances where true label data is completely unavailable" (p. 14).
 - **Decision rules** (p. 14): VFDR and Adaptive VFDR, PRISM-based rules, fuzzy rules with pruning and recall of rules for recurring concepts.
 - **Others** (p. 14): among them, ref. [139] "considered the concept drift problem in time series and developed an online explicit drift detection method by monitoring time series features".
 
@@ -392,28 +558,50 @@ Publicly available, "including real-world datasets with synthetic drifts" (p. 12
 ## Assumptions and limitations
 
 - **Supervised streams:** the definitions use labeled pairs $(X_i, y_i)$ (p. 2), and most reviewed methods assume true labels arrive after prediction (finding 4, p. 14).
-- **Classification focus:** the reviewed detectors and adapters are classifiers (error rate, decision trees, voting ensembles), and all datasets in Tables 3–4 have a number of classes (pp. 13–14). In the main text, regression appears only as a metric example, mean absolute scaled error (p. 12).
+- **Classification focus:** the reviewed detectors and adapters are classifiers (error rate, decision trees, voting ensembles), and all datasets in Tables 3–4 have a number of classes (pp. 13–14).
+  - In the main text, regression appears only as a metric example, mean absolute scaled error (p. 12).
 - **No experiments:** the review compares methods by their design (Tables 1–2), not by measured performance; it points to ref. [54] for a comparative study of eight detectors (p. 7).
 - **Real-world datasets** lack ground-truth drift times and may mix drift types (pp. 12–13); the authors call for a framework to select real-world streams (p. 15).
 - **Severity and regions** are rarely used by adaptation methods (p. 8, p. 14).
-- **Minor inconsistencies in the text:** the abstract says "over 130" publications, Section 1 says 137 research articles (p. 1, p. 2); "ECCD" on p. 7 refers to ECDD; Table 2 calls ref. [52] "EWMA" and Table 1 "TSMSD-EWMA" (pp. 8–9); the three-layer detector's Layer III is $P_t(y|X)$ in the text, but its threshold $\theta_{P_t(X|y)}$ (p. 6) and Table 1's Stage 3 $P(X|y)$ (p. 8) use $X|y$; the method is spelled "DELM" in the text and "DEML" in Tables 1–2 and once on p. 4.
-- **Our reading:** the review predates deep learning-based streaming methods in its coverage; nothing on neural networks beyond Extreme Learning Machines, nothing on pre-trained models, fine-tuning or weight-space methods, and nothing on forecasting or anomaly detection as tasks. Its "virtual drift" (Source I) is treated as harmless to the decision boundary, which is a classification view: for density-based or reconstruction-based anomaly detection, a change in $P(X)$ is exactly what the model learns.
+- **Minor inconsistencies in the text:**
+  - the abstract says "over 130" publications, Section 1 says 137 research articles (p. 1, p. 2);
+  - "ECCD" on p. 7 refers to ECDD;
+  - Table 2 calls ref. [52] "EWMA" and Table 1 "TSMSD-EWMA" (pp. 8–9);
+  - the three-layer detector's Layer III is $P_t(y|X)$ in the text, but its threshold $\theta_{P_t(X|y)}$ (p. 6) and Table 1's Stage 3 $P(X|y)$ (p. 8) use $X|y$;
+  - the method is spelled "DELM" in the text and "DEML" in Tables 1–2 and once on p. 4.
+- **Our reading:**
+  - the review predates deep learning-based streaming methods in its coverage:
+    - nothing on neural networks beyond Extreme Learning Machines,
+    - nothing on pre-trained models, fine-tuning or weight-space methods, and
+    - nothing on forecasting or anomaly detection as tasks.
+  - Its "virtual drift" (Source I) is treated as harmless to the decision boundary, which is a classification view: for density-based or reconstruction-based anomaly detection, a change in $P(X)$ is exactly what the model learns.
 
 ## Relevance to this thesis
 
 **Our reading:**
 
-- **Vocabulary for describing drift in our datasets:** the joint-distribution definition (p. 2), the three sources (p. 3) and the four types (Fig. 4, p. 3) give a standard way to characterize each time-series dataset or split: which factor changes, and whether the change is sudden, gradual, incremental or reoccurring.
-- **Mapping to our tasks:** for forecasting, $X$ is the input window and $y$ the future values, so Source I is a change of the input regime and Source II a change of the dynamics. For unsupervised anomaly detection there is no $y$ during training, so only $P(X)$ is observed: in the paper's terms, the drift we can see is "virtual", even though it is what matters for a model of normal behavior.
+- **Vocabulary for describing drift in our datasets:** the joint-distribution definition (p. 2), the three sources (p. 3) and the four types (Fig. 4, p. 3) give a standard way to characterize each time-series dataset or split:
+  - which factor changes, and
+  - whether the change is sudden, gradual, incremental or reoccurring.
+- **Mapping to our tasks:**
+  - For forecasting, $X$ is the input window and $y$ the future values, so Source I is a change of the input regime and Source II a change of the dynamics.
+  - For unsupervised anomaly detection there is no $y$ during training, so only $P(X)$ is observed: in the paper's terms, the drift we can see is "virtual", even though it is what matters for a model of normal behavior.
 - **The adaptation families frame our comparison:**
   - *Simple retraining* corresponds to retraining or fine-tuning on the latest window only.
   - *Joint training* on all data seen so far is not one of the paper's three groups; it is closest to retraining with a growing (landmark) window.
-  - *Ensembles for recurring drift* store one model per concept; task arithmetic keeps one task vector per period and merges them into one model, which reads as a compressed ensemble without the inference cost of voting.
+  - *Ensembles for recurring drift* store one model per concept.
+    - Task arithmetic keeps one task vector per period and merges them into one model, which reads as a compressed ensemble without the inference cost of voting.
   - *Model adjusting for regional drift* is the closest analogue of updating only part of a model.
 - **Reoccurring concepts** (p. 3, p. 10) are the case where keeping old knowledge pays off, and the case where forgetting is most costly: a test for merging versus sequential fine-tuning.
-- **Severity as a guide** (p. 8): low severity favors incremental updates, high severity favors retraining. This is a hypothesis we could test with a measured distance between periods (e.g. a two-sample statistic) against which strategy wins.
-- **Evaluation protocol:** holdout per concept fits synthetic or known-boundary splits (p. 12), which is our setting when tasks are defined periods; prequential evaluation fits a single stream. The statistical tests (Wilcoxon, Nemenyi critical difference, p. 12) are candidates for a rule on when a difference between methods is real. The kappa-temporal idea, comparing against a persistence baseline (p. 12), parallels naive forecasting baselines in time series.
-- **Datasets:** Electricity, NOAA weather and Sensor carry temporal drift (p. 12) but are labeled classification streams (Table 4, p. 14), so they don't fit our tasks directly; they are useful as reference points on what kinds of drift are documented. The real-world limitation (unknown drift times, mixed types, pp. 12–13) applies to our time-series benchmarks too, which favors also using controlled, synthetic drift.
+- **Severity as a guide** (p. 8): low severity favors incremental updates, high severity favors retraining.
+  - This is a hypothesis we could test with a measured distance between periods (e.g. a two-sample statistic) against which strategy wins.
+- **Evaluation protocol:**
+  - Holdout per concept fits synthetic or known-boundary splits (p. 12), which is our setting when tasks are defined periods; prequential evaluation fits a single stream.
+  - The statistical tests (Wilcoxon, Nemenyi critical difference, p. 12) are candidates for a rule on when a difference between methods is real.
+  - The kappa-temporal idea, comparing against a persistence baseline (p. 12), parallels naive forecasting baselines in time series.
+- **Datasets:** Electricity, NOAA weather and Sensor carry temporal drift (p. 12) but are labeled classification streams (Table 4, p. 14), so they don't fit our tasks directly.
+  - They are useful as reference points on what kinds of drift are documented.
+  - The real-world limitation (unknown drift times, mixed types, pp. 12–13) applies to our time-series benchmarks too, which favors also using controlled, synthetic drift.
 - **Ref. [139]** (drift detection by monitoring time series features, p. 14) is the only time-series-specific pointer in the review; worth a look if drift detection becomes part of the thesis.
 
 ## Quotes worth keeping

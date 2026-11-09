@@ -8,11 +8,27 @@
 
 ## In one paragraph
 
-The paper studies **continual model merging**: fine-tuned models of the same pre-trained network arrive one at a time, and each new one is merged into the current merged model without access to the earlier ones or to any training data (pp. 1–3). It proposes **OPCM** (Orthogonal Projection-based Continual Merging), a training-free method that (1) projects each new task vector, layer by layer, onto the subspace orthogonal to the dominant singular directions of the current merged task vector, and (2) rescales the sum with an adaptive factor $\lambda^{(t)}$ that keeps the distance from the pre-trained model roughly constant (pp. 4–6). Memory stays $O(|\theta|)$ whatever the number of tasks (p. 4). On CLIP-ViT-B/32, B/16 and L/14 with 8, 14 and 20 image classification tasks, OPCM beats the strongest baseline by about 4.6–8 points of average accuracy in each setting (Table 1, p. 7), which the authors round to "improvements of 5-8% over continual Task Arithmetic and continual Ties-Merging" (p. 8), with small standard deviations over 10 random task orders (Table 1, p. 7). Continual fine-tuning (sequential training on the data) is still better in 4 of 9 settings (Table 6, p. 36).
+The paper studies **continual model merging**: fine-tuned models of the same pre-trained network arrive one at a time, and each new one is merged into the current merged model without access to the earlier ones or to any training data (pp. 1–3).
+
+It proposes **OPCM** (Orthogonal Projection-based Continual Merging), a training-free method that:
+
+- (1) projects each new task vector, layer by layer, onto the subspace orthogonal to the dominant singular directions of the current merged task vector, and
+- (2) rescales the sum with an adaptive factor $\lambda^{(t)}$ that keeps the distance from the pre-trained model roughly constant (pp. 4–6).
+
+Memory stays $O(|\theta|)$ whatever the number of tasks (p. 4).
+
+On CLIP-ViT-B/32, B/16 and L/14 with 8, 14 and 20 image classification tasks:
+
+- OPCM beats the strongest baseline by about 4.6–8 points of average accuracy in each setting (Table 1, p. 7), which the authors round to "improvements of 5-8% over continual Task Arithmetic and continual Ties-Merging" (p. 8)
+- with small standard deviations over 10 random task orders (Table 1, p. 7).
+
+Continual fine-tuning (sequential training on the data) is still better in 4 of 9 settings (Table 6, p. 36).
 
 ## Problem
 
-Conventional model merging assumes all expert models are available at once and merges them in one step (Definition 3.1, p. 3). The paper argues that this does not fit settings where models "become available sequentially" (p. 1), and that it costs memory linear in the number of models (p. 2, p. 4).
+Conventional model merging assumes all expert models are available at once and merges them in one step (Definition 3.1, p. 3).
+
+The paper argues that this does not fit settings where models "become available sequentially" (p. 1), and that it costs memory linear in the number of models (p. 2, p. 4).
 
 **Setting** (p. 3):
 
@@ -48,9 +64,16 @@ $$\theta^{(t)}_{\text{merged}} = \theta^{(t-1)}_{\text{merged}} + \lambda(\theta
 
 ## Method
 
-**Three design goals** (pp. 4–5): orthogonality preservation (new updates approximately orthogonal to the merged ones), magnitude control (parameter changes stay stable, no drift from the pre-trained loss basin), information retention (keep all earlier tasks).
+**Three design goals** (pp. 4–5):
 
-**Which parameters are projected** (p. 5): weight matrices of linear layers go through the orthogonal projection; "other parameters, such as biases and those in non-linear layers, are averaged directly" (p. 5).
+- Orthogonality preservation (new updates approximately orthogonal to the merged ones).
+- Magnitude control (parameter changes stay stable, no drift from the pre-trained loss basin).
+- Information retention (keep all earlier tasks).
+
+**Which parameters are projected** (p. 5):
+
+- weight matrices of linear layers go through the orthogonal projection;
+- "other parameters, such as biases and those in non-linear layers, are averaged directly" (p. 5).
 
 **Update rule for a linear-layer weight** $W \in \mathbb{R}^{m \times n}$ (Eq. 6, p. 5):
 
@@ -68,7 +91,12 @@ The paper reads this as "a more generalized form of Task Arithmetic" (p. 5).
 
 $$p^{(t)}_{\text{merged}} = p^{(0)} + \left(\lambda^{(t-1)} \Delta p^{(t-1)}_{\text{merged}} + \Delta p^{(t)}\right)/\lambda^{(t)}, \qquad p^{(t)}_{\text{merged}} = p^{(0)} + \frac{1}{\lambda^{(t)}} \sum_{i=1}^{t} \Delta p^{(i)}$$
 
-**Projection mapping** (pp. 5–6). Full SVD of the previous merged task vector, $\Delta W^{(t-1)}_{\text{merged}} = U^{(t-1)} \Sigma^{(t-1)} V^{(t-1)}$ (as printed on p. 5; written $U^{(t-1)}\Sigma^{(t-1)}V^{(t-1)T}$ in the proof, p. 25), with $U^{(t-1)} \in \mathbb{R}^{m \times m}$, $V^{(t-1)} \in \mathbb{R}^{n \times n}$ orthonormal and $\Sigma^{(t-1)} \in \mathbb{R}^{m \times n}$ rectangular diagonal. Then (p. 6):
+**Projection mapping** (pp. 5–6).
+
+Full SVD of the previous merged task vector, $\Delta W^{(t-1)}_{\text{merged}} = U^{(t-1)} \Sigma^{(t-1)} V^{(t-1)}$ (as printed on p. 5; written $U^{(t-1)}\Sigma^{(t-1)}V^{(t-1)T}$ in the proof, p. 25),
+with $U^{(t-1)} \in \mathbb{R}^{m \times m}$, $V^{(t-1)} \in \mathbb{R}^{n \times n}$ orthonormal and $\Sigma^{(t-1)} \in \mathbb{R}^{m \times n}$ rectangular diagonal.
+
+Then (p. 6):
 
 $$\mathcal{P}^{(t-1)}_\alpha\left(\Delta W^{(t)}\right) = \sum_{i,j=r_\alpha, i \neq j}^{m,n} \left\langle \Delta W^{(t)}, u_i v_j^T \right\rangle_F u_i v_j^T$$
 
@@ -81,7 +109,10 @@ $$\mathcal{P}^{(t-1)}_\alpha\left(\Delta W^{(t)}\right) = \sum_{i,j=r_\alpha, i 
 
 $$\lambda^{(1)} = 1, \qquad \lambda^{(t)} = \left\| \lambda^{(t-1)} \Delta\theta^{(t-1)}_{\text{merged}} + \mathcal{P}^{(t-1)}_\alpha\left(\Delta\theta^{(t)}\right) \right\|_2 \Big/ \text{Avg}\left(\|\Delta\theta^{(t)}\|_2\right)$$
 
-with $\Delta\theta^{(t-1)}_{\text{merged}} = \theta^{(t-1)}_{\text{merged}} - \theta^{(0)}$ and $\Delta\theta^{(t)} = \theta^{(t)} - \theta^{(0)}$ as flattened vectors over all parameters, and $\text{Avg}(\|\Delta\theta^{(t)}\|_2) = \frac{1}{t} \sum_{i=1}^{t} \|\Delta\theta^{(i)}\|_2$ (p. 6). The notation applies $\mathcal{P}$ to the whole task vector "for notational simplicity" (p. 6).
+with $\Delta\theta^{(t-1)}_{\text{merged}} = \theta^{(t-1)}_{\text{merged}} - \theta^{(0)}$ and $\Delta\theta^{(t)} = \theta^{(t)} - \theta^{(0)}$ as flattened vectors over all parameters,
+and $\text{Avg}(\|\Delta\theta^{(t)}\|_2) = \frac{1}{t} \sum_{i=1}^{t} \|\Delta\theta^{(i)}\|_2$ (p. 6).
+
+The notation applies $\mathcal{P}$ to the whole task vector "for notational simplicity" (p. 6).
 
 - **Simpler alternative:** $\lambda^{(t)} = \sqrt{t}$, motivated by task vectors being approximately orthogonal, $\langle \Delta\theta^{(i)}, \Delta\theta^{(j)} \rangle \approx \delta_{ij}$ (p. 6).
 - **Empirically,** the adaptive $\lambda^{(t)}$ "closely follow[s]" a $\sqrt{t}$ curve for all three models (Figure 7b, p. 9).
@@ -90,9 +121,13 @@ with $\Delta\theta^{(t-1)}_{\text{merged}} = \theta^{(t-1)}_{\text{merged}} - \t
 
 1. Initialize $\theta^{(1)}_{\text{merged}} = \theta^{(1)}$, average task-vector norm $n = \|\Delta\theta^{(1)}\|_2$, $\lambda^{(1)} = 1$.
 2. For $t = 2, \dots, T$:
-   - for each linear-layer weight $W$: $\Delta W^{(t-1)}_{\text{merged}} \leftarrow W^{(t-1)}_{\text{merged}} - W^{(0)}$; $\Delta W^{(t)} \leftarrow W^{(t)} - W^{(0)}$; $\Delta W^{(t)}_{\text{proj}} \leftarrow \mathcal{P}^{(t-1)}_\alpha(\Delta W^{(t)}; \Delta W^{(t-1)}_{\text{merged}})$;
+   - for each linear-layer weight $W$:
+     - $\Delta W^{(t-1)}_{\text{merged}} \leftarrow W^{(t-1)}_{\text{merged}} - W^{(0)}$;
+     - $\Delta W^{(t)} \leftarrow W^{(t)} - W^{(0)}$;
+     - $\Delta W^{(t)}_{\text{proj}} \leftarrow \mathcal{P}^{(t-1)}_\alpha(\Delta W^{(t)}; \Delta W^{(t-1)}_{\text{merged}})$;
    - for every other parameter $p$: $\Delta p^{(t)} \leftarrow p^{(t)} - p^{(0)}$;
-   - $\Delta\theta^{(t-1)}_{\text{merged}} \leftarrow \theta^{(t-1)}_{\text{merged}} - \theta^{(0)}$; concatenate $\Delta W^{(t)}_{\text{proj}}$ and $\Delta p^{(t)}$ into $\Delta\theta^{(t)}_{\text{proj}}$;
+   - $\Delta\theta^{(t-1)}_{\text{merged}} \leftarrow \theta^{(t-1)}_{\text{merged}} - \theta^{(0)}$;
+   - concatenate $\Delta W^{(t)}_{\text{proj}}$ and $\Delta p^{(t)}$ into $\Delta\theta^{(t)}_{\text{proj}}$;
    - $n \leftarrow \frac{t-1}{t} n + \frac{1}{t} \|\Delta\theta^{(t)}\|_2$;
    - $\lambda^{(t)} \leftarrow \left\| \lambda^{(t-1)} \Delta\theta^{(t-1)}_{\text{merged}} + \Delta\theta^{(t)}_{\text{proj}} \right\|_2 / n$;
    - $\theta^{(t)}_{\text{merged}} \leftarrow \theta^{(0)} + \left(\lambda^{(t-1)} \Delta\theta^{(t-1)}_{\text{merged}} + \Delta\theta^{(t)}_{\text{proj}}\right) / \lambda^{(t)}$.
@@ -100,19 +135,25 @@ with $\Delta\theta^{(t-1)}_{\text{merged}} = \theta^{(t-1)}_{\text{merged}} - \t
 
 **Theory** (Section 5, pp. 6–7; proofs pp. 24–26):
 
-- **Theorem 5.1, orthogonality** (Eq. 8, p. 6): $\left\langle \mathcal{P}^{(t-1)}_\alpha(\Delta W^{(t)}), \Delta W^{(t-1)}_{\text{merged}} \right\rangle_F = 0$. The proof (Eqs. 19–21, p. 25) uses $\langle u_i v_j^T, U \Sigma V^T \rangle_F = 0$ for $i \neq j$.
+- **Theorem 5.1, orthogonality** (Eq. 8, p. 6): $\left\langle \mathcal{P}^{(t-1)}_\alpha(\Delta W^{(t)}), \Delta W^{(t-1)}_{\text{merged}} \right\rangle_F = 0$.
+
+  The proof (Eqs. 19–21, p. 25) uses $\langle u_i v_j^T, U \Sigma V^T \rangle_F = 0$ for $i \neq j$.
 - **Merging gap** (Eq. 9, p. 6), "similar to [89]", as printed:
 
   $$G_i = \mathcal{L}_i\left(\theta^{(0)} + \sum_{j=1}^{t} \eta_j \mathcal{P}^{(j-1)}_\alpha\left(\Delta\theta^{(i)}\right)\right) - \mathcal{L}_i\left(\theta^{(0)} + \eta_i \mathcal{P}^{(i-1)}_\alpha\left(\Delta\theta^{(i)}\right)\right)$$
 
-  A first-order Taylor expansion at $\theta^{(0)}$ gives $G_i \approx \nabla_{\theta^{(0)}} \mathcal{L}_i^\top \left(\sum_{j=1, j \neq i}^{t} \eta_j \mathcal{P}^{(j-1)}_\alpha(\Delta\theta^{(i)})\right)$; with $\eta_i = 1/\lambda^{(t)}$, $G_t \approx \nabla_{\theta^{(0)}} \mathcal{L}_t^\top \left(\frac{\lambda^{(t-1)}}{\lambda^{(t)}} \Delta\theta^{(t-1)}_{\text{merged}}\right)$ (p. 6). Treating the task vector as accumulated gradients, $G_t \approx C \, \Delta\theta^{(t)\top} \Delta\theta^{(t-1)}_{\text{merged}}$ with $C$ a constant, so orthogonality "serves to minimize the gap $G_t$" (p. 7).
+  A first-order Taylor expansion at $\theta^{(0)}$ gives $G_i \approx \nabla_{\theta^{(0)}} \mathcal{L}_i^\top \left(\sum_{j=1, j \neq i}^{t} \eta_j \mathcal{P}^{(j-1)}_\alpha(\Delta\theta^{(i)})\right)$;
+  with $\eta_i = 1/\lambda^{(t)}$, $G_t \approx \nabla_{\theta^{(0)}} \mathcal{L}_t^\top \left(\frac{\lambda^{(t-1)}}{\lambda^{(t)}} \Delta\theta^{(t-1)}_{\text{merged}}\right)$ (p. 6).
+
+  Treating the task vector as accumulated gradients, $G_t \approx C \, \Delta\theta^{(t)\top} \Delta\theta^{(t-1)}_{\text{merged}}$ with $C$ a constant, so orthogonality "serves to minimize the gap $G_t$" (p. 7).
 - **Theorem 5.2, bounded distance** (Eq. 10, p. 7), with $\lambda^{(t)} = \sqrt{t}$:
 
   $$\left\| W^{(t)}_{\text{merged}} - W^{(0)} \right\|_F^2 \leq \max_{i \in [1,t]} \left\| \Delta W^{(i)} \right\|_F^2$$
 
   Proof by induction (Eqs. 22–25, pp. 25–26), using orthogonality to split the norm into $\frac{t-1}{t}\|\Delta W^{(t-1)}_{\text{merged}}\|_F^2 + \frac{1}{t}\|\mathcal{P}(\Delta W^{(t)})\|_F^2$ and $\|\mathcal{P}(\Delta W^{(t)})\|_F^2 \leq \|\Delta W^{(t)}\|_F^2$.
 - **Corollary 5.3, preservation of task information** (Eq. 11, p. 7): $W^{(t)}_{\text{merged}} - W^{(0)} = \frac{1}{\lambda^{(t)}} \sum_{i=1}^{t} \mathcal{P}^{(i-1)}_\alpha(\Delta W^{(i)})$, i.e. a weighted combination of all earlier (projected) task vectors.
-- **Corollary A.2, correlated task vectors** (p. 26): writing $\Delta W^{(t)} = \rho \Delta W^{(t-1)}_{\text{merged}} + \eta$ with $\eta$ orthogonal to $\Delta W^{(t-1)}_{\text{merged}}$ (Eq. 26), the projection gives $\mathcal{P}^{(t-1)}_\alpha(\Delta W^{(t)}) = \eta$ (Eq. 29), so a highly correlated new model contributes only its novel part (Eq. 30, p. 26).
+- **Corollary A.2, correlated task vectors** (p. 26): writing $\Delta W^{(t)} = \rho \Delta W^{(t-1)}_{\text{merged}} + \eta$ with $\eta$ orthogonal to $\Delta W^{(t-1)}_{\text{merged}}$ (Eq. 26), the projection gives $\mathcal{P}^{(t-1)}_\alpha(\Delta W^{(t)}) = \eta$ (Eq. 29),
+  so a highly correlated new model contributes only its novel part (Eq. 30, p. 26).
 
 **Computational cost** (Appendix B, p. 27): dominated by the full SVD, $O(\min(m^2 n, n^2 m))$ per weight matrix; "approximately $O(TL\min(mn, mn))$" for $T$ tasks and $L$ linear layers (as printed, p. 27).
 
@@ -133,11 +174,20 @@ with $\Delta\theta^{(t-1)}_{\text{merged}} = \theta^{(t-1)}_{\text{merged}} - \t
 
 **Baselines** (p. 8; Appendix D.3.1, pp. 32–33):
 
-- **Continual fine-tuning** (Eq. 33, p. 32): $\theta^{(t)} = \text{Fine-tune}(\theta^{(t-1)}, \mathcal{D}_t)$, same schedule (lr 1e-5, batch 128, 4000 steps per task); a **single run** with random seed 42 and a shuffled task order (p. 32; Table 4 caption, p. 35). Each task takes 20–30 minutes of fine-tuning, so a 20-task run takes 8–10 hours (p. 36).
+- **Continual fine-tuning** (Eq. 33, p. 32): $\theta^{(t)} = \text{Fine-tune}(\theta^{(t-1)}, \mathcal{D}_t)$.
+  - Same schedule (lr 1e-5, batch 128, 4000 steps per task).
+  - A **single run** with random seed 42 and a shuffled task order (p. 32; Table 4 caption, p. 35).
+  - Each task takes 20–30 minutes of fine-tuning, so a 20-task run takes 8–10 hours (p. 36).
 - **SWA** (Eqs. 34–35, p. 32): $\theta^{(1)}_{\text{SWA}} = \theta^{(1)}$, $\theta^{(t)}_{\text{SWA}} = \frac{\theta^{(t-1)}_{\text{SWA}}(t-1) + \theta^{(t)}}{t}$, i.e. $\theta^{(t)}_{\text{SWA}} = \frac{1}{t}\sum_{i=1}^{t} \theta^{(i)}$.
-- **Continual task arithmetic** (Eq. 37, p. 33): $\theta^{(0)}_{\text{merged}} = \theta^{(0)}$, $\theta^{(t)}_{\text{merged}} = \theta^{(t-1)}_{\text{merged}} + \lambda(\theta^{(t)} - \theta^{(0)})$. $\lambda$ chosen as "the value of $\lambda$ that achieves the highest average accuracy" in $\{0.1, 0.2, \dots, 1.0\}$: **0.3 for 8 tasks, 0.1 for 14 and 20 tasks** (p. 33, p. 38).
-- **Continual Ties-Merging** (Eq. 40, p. 33): $\theta^{(1)}_{\text{merged}} = \theta^{(0)} + \lambda(\theta^{(1)} - \theta^{(0)})$, $\theta^{(t)}_{\text{merged}} = \theta^{(0)} + \lambda\left(\tau^{(t-1)}_{\text{Ties-merged}} + \tau^{(t)}_{\text{Ties}}\right)$, (the where-clause prints $\theta^{(t)}_{\text{Ties}}$ on its left-hand side, p. 33), where TiesMerging is applied to the pair $\{\theta^{(t-1)}_{\text{merged}} - \theta^{(0)}, \theta^{(t)} - \theta^{(0)}\}$; same $\lambda$ as task arithmetic (p. 33).
-- **Continual AdaMerging and TSVM** (Appendix E, p. 38): $\theta^{(0)}_{\text{merged}} = \theta^{(0)}$, $\theta^{(t+1)}_{\text{merged}} = \text{AdaMerging}(\theta_0; \theta^{(t)}_{\text{merged}}, \theta^{(t+1)})$ (and likewise for TSVM); a single run, task order SUN397, Cars, RESISC45, EuroSAT, SVHN, GTSRB, MNIST, DTD (p. 38).
+- **Continual task arithmetic** (Eq. 37, p. 33): $\theta^{(0)}_{\text{merged}} = \theta^{(0)}$, $\theta^{(t)}_{\text{merged}} = \theta^{(t-1)}_{\text{merged}} + \lambda(\theta^{(t)} - \theta^{(0)})$.
+  - $\lambda$ chosen as "the value of $\lambda$ that achieves the highest average accuracy" in $\{0.1, 0.2, \dots, 1.0\}$: **0.3 for 8 tasks, 0.1 for 14 and 20 tasks** (p. 33, p. 38).
+- **Continual Ties-Merging** (Eq. 40, p. 33):
+  - $\theta^{(1)}_{\text{merged}} = \theta^{(0)} + \lambda(\theta^{(1)} - \theta^{(0)})$,
+  - $\theta^{(t)}_{\text{merged}} = \theta^{(0)} + \lambda\left(\tau^{(t-1)}_{\text{Ties-merged}} + \tau^{(t)}_{\text{Ties}}\right)$ (the where-clause prints $\theta^{(t)}_{\text{Ties}}$ on its left-hand side, p. 33),
+  - where TiesMerging is applied to the pair $\{\theta^{(t-1)}_{\text{merged}} - \theta^{(0)}, \theta^{(t)} - \theta^{(0)}\}$;
+  - same $\lambda$ as task arithmetic (p. 33).
+- **Continual AdaMerging and TSVM** (Appendix E, p. 38): $\theta^{(0)}_{\text{merged}} = \theta^{(0)}$, $\theta^{(t+1)}_{\text{merged}} = \text{AdaMerging}(\theta_0; \theta^{(t)}_{\text{merged}}, \theta^{(t+1)})$ (and likewise for TSVM).
+  - A single run, task order SUN397, Cars, RESISC45, EuroSAT, SVHN, GTSRB, MNIST, DTD (p. 38).
 
 **Metrics** (Appendix D.2, p. 32), as printed:
 
@@ -147,7 +197,9 @@ As printed (p. 32), the sum runs over $t$ but indexes $\text{ACC}_i$, and uses $
 
 $$\text{BWT} = \frac{\sum_{i=1}^{T-1} \text{ACC}_i\left(\theta^{(T)}_{\text{merged}}\right) - \text{ACC}_i\left(\theta^{(i)}_{\text{merged}}\right)}{T-1}$$
 
-where $\text{ACC}_i(\cdot)$ is accuracy on the $i$-th task's test data (p. 32). The **accuracy matrix** (p. 34): row $i$ is the model after merging the $i$-th model, column $j$ is $\text{ACC}_j(\theta^{(i)}_{\text{merged}})$.
+where $\text{ACC}_i(\cdot)$ is accuracy on the $i$-th task's test data (p. 32).
+
+The **accuracy matrix** (p. 34): row $i$ is the model after merging the $i$-th model, column $j$ is $\text{ACC}_j(\theta^{(i)}_{\text{merged}})$.
 
 **Hardware** (p. 32): one machine with 8 NVIDIA RTX 4090 (24 GB each); PyTorch, Python 3.12.
 
@@ -171,16 +223,24 @@ where $\text{ACC}_i(\cdot)$ is accuracy on the $i$-th task's test data (p. 32). 
 | BWT: C. Ties-Merging | -15.3±8.0 | **1.9**±0.6 | **-1.5**±0.7 | -5.5±0.4 | **1.4**±0.7 | **-1.5**±1.2 | -13.0±5.7 | **1.1**±0.4 | **-2.9**±1.0 |
 | BWT: OPCM | **-6.3**±1.1 | -6.0±1.0 | -7.8±1.5 | -4.8±0.7 | -5.1±1.4 | -6.3±2.2 | **-2.6**±1.0 | -4.3±0.7 | -6.5±1.8 |
 
-Bold as printed. "C. Fine-Tuned" is one run of continual fine-tuning (p. 32, p. 35). **Our reading:** "Fine-Tuned" is the average of the individual fine-tuned models: Table 3 (p. 28) gives, for ViT-B/32 on 8 tasks, a fine-tuned average of 723.1/8 = 90.4 and a pre-trained average of 48.1, both matching Table 1. C. Fine-Tuned on ViT-L/14 is non-monotonic (70.9 on 14 tasks, 77.7 on 20), from a single run; the paper doesn't comment.
+Bold as printed. "C. Fine-Tuned" is one run of continual fine-tuning (p. 32, p. 35).
+
+**Our reading:**
+
+- "Fine-Tuned" is the average of the individual fine-tuned models: Table 3 (p. 28) gives, for ViT-B/32 on 8 tasks, a fine-tuned average of 723.1/8 = 90.4 and a pre-trained average of 48.1, both matching Table 1.
+- C. Fine-Tuned on ViT-L/14 is non-monotonic (70.9 on 14 tasks, 77.7 on 20), from a single run; the paper doesn't comment.
 
 **What the authors draw from it** (p. 8):
 
-- The authors report "improvements of 5-8% over continual Task Arithmetic and continual Ties-Merging" (p. 8); against the strongest baseline in each setting, Table 1 gives about 4.6–8 points (e.g. ViT-B/32, 20 tasks: 65.7 − 61.1 = 4.6), and against continual Ties-Merging on 8 tasks much more (ViT-B/32: 75.5 − 49.0 = 26.5).
+- The authors report "improvements of 5-8% over continual Task Arithmetic and continual Ties-Merging" (p. 8).
+  - Against the strongest baseline in each setting, Table 1 gives about 4.6–8 points (e.g. ViT-B/32, 20 tasks: 65.7 − 61.1 = 4.6), and against continual Ties-Merging on 8 tasks much more (ViT-B/32: 75.5 − 49.0 = 26.5).
 - ViT-L/14 forgets least, with a BWT of -2.6% on 8 tasks.
 - Degradation at 20 tasks "compared to individuals": -17.5% for ViT-L/14, 24.1% for ViT-B/32 and 21.3% for ViT-B/16 (p. 8).
-- Robustness to task order: narrow confidence bands (Figure 5) and small standard deviations (Table 1) (p. 8); Continual Ties-Merging has much larger standard deviations, i.e. it is more sensitive to task order (p. 35).
+- Robustness to task order: narrow confidence bands (Figure 5) and small standard deviations (Table 1) (p. 8).
+  - Continual Ties-Merging has much larger standard deviations, i.e. it is more sensitive to task order (p. 35).
 - Accuracy falls as tasks are added (Figure 5, p. 8): from around 90% for all models, ViT-L/14 keeps approximately 75–80% by task 20, the smaller models drop to around 65–70% (p. 8, as stated in the text).
-- In the per-task tables, EMNIST and KMNIST stay hard for all continual methods (p. 35); in the SWA accuracy matrices the decline is "particularly significant" for KMNIST and EMNIST, attributed to their divergence from the pre-trained model and the other tasks (p. 34).
+- In the per-task tables, EMNIST and KMNIST stay hard for all continual methods (p. 35).
+- In the SWA accuracy matrices the decline is "particularly significant" for KMNIST and EMNIST, attributed to their divergence from the pre-trained model and the other tasks (p. 34).
 
 **OPCM vs continual fine-tuning** (Table 6, p. 36). Average accuracy (%); continual fine-tuning is a single run, OPCM is 10 runs:
 
@@ -196,7 +256,9 @@ Bold as printed. "C. Fine-Tuned" is one run of continual fine-tuning (p. 32, p. 
 | ViT-B/16, 20 tasks | 68.2 | 70.3±0.2, Min: **69.8**, Max: 70.7 |
 | ViT-L/14, 20 tasks | 77.7 | 76.0±0.2, Min: 75.6, Max: 76.4 |
 
-In 5 of 9 settings (bold) OPCM's minimum exceeds the continual fine-tuning run; in the rest OPCM is "within 1-5%" of it (p. 36). OPCM needs "only a few seconds versus 20-30 minutes per task for continual fine-tuning" (p. 37).
+In 5 of 9 settings (bold) OPCM's minimum exceeds the continual fine-tuning run; in the rest OPCM is "within 1-5%" of it (p. 36).
+
+OPCM needs "only a few seconds versus 20-30 minutes per task for continual fine-tuning" (p. 37).
 
 **Comparison with conventional (all-at-once) merging** (Table 7, p. 38). Eight tasks, CLIP-ViT-B/32, accuracy (%):
 
@@ -215,7 +277,9 @@ In 5 of 9 settings (bold) OPCM's minimum exceeds the continual fine-tuning run; 
 | C. TSVM | 59.9 | 59.5 | 64.0 | 64.7 | 87.9 | 86.1 | 99.5 | 34.3 | 68.5 |
 | OPCM (10 runs) | 66.2±0.5 | 63.5±0.5 | 78.0±2.2 | 86.5±1.9 | 82.4±1.3 | 74.3±1.4 | 96.9±0.7 | 56.4±1.3 | 75.5±0.5 |
 
-AdaMerging drops from 82.6% (conventional) to 73.5% when used continually (p. 38). OPCM is better than "most" conventional methods (p. 38), though not RegMean, layer-wise AdaMerging or TSVM in this table.
+AdaMerging drops from 82.6% (conventional) to 73.5% when used continually (p. 38).
+
+OPCM is better than "most" conventional methods (p. 38), though not RegMean, layer-wise AdaMerging or TSVM in this table.
 
 **Runtime** (Table 2, p. 27; the model and number of tasks aren't stated next to the table; **our reading:** every total-to-per-model time ratio is about 8, e.g. 73.26/9.1, so probably 8 models):
 
@@ -229,14 +293,21 @@ AdaMerging drops from 82.6% (conventional) to 73.5% when used continually (p. 38
 
 **Hyperparameters** (Section 6.2, p. 9; Appendix D.4, pp. 37–38):
 
-- **Task arithmetic is sensitive to $\lambda$:** the text gives 0.3 for 8 tasks and 0.1 for 14 and 20 tasks (pp. 33, 38). **Our reading:** Figures 6a (p. 9) and 13 (p. 37) peak at $\lambda = 0.2$ for ViT-B/32 (about 0.69 vs about 0.675 at 0.3) and ViT-L/14 on 8 tasks; only ViT-B/16 peaks at 0.3. Table 1's continual task arithmetic value for ViT-B/32 on 8 tasks (67.5) matches the $\lambda = 0.3$ point, so this baseline may be under-tuned.
-- **OPCM vs $\alpha$:** an inverted U, with the optimum for $\alpha \approx 0.4$–$0.6$ (p. 9), "consistently" within 0.4–0.6 regardless of the number of tasks (p. 38); the optimal $\alpha$ stays around 0.5 across task counts (p. 9) and across model sizes on 20 tasks (Figure 7a, p. 9).
+- **Task arithmetic is sensitive to $\lambda$:** the text gives 0.3 for 8 tasks and 0.1 for 14 and 20 tasks (pp. 33, 38).
+  - **Our reading:**
+    - Figures 6a (p. 9) and 13 (p. 37) peak at $\lambda = 0.2$ for ViT-B/32 (about 0.69 vs about 0.675 at 0.3) and ViT-L/14 on 8 tasks; only ViT-B/16 peaks at 0.3.
+    - Table 1's continual task arithmetic value for ViT-B/32 on 8 tasks (67.5) matches the $\lambda = 0.3$ point, so this baseline may be under-tuned.
+- **OPCM vs $\alpha$:** an inverted U, with the optimum for $\alpha \approx 0.4$–$0.6$ (p. 9), "consistently" within 0.4–0.6 regardless of the number of tasks (p. 38).
+  - The optimal $\alpha$ stays around 0.5 across task counts (p. 9) and across model sizes on 20 tasks (Figure 7a, p. 9).
 - OPCM beats task arithmetic "across a broad spectrum of $\alpha$ values ($\alpha \leq 0.9$)" (p. 38; Figure 14, p. 37). **Our reading** of Figures 6b and 14: accuracy drops sharply at $\alpha = 1.0$.
 
 **Task-vector similarity** (Figure 4, p. 6; Figures 9–10, pp. 29–30; text p. 28):
 
 - Most off-diagonal cosine similarities between task vectors are 0.01–0.05 (p. 28).
-- Related tasks are more similar: digit tasks (SVHN, MNIST, EMNIST, KMNIST) and CIFAR10/CIFAR100 (p. 28). Printed cells: SVHN–MNIST 0.15 for ViT-B/32 (Figure 4, p. 6; Figure 9, p. 29) and 0.25 for ViT-B/16 (Figure 10, p. 30); CIFAR100–CIFAR10 0.11 for both (pp. 29–30).
+- Related tasks are more similar: digit tasks (SVHN, MNIST, EMNIST, KMNIST) and CIFAR10/CIFAR100 (p. 28).
+  - Printed cells:
+    - SVHN–MNIST 0.15 for ViT-B/32 (Figure 4, p. 6; Figure 9, p. 29) and 0.25 for ViT-B/16 (Figure 10, p. 30);
+    - CIFAR100–CIFAR10 0.11 for both (pp. 29–30).
 - ViT-L/14 shows slightly lower similarity overall (p. 28).
 
 **Fine-tuned models** (Table 3, p. 28): per-task test accuracy of pre-trained and fine-tuned models for the 20 tasks; their averages are the "Pre-Trained" and "Fine-Tuned" rows of Table 1.
@@ -248,15 +319,20 @@ AdaMerging drops from 82.6% (conventional) to 73.5% when used continually (p. 38
 - **Only linear-layer weights are projected;** biases and other parameters are combined without projection (p. 5).
 - **Fixed $\alpha = 0.5$** in all experiments (p. 8); the baselines' $\lambda$ is chosen as the value with the highest average accuracy (p. 33), the paper does not say on which split.
 - **Continual fine-tuning is a single run** (seed 42) while OPCM is averaged over 10 orders (p. 32, p. 36).
-- **Vision only:** "While our current work focuses on vision models, the proposed method's principles are generally applicable to other domains" (p. 10); extensions to language and multimodal models are future work (p. 10).
+- **Vision only:** "While our current work focuses on vision models, the proposed method's principles are generally applicable to other domains" (p. 10).
+  - Extensions to language and multimodal models are future work (p. 10).
 - **Limitations the authors point to** (checklist, p. 17): the non-commutativity of continual merging (Section 3.2) and the cost of the SVD-based projection (Appendix B).
 - **Our reading:**
-  - The projection formula sums over $i, j \geq r_\alpha$ with $i \neq j$ (p. 6), which excludes the diagonal components $u_i v_i^T$ beyond $r_\alpha$ as well; the orthogonality proof relies only on $i \neq j$ (p. 25). How exactly the released code builds the projection should be checked before reimplementing.
+  - The projection formula sums over $i, j \geq r_\alpha$ with $i \neq j$ (p. 6), which excludes the diagonal components $u_i v_i^T$ beyond $r_\alpha$ as well.
+    - The orthogonality proof relies only on $i \neq j$ (p. 25).
+    - How exactly the released code builds the projection should be checked before reimplementing.
   - Eq. 9's sum applies $\mathcal{P}^{(j-1)}_\alpha$ to $\Delta\theta^{(i)}$ (as printed, p. 6), which looks like a typo for $\Delta\theta^{(j)}$; the gap argument is first-order and informal.
   - Theorem 5.2 assumes $\lambda^{(t)} = \sqrt{t}$, not the adaptive $\lambda^{(t)}$ used by Algorithm 1; the two are close empirically (Figure 7b, p. 9).
-  - The "5–8%" gain is over other merging methods; OPCM stays well below the individual fine-tuned models (e.g. 65.7 vs 89.8 on ViT-B/32, 20 tasks, Table 1) and below conventional (all-at-once) merging methods such as TSVM on 8 tasks (75.5 vs 83.1, Table 7).
+  - The "5–8%" gain is over other merging methods.
+    - OPCM stays well below the individual fine-tuned models (e.g. 65.7 vs 89.8 on ViT-B/32, 20 tasks, Table 1) and below conventional (all-at-once) merging methods such as TSVM on 8 tasks (75.5 vs 83.1, Table 7).
   - The degradation figures on p. 8 (17.5, 24.1, 21.3) equal Fine-Tuned minus OPCM in Table 1 (e.g. 93.5 − 76.0), so they are absolute accuracy points, though printed with "%".
-  - Conventional task arithmetic on 8 ViT-B/32 tasks scores 68.0 (Table 7) and continual task arithmetic 67.5 (Table 1); with a fixed $\lambda$ the two should give the same final model, so the difference may come from a different $\lambda$ or setup, not explained in the paper.
+  - Conventional task arithmetic on 8 ViT-B/32 tasks scores 68.0 (Table 7) and continual task arithmetic 67.5 (Table 1).
+    - With a fixed $\lambda$ the two should give the same final model, so the difference may come from a different $\lambda$ or setup, not explained in the paper.
   - There is no joint multi-task training baseline (all tasks' data at once), only sequential continual fine-tuning.
 
 ## Relevance to this thesis
@@ -264,14 +340,20 @@ AdaMerging drops from 82.6% (conventional) to 73.5% when used continually (p. 38
 **Our reading:**
 
 - **A formal frame for the sequential setting we study:** Definition 3.2 (continual merging), the non-commutativity issue (Eq. 4) and the metrics ACC and BWT with an accuracy matrix (p. 32, p. 34) map directly onto merging models trained on successive periods or successive datasets of time series.
-- **Continual task arithmetic (Eq. 5 / Eq. 37) is the natural sequential baseline:** it needs only the running merged model, and with Eq. 37's start ($\theta^{(0)}_{\text{merged}} = \theta^{(0)}$, p. 33), its final model equals one-shot task arithmetic with the same $\lambda$; Definition 3.2 "typically" starts from $\theta^{(1)}_{\text{merged}} = \theta^{(1)}$ (p. 3), which gives the first task vector weight 1 instead of $\lambda$. We can compare it with joint training, one-shot task arithmetic, continual fine-tuning and OPCM on the same task sequences.
+- **Continual task arithmetic (Eq. 5 / Eq. 37) is the natural sequential baseline:**
+  - It needs only the running merged model, and with Eq. 37's start ($\theta^{(0)}_{\text{merged}} = \theta^{(0)}$, p. 33), its final model equals one-shot task arithmetic with the same $\lambda$.
+  - Definition 3.2 "typically" starts from $\theta^{(1)}_{\text{merged}} = \theta^{(1)}$ (p. 3), which gives the first task vector weight 1 instead of $\lambda$.
+  - We can compare it with joint training, one-shot task arithmetic, continual fine-tuning and OPCM on the same task sequences.
 - **What to test for anomaly detection and forecasting:**
-  - whether OPCM's projection helps when task vectors are **not** near-orthogonal, as may be the case for consecutive periods of the same signal (the paper's tasks have cosine similarity mostly 0.01–0.05, p. 28); Corollary A.2 (p. 26) predicts that highly correlated updates are mostly filtered out, which could also discard useful drift adaptation;
+  - whether OPCM's projection helps when task vectors are **not** near-orthogonal, as may be the case for consecutive periods of the same signal (the paper's tasks have cosine similarity mostly 0.01–0.05, p. 28);
+    - Corollary A.2 (p. 26) predicts that highly correlated updates are mostly filtered out, which could also discard useful drift adaptation;
   - whether $\lambda^{(t)} \approx \sqrt{t}$ holds for our models;
   - the sensitivity to $\alpha$ (paper: optimum 0.4–0.6, sharp drop at 1.0) and to task order (10 shuffled orders, as in the paper);
   - BWT on earlier periods (forgetting) next to accuracy on the latest one.
 - **Gaps to fill ourselves:** the paper has no joint multi-task training baseline and only one continual fine-tuning run; our study should add both, with several orders and seeds.
-- **Practical constraints:** heads must be shared or frozen for weight-space merging; for forecasting and anomaly scoring heads (regression, reconstruction) this needs a design choice. The full SVD per linear layer is affordable for small time-series models (Table 2 gives about 9 s per model for CLIP, p. 27).
+- **Practical constraints:**
+  - Heads must be shared or frozen for weight-space merging; for forecasting and anomaly scoring heads (regression, reconstruction) this needs a design choice.
+  - The full SVD per linear layer is affordable for small time-series models (Table 2 gives about 9 s per model for CLIP, p. 27).
 - **Reimplementation:** the code is public (p. 1); the projection's index range (see limitations) should be checked against it.
 
 ## Quotes worth keeping

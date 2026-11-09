@@ -8,7 +8,26 @@
 
 ## In one paragraph
 
-The paper tests whether time-series foundation models (TSFMs) used **zero-shot** for univariate time-series anomaly detection (TSAD) through their reconstruction or forecasting error actually beat trivial "one-liner" detectors (pp. 1–2). It evaluates five families — MOMENT (reconstruction), Chronos-Bolt, TimesFM and Time-MoE (forecasting), and TSPulse (both) — at two sizes each (except TSPulse) and context windows of 64, 256 and 512 (p. 2, Table 2, p. 5), on the 350 series of the TSB-AD-U evaluation set, scored with VUS-PR (p. 5). Against **moving-window variance** (for reconstruction models) and **squared difference** from a local mean (for forecasting models), no TSFM is consistently or significantly better: correlations of per-series VUS-PR with the baseline are 0.848–0.995 and Cohen's $d$ ranges from −0.180 to 0.194 (Table 8, p. 24). The reasons given: z-normalization makes MOMENT's score approximately the window variance times a near-constant reconstruction error (Eq. 1, p. 6; Appendix D, p. 17), and one-step forecasting lets anomalous inputs in the context make the anomaly itself predictable (p. 7). The paper also reports 50 series of TSB-AD-U with problematic labels (Table 7, p. 21) and a metric effect where tiny score differences inflate VUS-PR (p. 21). It proposes three directions: ensembling short and long forecasting horizons, detecting anomalies in hidden representations, and end-to-end fine-tuning with labeled anomalies (Section 6, pp. 8–10).
+The paper tests whether time-series foundation models (TSFMs) used **zero-shot** for univariate time-series anomaly detection (TSAD) through their reconstruction or forecasting error actually beat trivial "one-liner" detectors (pp. 1–2).
+
+It evaluates five families — MOMENT (reconstruction), Chronos-Bolt, TimesFM and Time-MoE (forecasting), and TSPulse (both) — at two sizes each (except TSPulse) and context windows of 64, 256 and 512 (p. 2, Table 2, p. 5), on the 350 series of the TSB-AD-U evaluation set, scored with VUS-PR (p. 5).
+
+Against **moving-window variance** (for reconstruction models) and **squared difference** from a local mean (for forecasting models), no TSFM is consistently or significantly better:
+
+- correlations of per-series VUS-PR with the baseline are 0.848–0.995 and Cohen's $d$ ranges from −0.180 to 0.194 (Table 8, p. 24).
+
+The reasons given:
+
+- z-normalization makes MOMENT's score approximately the window variance times a near-constant reconstruction error (Eq. 1, p. 6; Appendix D, p. 17),
+- and one-step forecasting lets anomalous inputs in the context make the anomaly itself predictable (p. 7).
+
+The paper also reports 50 series of TSB-AD-U with problematic labels (Table 7, p. 21) and a metric effect where tiny score differences inflate VUS-PR (p. 21).
+
+It proposes three directions:
+
+- ensembling short and long forecasting horizons,
+- detecting anomalies in hidden representations,
+- and end-to-end fine-tuning with labeled anomalies (Section 6, pp. 8–10).
 
 ## Problem
 
@@ -16,17 +35,25 @@ The paper tests whether time-series foundation models (TSFMs) used **zero-shot**
 
 **Setting:**
 
-- **Univariate** series only (p. 2, footnote 1), because "the majority of TSFMs support only univariate inputs natively"; Chronos-2 and Toto 1.0 are named as recent exceptions, with preliminary multivariate results in Appendix M (p. 2).
-- **Zero-shot:** the evaluation set is used "to evaluate the models' zero-shot anomaly detection capabilities for univariate TSAD" (p. 5). No fine-tuning of the TSFMs is performed in the paper's own experiments (Sections 4–5); fine-tuning with labeled anomalies is left as a future direction (p. 10).
-- **Motivation:** the only extensive prior evaluation (Liu & Paparrizos, 2024, the TSB-AD benchmark) "heavily relies on aggregate metrics which overlook counterintuitive details", and uses one model size and short context windows per family (p. 2).
+- **Univariate** series only (p. 2, footnote 1), because "the majority of TSFMs support only univariate inputs natively".
+  - Chronos-2 and Toto 1.0 are named as recent exceptions, with preliminary multivariate results in Appendix M (p. 2).
+- **Zero-shot:** the evaluation set is used "to evaluate the models' zero-shot anomaly detection capabilities for univariate TSAD" (p. 5).
+  - No fine-tuning of the TSFMs is performed in the paper's own experiments (Sections 4–5).
+  - Fine-tuning with labeled anomalies is left as a future direction (p. 10).
+- **Motivation:** the only extensive prior evaluation (Liu & Paparrizos, 2024, the TSB-AD benchmark)
+  - "heavily relies on aggregate metrics which overlook counterintuitive details",
+  - and uses one model size and short context windows per family (p. 2).
 
 **Definitions** (p. 2, p. 3):
 
 - A univariate time series $T = (x_1, \dots, x_n)$, $x_i \in \mathbb{R}$; a subsequence $T_{s,e} = (x_s, x_{s+1}, \dots, x_e)$ with $1 \le s < e \le n$, of length $e - s + 1$ (p. 2).
-- **TSAD** (Definition 1, p. 3): predicting anomaly scores $s_i \in \mathbb{R}^+$ for each $x_i \in T$; $x_i$ is more anomalous than $x_j$ if $s_i > s_j$. The task is defined as **scoring**, not as binary labeling.
+- **TSAD** (Definition 1, p. 3): predicting anomaly scores $s_i \in \mathbb{R}^+$ for each $x_i \in T$; $x_i$ is more anomalous than $x_j$ if $s_i > s_j$.
+  - The task is defined as **scoring**, not as binary labeling.
 - **Forecasting-based TSFM** (Definition 2, p. 3): $\mathcal{F}^{(\text{forecast})} : \mathbb{R}^w \mapsto \mathbb{R}$, pre-trained to predict the next value after a context window of length $w$.
 - **Reconstruction-based TSFM** (Definition 3, p. 3): $\mathcal{F}^{(\text{reconstruct})} : \mathbb{R}^w \mapsto \mathbb{R}^w$, pre-trained to reconstruct sequences of length $w$.
-- **The assumption under test** (p. 3): forecasting-based detection assumes "anomalous observations are inherently more difficult to predict"; reconstruction-based detection assumes "anomalous sequences are harder to reconstruct".
+- **The assumption under test** (p. 3):
+  - forecasting-based detection assumes "anomalous observations are inherently more difficult to predict";
+  - reconstruction-based detection assumes "anomalous sequences are harder to reconstruct".
 
 ## Method
 
@@ -55,7 +82,8 @@ Each window is normalized, passed through the TSFM, and de-normalized (Figure 1,
 - **Squared difference** (Definition 5, p. 5), the baseline for forecasting-based models, "inspired by the one-liners of Wu & Keogh (2023)", using "the mean of the neighboring observations as forecast" (p. 4):
   - **Last-$w$:** $s_{i+w} = (\mathrm{mean}(T_{i,i+w-1}) - x_{i+w})^2$
   - **Centered-$w$:** $s_{i+\lfloor w/2 \rfloor} = (\mathrm{mean}(T_{i,i+w-1} \setminus x_{i+\lfloor w/2 \rfloor}) - x_{i+\lfloor w/2 \rfloor})^2$
-- The baselines used in the comparisons are Var-$w$ with the same $w$ as the TSFM's context (e.g. Var-64 vs MOMENT-base-64, Figure 3, p. 6), Last-1, Last-3 and Centered-5 (Figure 5, p. 7); Last-3 is the reference for the statistical tests on forecasting models (Table 3, p. 8).
+- The baselines used in the comparisons are Var-$w$ with the same $w$ as the TSFM's context (e.g. Var-64 vs MOMENT-base-64, Figure 3, p. 6), Last-1, Last-3 and Centered-5 (Figure 5, p. 7).
+  - Last-3 is the reference for the statistical tests on forecasting models (Table 3, p. 8).
 
 ### Why MOMENT behaves like variance (p. 5, p. 6, Appendix D p. 17)
 
@@ -71,19 +99,41 @@ s_{i+\lfloor w/2 \rfloor} &= \mathrm{MSE}\big(T_{i,i+w-1},\ \hat{T}_{i,i+w-1}\bi
 \end{aligned}
 $$
 
-MOMENT's normalizer adds $\epsilon = 10^{-5}$ to the standard deviation; its influence is called negligible (p. 17). The last line is Equation 1 (p. 6). If the second factor barely varies, the score is the window variance (p. 6).
+MOMENT's normalizer adds $\epsilon = 10^{-5}$ to the standard deviation; its influence is called negligible (p. 17).
+
+The last line is Equation 1 (p. 6). If the second factor barely varies, the score is the window variance (p. 6).
 
 ### Statistical comparison (Table 3, p. 8; Appendix J, p. 24)
 
-Per configuration, over the 350 series: mean VUS-PR of the TSFM and of its baseline, the correlation between their per-series scores, its p-value, and Cohen's $d$ (Table 8, p. 24). In addition, **non-inferiority tests based on the Wilcoxon signed-rank test** exclude, "with at least 95% confidence level", that the TSFMs beat their baselines by more than a small margin (p. 24). The paper doesn't state which correlation coefficient is used, nor the sign convention of Cohen's $d$ (**our reading:** the positive values where the TSFM mean is higher suggest TSFM minus baseline).
+Per configuration, over the 350 series:
+
+- mean VUS-PR of the TSFM and of its baseline,
+- the correlation between their per-series scores,
+- its p-value,
+- and Cohen's $d$ (Table 8, p. 24).
+
+In addition, **non-inferiority tests based on the Wilcoxon signed-rank test** exclude, "with at least 95% confidence level", that the TSFMs beat their baselines by more than a small margin (p. 24).
+
+The paper doesn't state which correlation coefficient is used, nor the sign convention of Cohen's $d$ (**our reading:** the positive values where the TSFM mean is higher suggest TSFM minus baseline).
 
 ### One-to-one plots (Figures 3–5, pp. 6–7)
 
-Each point is one series: $x$ = VUS-PR of the TSFM, $y$ = VUS-PR of the baseline; legends give the share of series with $y \approx x$, $y > x$ (baseline better) and $y < x$ (TSFM better). The tolerance for "≈" isn't stated in the paper. The legend percentages are copied as printed; several don't sum to 100 because of rounding (e.g. MOMENT-large-1024: 77 / 16 / 8, pp. 7, 18; TimesFM vs Last-1 without the problematic series: 85 / 3 / 13, p. 22; Chronos-t5: 85 / 11 / 5, p. 23; Time-MoE with Min-Max: 85 / 5 / 9, p. 23).
+Each point is one series: $x$ = VUS-PR of the TSFM, $y$ = VUS-PR of the baseline.
+
+Legends give the share of series with $y \approx x$, $y > x$ (baseline better) and $y < x$ (TSFM better). The tolerance for "≈" isn't stated in the paper.
+
+The legend percentages are copied as printed; several don't sum to 100 because of rounding (e.g.
+
+- MOMENT-large-1024: 77 / 16 / 8, pp. 7, 18;
+- TimesFM vs Last-1 without the problematic series: 85 / 3 / 13, p. 22;
+- Chronos-t5: 85 / 11 / 5, p. 23;
+- Time-MoE with Min-Max: 85 / 5 / 9, p. 23).
 
 ### Proposed horizon ensemble (Section 6.1, p. 9)
 
-For a context $T_{t-w:t-1}$ and horizon $h$, the TSFM predicts $\hat{T}_{t:t+h-1}$, and the score of $x_t$ is the MSE between $T_{t:t+h-1}$ and $\hat{T}_{t:t+h-1}$; scores from several horizons are combined with a `MAX` operation (p. 9).
+For a context $T_{t-w:t-1}$ and horizon $h$, the TSFM predicts $\hat{T}_{t:t+h-1}$, and the score of $x_t$ is the MSE between $T_{t:t+h-1}$ and $\hat{T}_{t:t+h-1}$.
+
+Scores from several horizons are combined with a `MAX` operation (p. 9).
 
 ## Experimental setup
 
@@ -102,34 +152,56 @@ For a context $T_{t-w:t-1}$ and horizon $h$, the TSFM predicts $\hat{T}_{t:t+h-1
 
 Sources: Table 1 (p. 4) for the first five rows; Table 2 (p. 5) for the last three, with the footnote that MOMENT-large was also run with window 1024 (p. 5).
 
-- **TSPulse** is "a tiny (1M) non-Transformer model" with three heads: time-domain reconstruction (Head$_\text{time}$), frequency-domain reconstruction (Head$_\text{fft}$), and time-domain forecasting (Head$_\text{future}$), "combined via ensembling and triangulation", "a per-dataset model selection procedure based on the heads' performance on a tuning set" (p. 4). Its numbers are **taken from its own paper** (Ekambaram et al., 2025, Table 1(a)), not rerun (p. 4, p. 8).
-- **Pre-training losses** (p. 15): Chronos uses cross-entropy on the next data point; TimesFM MSE on the next patch; Time-MoE forecasting with different horizons; MOMENT is "the only large-scale TSFM, as far as we know, that is pre-trained on the task of sequence reconstruction".
-- **Normalization** (p. 15): Time-MoE, MOMENT, Chronos-Bolt and TimesFM z-normalize each context window; Chronos-t5 uses mean scaling. Chronos-t5 is the only family with discrete tokens (uniform binning) (p. 15).
+- **TSPulse** is "a tiny (1M) non-Transformer model" with three heads:
+  - time-domain reconstruction (Head$_\text{time}$),
+  - frequency-domain reconstruction (Head$_\text{fft}$),
+  - and time-domain forecasting (Head$_\text{future}$),
+  - "combined via ensembling and triangulation", "a per-dataset model selection procedure based on the heads' performance on a tuning set" (p. 4).
+  - Its numbers are **taken from its own paper** (Ekambaram et al., 2025, Table 1(a)), not rerun (p. 4, p. 8).
+- **Pre-training losses** (p. 15):
+  - Chronos uses cross-entropy on the next data point;
+  - TimesFM MSE on the next patch;
+  - Time-MoE forecasting with different horizons;
+  - MOMENT is "the only large-scale TSFM, as far as we know, that is pre-trained on the task of sequence reconstruction".
+- **Normalization** (p. 15): Time-MoE, MOMENT, Chronos-Bolt and TimesFM z-normalize each context window; Chronos-t5 uses mean scaling.
+  - Chronos-t5 is the only family with discrete tokens (uniform binning) (p. 15).
 - Naming convention: "model family-model size-context window length", e.g. MOMENT-base-64 (p. 4).
 
 ### Dataset (p. 5; Appendix A.2, p. 14; Appendix H, p. 21)
 
-- **TSB-AD-U evaluation set** (Liu & Paparrizos, 2024): **350 univariate time series** curated from **23 univariate datasets** (p. 5), "twelve of the 23 univariate datasets are derived from multivariate datasets" (p. 5, footnote 2). Chosen because "it is the latest curated benchmark emphasizing labeling quality" (p. 5).
-- The train-test split is TSB-AD's own (p. 14). Series are referred to by ID, e.g. "TSB-AD-U 811" is `811_Exathlon_id_2_Facility_tr_10766_1st_12590` (p. 5).
-- Source datasets visible in the paper's examples: Exathlon, UCR, SMD, OPPORTUNITY, YAHOO, NAB, WSD, SED, SMAP (Figures 2, 9, pp. 6, 16), MSL and SWaT (Table 7, p. 21). Datasets **not** used in MOMENT's pre-training: WSD, Stock, LTDB, SED, TAO, NEK, CATSv2, TODS, Power, SWaT, Exathlon (p. 20, footnote 6).
+- **TSB-AD-U evaluation set** (Liu & Paparrizos, 2024): **350 univariate time series** curated from **23 univariate datasets** (p. 5)
+  - "twelve of the 23 univariate datasets are derived from multivariate datasets" (p. 5, footnote 2).
+  - Chosen because "it is the latest curated benchmark emphasizing labeling quality" (p. 5).
+- The train-test split is TSB-AD's own (p. 14).
+  - Series are referred to by ID, e.g. "TSB-AD-U 811" is `811_Exathlon_id_2_Facility_tr_10766_1st_12590` (p. 5).
+- Source datasets visible in the paper's examples: Exathlon, UCR, SMD, OPPORTUNITY, YAHOO, NAB, WSD, SED, SMAP (Figures 2, 9, pp. 6, 16), MSL and SWaT (Table 7, p. 21).
+- Datasets **not** used in MOMENT's pre-training: WSD, Stock, LTDB, SED, TAO, NEK, CATSv2, TODS, Power, SWaT, Exathlon (p. 20, footnote 6).
 - Exathlon's mean anomaly length is 1577.3, "almost 25 times larger than the context window length" of 64 (p. 5).
-- **Multivariate** (Appendix M, p. 28): qualitative examples on TSB-AD-M series (Genesis, SWaT, MSL, Daphnet, LTDB, Exathlon, TAO, SMAP) with Chronos-2-512, Toto-Open-Base-1.0-512 and Last-3; scores are the mean squared prediction error over all channels (Figure 19, p. 28). No numbers are given.
+- **Multivariate** (Appendix M, p. 28): qualitative examples on TSB-AD-M series (Genesis, SWaT, MSL, Daphnet, LTDB, Exathlon, TAO, SMAP) with Chronos-2-512, Toto-Open-Base-1.0-512 and Last-3.
+  - Scores are the mean squared prediction error over all channels (Figure 19, p. 28).
+  - No numbers are given.
 
 ### Metrics and evaluation protocol (p. 5, p. 21, p. 24)
 
-- **VUS-PR**, following Liu & Paparrizos (2024), the main metric (p. 5). The authors state that all key findings "can be derived by examining intermediate results, such as anomaly scores, or by conducting representative case studies, without relying on any specific metric" (p. 5).
+- **VUS-PR**, following Liu & Paparrizos (2024), the main metric (p. 5).
+  - The authors state that all key findings "can be derived by examining intermediate results, such as anomaly scores, or by conducting representative case studies, without relying on any specific metric" (p. 5).
 - VUS-PR (Paparrizos et al., 2022), "like its parent AUC-PR, only cares about the relative ranking of the scores rather than their actual values" (p. 21).
 - **Event-based F1** as a robustness check (Table 9, p. 25; p. 24). Its definition and thresholding aren't given in the paper.
-- **Not used or discussed:** point adjustment, PA-F1, point-wise F1, AUROC, affiliation metrics, or any threshold-selection rule. The paper's TSAD definition is score-only (Definition 1, p. 3), and VUS-PR "only cares about the relative ranking of the scores" (p. 21); **our reading:** so it needs no threshold.
-- **Forecasting quality:** MASE of each series against the Last-1 baseline, aggregated with the geometric mean; evaluation starts at the 513th data point "for a fair comparison across different context window lengths" (p. 7, footnote 5).
+- **Not used or discussed:** point adjustment, PA-F1, point-wise F1, AUROC, affiliation metrics, or any threshold-selection rule.
+  - The paper's TSAD definition is score-only (Definition 1, p. 3), and VUS-PR "only cares about the relative ranking of the scores" (p. 21);
+  - **our reading:** so it needs no threshold.
+- **Forecasting quality:** MASE of each series against the Last-1 baseline, aggregated with the geometric mean.
+  - Evaluation starts at the 513th data point "for a fair comparison across different context window lengths" (p. 7, footnote 5).
 - **Constant-value windows** are excluded from the MSE histograms "as they are trivially reconstructed" (p. 6, footnote 3).
 
 ## Results
 
 ### Reconstruction-based: MOMENT vs Var-$w$ (Section 5.1, pp. 5–7; Appendix E, p. 18)
 
-- In Liu & Paparrizos (2024), MOMENT-base-64 reaches VUS-PR 0.81 on Exathlon, among the best detectors there (p. 5). The paper finds MOMENT-base does well where anomalous regions have higher variance than normal ones and fails on low-variance anomalies (p. 5; Figures 2a, 9a).
-- MOMENT-base reconstructs all normalized windows "with a consistently high MSE near 1.1", whether or not they contain an anomaly (p. 6, Figure 3). MOMENT-large reconstructs better and with a wider spread, but the MSE distributions of normal and anomalous windows "remain entirely overlapping" (p. 6, Figure 4).
+- In Liu & Paparrizos (2024), MOMENT-base-64 reaches VUS-PR 0.81 on Exathlon, among the best detectors there (p. 5).
+  - The paper finds MOMENT-base does well where anomalous regions have higher variance than normal ones and fails on low-variance anomalies (p. 5; Figures 2a, 9a).
+- MOMENT-base reconstructs all normalized windows "with a consistently high MSE near 1.1", whether or not they contain an anomaly (p. 6, Figure 3).
+  - MOMENT-large reconstructs better and with a wider spread, but the MSE distributions of normal and anomalous windows "remain entirely overlapping" (p. 6, Figure 4).
 - **Data contamination** isn't the explanation: on 94 series from datasets not in MOMENT's pre-training, the same overlap holds (Figure 14, p. 20).
 
 Share of the 350 series per outcome, as printed in the plot legends (Figures 3–4, pp. 6–7; Figures 10–11, p. 18). $y$ = Var-$w$, $x$ = MOMENT:
@@ -161,9 +233,13 @@ Share of the 350 series per outcome, as printed in the plot legends (Figures 3�
 | TimesFM-1.0 | 0.96 | 0.98 | 1.00 |
 | TimesFM-2.0 | 0.84 | 0.82 | 0.83 |
 
-Baselines: Last-1 1.00, Last-3 1.30, Centered-5 0.71 (Figure 12, p. 19). So Centered-5 has the lowest MASE of all, and Time-MoE the lowest among the TSFMs, yet the VUS-PR boxplots are all similar (Figure 12, p. 19).
+Baselines: Last-1 1.00, Last-3 1.30, Centered-5 0.71 (Figure 12, p. 19).
 
-**Why:** with a one-step horizon, a sliding context that overlaps a sequence anomaly feeds the model recent anomalous values, so "even anomalous values are usually not 'unexpected'" and are forecast accurately; forecasting many steps ahead from the same context avoids this (p. 7; Figure 6, p. 8, TimesFM-1.0-512 with horizon 1 vs 64).
+So Centered-5 has the lowest MASE of all, and Time-MoE the lowest among the TSFMs, yet the VUS-PR boxplots are all similar (Figure 12, p. 19).
+
+**Why:** with a one-step horizon, a sliding context that overlaps a sequence anomaly feeds the model recent anomalous values, so "even anomalous values are usually not 'unexpected'" and are forecast accurately.
+
+Forecasting many steps ahead from the same context avoids this (p. 7; Figure 6, p. 8, TimesFM-1.0-512 with horizon 1 vs 64).
 
 ### Statistical analysis, VUS-PR (Table 8, p. 24; excerpt in Table 3, p. 8)
 
@@ -197,7 +273,11 @@ Baseline: Var-$w$ (same $w$) for MOMENT, Last-3 for forecasting models.
 | Times-FM-2.0-256 | 0.304 | 0.284 | 0.926 | 1.56E-149 | 0.156 |
 | Times-FM-2.0-512 | 0.302 | 0.284 | 0.923 | 7.82E-147 | 0.142 |
 
-**Non-inferiority margins** (Wilcoxon signed-rank, at least 95% confidence; p. 24): the TSFMs don't beat their baselines by more than 0.016 (MOMENT-large), 0.0008 (MOMENT-base), 0.008 (all forecasting-based TSFMs) in VUS-PR.
+**Non-inferiority margins** (Wilcoxon signed-rank, at least 95% confidence; p. 24): the TSFMs don't beat their baselines by more than
+
+- 0.016 (MOMENT-large),
+- 0.0008 (MOMENT-base),
+- 0.008 (all forecasting-based TSFMs) in VUS-PR.
 
 ### Statistical analysis, Event-based F1 (Table 9, p. 25)
 
@@ -241,7 +321,10 @@ Mean VUS-PR on the TSB-AD-U evaluation set, TSPulse numbers taken from its own p
 | Var-96† | 0.42 | Centered-5 | 0.29 | 0.47 | 0.44 |
 | Head$_\text{time}$ | 0.42 | Head$_\text{future}$ | 0.3 | 0.48 | 0.44 |
 
-† Window 96 because TSPulse computes reconstruction MSE "on only the last 96 data points of the 512-point context window" (p. 8). **Our reading:** the triangulation and ensemble columns appear to combine the two entries of each row (baseline pairs in the first two rows, TSPulse heads in the third); the paper says only that triangulating or ensembling the two baselines performs similarly to doing so with the heads (p. 8).
+† Window 96 because TSPulse computes reconstruction MSE "on only the last 96 data points of the 512-point context window" (p. 8).
+
+**Our reading:** the triangulation and ensemble columns appear to combine the two entries of each row (baseline pairs in the first two rows, TSPulse heads in the third).
+The paper says only that triangulating or ensembling the two baselines performs similarly to doing so with the heads (p. 8).
 
 ### Non-TSFM detectors vs the baselines (Section 5.4, p. 8; Appendix K, p. 26)
 
@@ -276,7 +359,9 @@ VUS-PR scores from Liu & Paparrizos (2024); Var uses the detector's window size,
 | TimesNet | 0.805 | 0.724 |
 | FITS | 0.773 | 0.621 |
 
-"Unlike the TSFMs, the correlation with the baselines is low for the vast majority of non-TSFM anomaly detectors"; the exceptions with high correlation to Var, e.g. TimesNet, "also employ z-normalization" (p. 8).
+"Unlike the TSFMs, the correlation with the baselines is low for the vast majority of non-TSFM anomaly detectors".
+
+The exceptions with high correlation to Var, e.g. TimesNet, "also employ z-normalization" (p. 8).
 
 ### Normalization ablation (p. 6, p. 7; Appendix I, Figure 17, p. 23)
 
@@ -290,14 +375,24 @@ Share of series with $y \approx x$ / $y > x$ / $y < x$, as printed in the legend
 | Chronos-Bolt-base-64 (Last-3) | 86 / 6 / 8 | — | — | — |
 | Chronos-t5-base-64 (Last-3) | — | — | — | 85 / 11 / 5 |
 
-"When employing normalization methods other than window-wise Z-norm, the correlation with baselines diminishes for reconstruction-based models but persists for forecasting-based models" (Figure 17 caption, p. 23). The paper doesn't report whether MOMENT's VUS-PR improves with the other normalizations.
+"When employing normalization methods other than window-wise Z-norm, the correlation with baselines diminishes for reconstruction-based models but persists for forecasting-based models" (Figure 17 caption, p. 23).
+
+The paper doesn't report whether MOMENT's VUS-PR improves with the other normalizations.
 
 ### Dataset labeling flaws and metric exaggeration (Appendix H, pp. 21–22)
 
-- **Case TSB-AD-U 534 (SMAP)** (Figure 15, p. 21): every point is −1 except one equal to 1; the ground truth marks an anomaly from 16 steps before the spike to 34 steps after. TimeMoE-large-512 gets VUS-PR 0.51, Last-1 only 0.05 (p. 21).
+- **Case TSB-AD-U 534 (SMAP)** (Figure 15, p. 21):
+  - every point is −1 except one equal to 1;
+  - the ground truth marks an anomaly from 16 steps before the spike to 34 steps after.
+  - TimeMoE-large-512 gets VUS-PR 0.51, Last-1 only 0.05 (p. 21).
 - **Problematic labeling:** it's unclear why the points around the spike are anomalous, and why more after than before (p. 21).
-- **Exaggerating metric:** the gap comes from "tiny bumps at the level of $10^{-5}$" in Time-MoE's scores just after the spike, where Last-1 gives exact zeros; since VUS-PR only depends on the ranking of scores, these bumps raise its VUS-PR substantially (p. 21).
-- **50 problematic series** found in the TSB-AD-U evaluation set (Table 7, p. 21): 47 with "anomalous labels (often arbitrarily) overlapping with normal regions", 3 from UCR with "off-by-one mislabeling": The paper doesn't say whether Table 7's "Index" values are TSB-AD-U IDs; they don't match the IDs used in the figures (e.g. the SMAP case study is series 534, Figure 15, while Table 7 lists SMAP as 245–261), so the flagged series can't yet be located in the benchmark.
+- **Exaggerating metric:** the gap comes from "tiny bumps at the level of $10^{-5}$" in Time-MoE's scores just after the spike, where Last-1 gives exact zeros.
+  - Since VUS-PR only depends on the ranking of scores, these bumps raise its VUS-PR substantially (p. 21).
+- **50 problematic series** found in the TSB-AD-U evaluation set (Table 7, p. 21):
+  - 47 with "anomalous labels (often arbitrarily) overlapping with normal regions",
+  - 3 from UCR with "off-by-one mislabeling".
+  - The paper doesn't say whether Table 7's "Index" values are TSB-AD-U IDs.
+  - They don't match the IDs used in the figures (e.g. the SMAP case study is series 534, Figure 15, while Table 7 lists SMAP as 245–261), so the flagged series can't yet be located in the benchmark.
 
 | Dataset | Index | Problem |
 |---|---|---|
@@ -308,7 +403,8 @@ Share of series with $y \approx x$ / $y > x$ / $y < x$, as printed in the legend
 | SMD | 68, 74 | same |
 | UCR | 212, 221, 228 | Off-by-one mislabeling |
 
-- Removing them further narrows the gap between forecasting TSFMs and the squared-difference baseline (p. 22). TimesFM-2.0-512 vs each baseline, $y \approx x$ / $y > x$ / $y < x$ (Figure 16, p. 22):
+- Removing them further narrows the gap between forecasting TSFMs and the squared-difference baseline (p. 22).
+- TimesFM-2.0-512 vs each baseline, $y \approx x$ / $y > x$ / $y < x$ (Figure 16, p. 22):
 
 | Baseline | Without problematic series | With problematic series |
 |---|---|---|
@@ -325,12 +421,26 @@ Share of series with $y \approx x$ / $y > x$ / $y < x$, as printed in the legend
 | 371 | Sequence (length 170) | 0.04 | 0.1 | 0.21 | 0.27 | 0.36 | 0.46 | 0.65 | 0.68 |
 | 603 | Point | 1.0 | 0.8 | 0.9 | 0.94 | 0.9 | 0.47 | 0.27 | 0.02 |
 
-- Longer horizons help longer anomalies and hurt shorter ones; "the optimal forecasting horizon correlates with the anomaly length" (p. 27; Figures 7, p. 9, and 18, p. 27, for TimesFM-1.0/2.0-512 and Chronos-Bolt-small/base-512, anomaly lengths grouped as 1, 2–64, 65–256, 257-).
-- On TSB-AD-U 558 (Yahoo), with one sequence and one point anomaly, $h = 1$ and $h = 64$ each miss one; their `MAX` ensemble finds both (p. 9; Figure 8a, p. 10). No aggregate number for the ensemble is given.
+- Longer horizons help longer anomalies and hurt shorter ones; "the optimal forecasting horizon correlates with the anomaly length"
+  (p. 27; Figures 7, p. 9, and 18, p. 27, for TimesFM-1.0/2.0-512 and Chronos-Bolt-small/base-512, anomaly lengths grouped as 1, 2–64, 65–256, 257-).
+- On TSB-AD-U 558 (Yahoo), with one sequence and one point anomaly, $h = 1$ and $h = 64$ each miss one; their `MAX` ensemble finds both (p. 9; Figure 8a, p. 10).
+  - No aggregate number for the ensemble is given.
 
-**2. Detect anomalies in hidden representations** (Section 6.2, p. 10). On TSB-AD-U 474 (UCR), MOMENT-base-64 with reconstruction error scores VUS-PR 0.003, rank 31st of 32 detectors; a KNN on MOMENT's hidden representations scores 0.250, rank 5th in the benchmark of Liu & Paparrizos (2024); "other detectors (e.g., KMeansAD) achieve even higher performance" (p. 10, Figure 8b). One series only.
+**2. Detect anomalies in hidden representations** (Section 6.2, p. 10). On TSB-AD-U 474 (UCR):
 
-**3. Fine-tune with labeled anomalies** (Section 6.3, p. 10): the pre-training objective "is not aligned with detecting anomalies"; fine-tuning on the pre-training task "only enhances forecasting or reconstruction performance"; end-to-end fine-tuning with labeled anomalies is proposed, by analogy with sequence labeling in NLP, and possibly needing only a limited number of anomalous events. "A comprehensive study of this paradigm is beyond the scope of the present work" (p. 10). No experiment.
+- MOMENT-base-64 with reconstruction error scores VUS-PR 0.003, rank 31st of 32 detectors;
+- a KNN on MOMENT's hidden representations scores 0.250, rank 5th in the benchmark of Liu & Paparrizos (2024);
+- "other detectors (e.g., KMeansAD) achieve even higher performance" (p. 10, Figure 8b).
+
+One series only.
+
+**3. Fine-tune with labeled anomalies** (Section 6.3, p. 10):
+
+- the pre-training objective "is not aligned with detecting anomalies";
+- fine-tuning on the pre-training task "only enhances forecasting or reconstruction performance";
+- end-to-end fine-tuning with labeled anomalies is proposed, by analogy with sequence labeling in NLP, and possibly needing only a limited number of anomalous events.
+
+"A comprehensive study of this paradigm is beyond the scope of the present work" (p. 10). No experiment.
 
 ### Multivariate (Appendix M, p. 28)
 
@@ -343,29 +453,51 @@ Stated or visible in the paper:
 - **Univariate, zero-shot only** (p. 2, p. 5); the multivariate evidence is qualitative and called "preliminary" (p. 2, p. 28).
 - **One benchmark, one main metric:** TSB-AD-U evaluation set, VUS-PR, with Event-based F1 as a check (p. 5, p. 24).
 - **TSPulse is not rerun:** its numbers are copied from its paper (p. 8).
-- **The future directions are not evaluated at scale:** the horizon ensemble and the hidden-representation KNN are shown on single series (pp. 9–10; aggregate per-horizon curves exist, but not for the ensemble), and labeled-anomaly fine-tuning is left out of scope (p. 10).
-- **The benchmark's labels are flawed** in at least 50 of 350 series (p. 21), yet the main tables use all 350 (Table 8, p. 24); the cleaned comparison is shown only for TimesFM-2.0-512 (Figure 16, p. 22).
+- **The future directions are not evaluated at scale:**
+  - the horizon ensemble and the hidden-representation KNN are shown on single series (pp. 9–10; aggregate per-horizon curves exist, but not for the ensemble),
+  - and labeled-anomaly fine-tuning is left out of scope (p. 10).
+- **The benchmark's labels are flawed** in at least 50 of 350 series (p. 21), yet the main tables use all 350 (Table 8, p. 24).
+  - The cleaned comparison is shown only for TimesFM-2.0-512 (Figure 16, p. 22).
 - **Code and raw scores** were not released with the submission (p. 14).
 
 **Our reading:**
 
-- The main TSFM result is "not significantly better", not "worse": all 18 forecasting configurations have a slightly higher mean VUS-PR than Last-3 (0.295–0.310 vs 0.284, Table 8, p. 24), and the non-inferiority tests bound the advantage at small margins (p. 24) rather than showing equivalence.
-- Very small p-values here test correlation, not a difference in performance; the difference is described by Cohen's $d$ and the non-inferiority margins (p. 24).
-- The paper reports no point-adjusted F1, AUROC or affiliation metrics, and no thresholding protocol, so it says nothing directly about the known inflation of point-adjusted F1. Its metric warning is a different one: rank-based metrics (VUS-PR, AUC-PR) can be moved by score differences of order $10^{-5}$ (p. 21).
-- The variance explanation is shown for window-wise z-normalized reconstruction (MOMENT); the TimesNet correlation with Var (0.805, p. 26) suggests the same mechanism can affect any z-normalizing reconstruction or forecasting model, but the paper only states the shared z-normalization (p. 8).
+- The main TSFM result is "not significantly better", not "worse":
+  - all 18 forecasting configurations have a slightly higher mean VUS-PR than Last-3 (0.295–0.310 vs 0.284, Table 8, p. 24),
+  - and the non-inferiority tests bound the advantage at small margins (p. 24) rather than showing equivalence.
+- Very small p-values here test correlation, not a difference in performance.
+  - The difference is described by Cohen's $d$ and the non-inferiority margins (p. 24).
+- The paper reports no point-adjusted F1, AUROC or affiliation metrics, and no thresholding protocol, so it says nothing directly about the known inflation of point-adjusted F1.
+  - Its metric warning is a different one: rank-based metrics (VUS-PR, AUC-PR) can be moved by score differences of order $10^{-5}$ (p. 21).
+- The variance explanation is shown for window-wise z-normalized reconstruction (MOMENT).
+  - The TimesNet correlation with Var (0.805, p. 26) suggests the same mechanism can affect any z-normalizing reconstruction or forecasting model, but the paper only states the shared z-normalization (p. 8).
 - The paper is under review; numbers or conclusions may change in a later version.
 
 ## Relevance to this thesis
 
 **Our reading:**
 
-- **Baselines to always include.** Any anomaly-detection result in the thesis (joint training, task arithmetic, continual strategies) should be compared with Var-$w$ and Last-$w$ / Centered-$w$ (Definitions 4–5, pp. 4–5): they cost nothing and, on TSB-AD-U, match four TSFM families (Table 8, p. 24) and TSPulse (Table 4, p. 8). A merging method that only matches a one-liner hasn't shown it detects anything.
-- **Check for the variance shortcut.** If our models use per-window z-normalization (as reversible instance normalization does), Eq. 1 (p. 6) predicts a reconstruction score close to window variance times a near-constant error. Reporting the per-series correlation with Var-$w$ (as in Tables 8 and 10) is a cheap diagnostic of whether a model has learned anything beyond variance.
-- **Compare per series, not only on averages.** The paper's protocol — one-to-one plots, correlation, Cohen's $d$, Wilcoxon non-inferiority with a stated margin (pp. 6–7, p. 24) — is a ready rule for "when a difference is real" between joint training and merged models.
-- **Metric choice.** VUS-PR is threshold-free and is the paper's main metric (p. 5), but it is rank-based and sensitive to tiny score differences (p. 21). Our evaluation should state the metric, its threshold rule if any, and whether point adjustment is used; this paper gives no guidance on point adjustment.
-- **Dataset caveats.** Of the datasets this project may use, SMAP, MSL, SMD, SWaT and NAB all have series flagged for problematic labels in TSB-AD-U (Table 7, p. 21). Results on them should be checked with and without the flagged series.
-- **Forecasting horizon** matters for forecasting-based detection: one-step error favors point anomalies, longer horizons favor sequence anomalies (Table 6, p. 9). If the thesis uses forecasting error as an anomaly score, the horizon is a design choice to record and possibly to ensemble.
-- **Fine-tuning direction.** The paper argues that pre-training-task fine-tuning doesn't align a model with detection (p. 10). Our fine-tuned task vectors are trained on the same proxy objectives, so whether merging them yields detection ability beyond the one-liners is an open question to test, not to assume.
+- **Baselines to always include.**
+  - Any anomaly-detection result in the thesis (joint training, task arithmetic, continual strategies) should be compared with Var-$w$ and Last-$w$ / Centered-$w$ (Definitions 4–5, pp. 4–5):
+    they cost nothing and, on TSB-AD-U, match four TSFM families (Table 8, p. 24) and TSPulse (Table 4, p. 8).
+  - A merging method that only matches a one-liner hasn't shown it detects anything.
+- **Check for the variance shortcut.**
+  - If our models use per-window z-normalization (as reversible instance normalization does), Eq. 1 (p. 6) predicts a reconstruction score close to window variance times a near-constant error.
+  - Reporting the per-series correlation with Var-$w$ (as in Tables 8 and 10) is a cheap diagnostic of whether a model has learned anything beyond variance.
+- **Compare per series, not only on averages.**
+  - The paper's protocol — one-to-one plots, correlation, Cohen's $d$, Wilcoxon non-inferiority with a stated margin (pp. 6–7, p. 24) — is a ready rule for "when a difference is real" between joint training and merged models.
+- **Metric choice.**
+  - VUS-PR is threshold-free and is the paper's main metric (p. 5), but it is rank-based and sensitive to tiny score differences (p. 21).
+  - Our evaluation should state the metric, its threshold rule if any, and whether point adjustment is used.
+  - This paper gives no guidance on point adjustment.
+- **Dataset caveats.**
+  - Of the datasets this project may use, SMAP, MSL, SMD, SWaT and NAB all have series flagged for problematic labels in TSB-AD-U (Table 7, p. 21).
+  - Results on them should be checked with and without the flagged series.
+- **Forecasting horizon** matters for forecasting-based detection: one-step error favors point anomalies, longer horizons favor sequence anomalies (Table 6, p. 9).
+  - If the thesis uses forecasting error as an anomaly score, the horizon is a design choice to record and possibly to ensemble.
+- **Fine-tuning direction.**
+  - The paper argues that pre-training-task fine-tuning doesn't align a model with detection (p. 10).
+  - Our fine-tuned task vectors are trained on the same proxy objectives, so whether merging them yields detection ability beyond the one-liners is an open question to test, not to assume.
 
 ## Quotes worth keeping
 

@@ -8,13 +8,34 @@
 
 ## In one paragraph
 
-TimesNet is a task-general backbone for time series (p. 1). Its premise is that real series are **multi-periodic**, and that each time point varies both within its period (**intraperiod-variation**, short-term) and across periods at the same phase (**interperiod-variation**, long-term) (p. 2). Each **TimesBlock** finds the $k$ dominant periods with an FFT, reshapes the 1D series into $k$ 2D tensors (columns: within a period; rows: same phase across periods), processes them with a shared, parameter-efficient **inception block** of 2D kernels, reshapes back, and sums the $k$ results weighted by the softmax of their FFT amplitudes (pp. 3–5). The paper reports state-of-the-art results on five tasks: long- and short-term forecasting, imputation, classification and anomaly detection (p. 6; Figure 4, p. 6; Table 11, p. 19). For anomaly detection, all models share the same criterion, the reconstruction error, and TimesNet reaches an average F1 of 85.49% with the inception block and 86.34% with a ResNeXt block (Table 5, p. 9).
+TimesNet is a task-general backbone for time series (p. 1).
+
+Its premise is that real series are **multi-periodic**, and that each time point varies both within its period (**intraperiod-variation**, short-term) and across periods at the same phase (**interperiod-variation**, long-term) (p. 2).
+
+Each **TimesBlock**:
+
+- finds the $k$ dominant periods with an FFT;
+- reshapes the 1D series into $k$ 2D tensors (columns: within a period; rows: same phase across periods);
+- processes them with a shared, parameter-efficient **inception block** of 2D kernels;
+- reshapes back, and sums the $k$ results weighted by the softmax of their FFT amplitudes (pp. 3–5).
+
+The paper reports state-of-the-art results on five tasks: long- and short-term forecasting, imputation, classification and anomaly detection (p. 6; Figure 4, p. 6; Table 11, p. 19).
+
+For anomaly detection, all models share the same criterion, the reconstruction error, and TimesNet reaches an average F1 of 85.49% with the inception block and 86.34% with a ResNeXt block (Table 5, p. 9).
 
 ## Problem
 
-Modeling **temporal variation**, which the authors call "the common key problem of extensive analysis tasks" (p. 1). A single time point carries little information; what matters is how values vary over time, and real-world variations mix and overlap (p. 1). RNNs struggle with long-term dependencies, 1D convolutions only model adjacent points, and attention "is hard ... to find out reliable dependencies directly from scattered time points" (pp. 1–2).
+Modeling **temporal variation**, which the authors call "the common key problem of extensive analysis tasks" (p. 1).
 
-**Setting:** a length-$T$ series with $C$ recorded variates, $\mathbf{X}_{\text{1D}} \in \mathbb{R}^{T \times C}$ (p. 3); one backbone for five tasks; the input embedding and output projection layers are kept the same across base models (p. 12), and forecasting adds an MLP initialization (p. 12).
+A single time point carries little information; what matters is how values vary over time, and real-world variations mix and overlap (p. 1).
+
+RNNs struggle with long-term dependencies, 1D convolutions only model adjacent points, and attention "is hard ... to find out reliable dependencies directly from scattered time points" (pp. 1–2).
+
+**Setting:**
+
+- a length-$T$ series with $C$ recorded variates, $\mathbf{X}_{\text{1D}} \in \mathbb{R}^{T \times C}$ (p. 3);
+- one backbone for five tasks;
+- the input embedding and output projection layers are kept the same across base models (p. 12), and forecasting adds an MLP initialization (p. 12).
 
 ## Method
 
@@ -38,10 +59,13 @@ For each selected frequency (Equation 3, p. 4):
 $$\mathbf{X}^i_{\text{2D}} = \mathrm{Reshape}_{p_i, f_i}\big(\mathrm{Padding}(\mathbf{X}_{\text{1D}})\big), \quad i \in \{1, \dots, k\}$$
 
 - $\mathrm{Padding}(\cdot)$ extends the series with zeros along time so it fits the reshape (p. 4).
-- $\mathbf{X}^i_{\text{2D}} \in \mathbb{R}^{p_i \times f_i \times C}$: $p_i$ rows and $f_i$ columns; in the paper's words, its "columns and rows represent the intraperiod-variation and interperiod-variation under the corresponding period length $p_i$ respectively" (p. 4).
+- $\mathbf{X}^i_{\text{2D}} \in \mathbb{R}^{p_i \times f_i \times C}$: $p_i$ rows and $f_i$ columns.
+  - In the paper's words, its "columns and rows represent the intraperiod-variation and interperiod-variation under the corresponding period length $p_i$ respectively" (p. 4).
 - The result is a set of $k$ 2D tensors $\{\mathbf{X}^1_{\text{2D}}, \dots, \mathbf{X}^k_{\text{2D}}\}$, one per period (p. 4).
 - The reshape gives two kinds of locality, adjacent time points (columns) and adjacent periods (rows), so 2D kernels can process it (p. 4).
-- Series without clear periodicity: their variation is "dominated by the intraperiod-variation and is equivalent to the ones with infinite period length" (p. 2); the model then learns the most significant frequency as 1, and the trend is covered by intraperiod modeling (p. 15).
+- Series without clear periodicity:
+  - their variation is "dominated by the intraperiod-variation and is equivalent to the ones with infinite period length" (p. 2);
+  - the model then learns the most significant frequency as 1, and the trend is covered by intraperiod modeling (p. 15).
 
 ### TimesNet: residual stack of TimesBlocks
 
@@ -82,7 +106,9 @@ $$
 
 ### Generality in 2D vision backbones
 
-The inception block can be replaced by any 2D vision backbone (ResNet, ResNeXt, ConvNeXt, attention-based models; p. 5, with Swin named on p. 15 and in Table 8); the main experiments use the inception block for its balance of performance and efficiency (p. 5; Figure 4 right, p. 6).
+The inception block can be replaced by any 2D vision backbone (ResNet, ResNeXt, ConvNeXt, attention-based models; p. 5, with Swin named on p. 15 and in Table 8).
+
+The main experiments use the inception block for its balance of performance and efficiency (p. 5; Figure 4 right, p. 6).
 
 ## Experimental setup
 
@@ -91,8 +117,12 @@ The inception block can be replaced by any 2D vision backbone (ResNet, ResNeXt, 
 - All experiments repeated three times; PyTorch; a single NVIDIA TITAN RTX 24GB GPU (p. 12).
 - Width from the number of variates $C$ (p. 12; Table 7, p. 14): $d_{\text{model}} = \min\{\max\{2^{\lceil \log C \rceil}, d_{\min}\}, d_{\max}\}$. The base of the logarithm isn't stated.
 - Optimizer: Adam with $(\beta_1, \beta_2) = (0.9, 0.999)$ (Table 7, p. 14).
-- Baselines reproduced from the configurations of their papers or official code; for a fair comparison, the **input embedding and the final projection layer are the same for all base models**, so only the base model differs (p. 12).
-- **Forecasting:** "especially for the forecasting task", an MLP on the temporal dimension initializes the predicted future; the next sentence adds the Series Stationarization of the Non-stationary Transformer "to eliminate the affect the distribution shift" (p. 12). **Our reading:** whether Stationarization (and the MLP initialization) also applies to other tasks, anomaly detection included, is ambiguous in the text.
+- Baselines reproduced from the configurations of their papers or official code.
+  - For a fair comparison, the **input embedding and the final projection layer are the same for all base models**, so only the base model differs (p. 12).
+- **Forecasting:**
+  - "especially for the forecasting task", an MLP on the temporal dimension initializes the predicted future;
+  - the next sentence adds the Series Stationarization of the Non-stationary Transformer "to eliminate the affect the distribution shift" (p. 12).
+  - **Our reading:** whether Stationarization (and the MLP initialization) also applies to other tasks, anomaly detection included, is ambiguous in the text.
 
 **Hyperparameters** (Table 7, p. 14; LR is the initial learning rate):
 
@@ -116,7 +146,16 @@ The text of Appendix B states $k = 3$ for imputation, classification and anomaly
 | Classification | UEA (10 subsets) | Accuracy | 29~1751 |
 | Anomaly detection | SMD, MSL, SMAP, SWaT, PSM | Precision, Recall, F1-Score | 100 |
 
-**Baselines:** more than 15, including LSTM, LSTNet, LSSL (RNN); TCN (CNN); LightTS, DLinear (MLP); Reformer, Informer, Pyraformer, Autoformer, FEDformer, Non-stationary Transformer, ETSformer (Transformer); plus task-specific ones: N-HiTS and N-BEATS (short-term forecasting), Anomaly Transformer (anomaly detection), Rocket and Flowformer (classification) (p. 6).
+**Baselines:** more than 15, including:
+
+- LSTM, LSTNet, LSSL (RNN);
+- TCN (CNN);
+- LightTS, DLinear (MLP);
+- Reformer, Informer, Pyraformer, Autoformer, FEDformer, Non-stationary Transformer, ETSformer (Transformer);
+- plus task-specific ones:
+  - N-HiTS and N-BEATS (short-term forecasting),
+  - Anomaly Transformer (anomaly detection),
+  - Rocket and Flowformer (classification) (p. 6).
 
 ### Anomaly detection protocol
 
@@ -131,17 +170,35 @@ The text of Appendix B states $k = 3$ for imputation, classification and anomaly
   | SWaT (Mathur & Tippenhauer, 2016) | water treatment | Infrastructure | 51 | 100 | (396000, 99000, 449919) |
   | PSM (Abdulaal et al., 2021) | service monitoring | Server Machine | 25 | 100 | (105984, 26497, 87841) |
 
-- **Pre-processing:** "Following the pre-processing methods in Anomaly Transformer (2021), we split the dataset into consecutive non-overlapping segments by sliding window" (p. 8); the window (series) length is 100 (Table 1, p. 6; Table 6, p. 14).
-- **Criterion:** the models are trained to reconstruct their input, and "the reconstruction error is a natural anomaly criterion"; "we only change the base models for reconstruction and use the classical reconstruction error as the shared anomaly criterion for all experiments" (p. 8). Training loss: MSE (Table 7, p. 14).
+- **Pre-processing:** "Following the pre-processing methods in Anomaly Transformer (2021), we split the dataset into consecutive non-overlapping segments by sliding window" (p. 8).
+  - The window (series) length is 100 (Table 1, p. 6; Table 6, p. 14).
+- **Criterion:**
+  - the models are trained to reconstruct their input, and "the reconstruction error is a natural anomaly criterion";
+  - "we only change the base models for reconstruction and use the classical reconstruction error as the shared anomaly criterion for all experiments" (p. 8).
+  - Training loss: MSE (Table 7, p. 14).
 - **Anomaly Transformer as a baseline:** its joint criterion (association discrepancy and reconstruction error) is replaced by the reconstruction error alone (Table 5 footnote, p. 9; Table 15 footnote, p. 22).
 - **Metrics:** precision, recall and F1-score, in %; F1 is the harmonic mean of precision and recall (p. 13; Table 15 caption, p. 22).
-- **Not stated in the paper:** how the reconstruction error is turned into a per-point score (e.g. which norm, averaged over variates or not), how the **threshold** is chosen, and whether **point adjustment** is applied. The paper only points to the pre-processing of Anomaly Transformer (p. 8). Also not stated: what the anomaly-detection validation split (sizes in Table 6, p. 14) is used for (early stopping, threshold); the stride of the "consecutive non-overlapping segments by sliding window" (p. 8) at train and test time, and how per-window errors map back to time points; any normalization for anomaly detection; how the multi-entity SMD, MSL and SMAP are combined.
-- **Our reading:** Table 8 shows ConvNeXt as the best 2D backbone (average F1 86.89), but Table 5 headlines ResNeXt (86.34) without explanation; and the mixed-dataset experiment of Table 12 is framed as a test of "large-scale pre-training" capacity (p. 20), which matters when citing it as joint training.
-- **Our reading:** the threshold rule and any point adjustment must come from the Anomaly Transformer protocol or the released code; neither can be confirmed from this paper. This matters for comparing against these F1 values, since point adjustment inflates F1 strongly.
+- **Not stated in the paper:**
+  - how the reconstruction error is turned into a per-point score (e.g. which norm, averaged over variates or not),
+  - how the **threshold** is chosen,
+  - and whether **point adjustment** is applied.
+  - The paper only points to the pre-processing of Anomaly Transformer (p. 8).
+  - Also not stated:
+    - what the anomaly-detection validation split (sizes in Table 6, p. 14) is used for (early stopping, threshold);
+    - the stride of the "consecutive non-overlapping segments by sliding window" (p. 8) at train and test time, and how per-window errors map back to time points;
+    - any normalization for anomaly detection;
+    - how the multi-entity SMD, MSL and SMAP are combined.
+- **Our reading:**
+  - Table 8 shows ConvNeXt as the best 2D backbone (average F1 86.89), but Table 5 headlines ResNeXt (86.34) without explanation;
+  - and the mixed-dataset experiment of Table 12 is framed as a test of "large-scale pre-training" capacity (p. 20), which matters when citing it as joint training.
+- **Our reading:**
+  - the threshold rule and any point adjustment must come from the Anomaly Transformer protocol or the released code; neither can be confirmed from this paper.
+  - This matters for comparing against these F1 values, since point adjustment inflates F1 strongly.
 
 ### Forecasting protocol
 
-- **Long-term:** the benchmarks of Autoformer: ETT (ETTm1, ETTm2, ETTh1, ETTh2), Electricity (UCI), Traffic (PeMS), Weather (Wetterstation), Exchange, ILI (CDC) (p. 6). Each dataset is one continuous series, from which samples are taken by a sliding window (p. 6).
+- **Long-term:** the benchmarks of Autoformer: ETT (ETTm1, ETTm2, ETTh1, ETTh2), Electricity (UCI), Traffic (PeMS), Weather (Wetterstation), Exchange, ILI (CDC) (p. 6).
+  - Each dataset is one continuous series, from which samples are taken by a sliding window (p. 6).
 - **Input length 96 (ILI: 36); prediction lengths $\{96, 192, 336, 720\}$ (ILI: $\{24, 36, 48, 60\}$)** (Table 2 caption, p. 7; Table 13 caption, p. 21).
 - **Short-term:** M4, yearly, quarterly, monthly (p. 6) and other (Table 14, p. 22; six subsets in Table 6, p. 14) univariate marketing series, 100,000 series in total; prediction lengths in $[6, 48]$ (p. 6; Table 3, p. 7).
 - **Long-term datasets** (Table 6, p. 14; dimension, size as (train, validation, test), information as printed):
@@ -156,9 +213,14 @@ The text of Appendix B states $k = 3$ for imputation, classification and anomaly
   | Exchange | 8 | (5120, 665, 1422) | Exchange rate (Daily) |
   | ILI | 7 | (617, 74, 170) | Illness (Weekly) |
 
-  **Our reading:** Table 6 lists ETTh1/ETTh2 as "15 mins", while Appendix H calls them "hourly-collected" (p. 20); the 15-minute label looks like a typo. Table 6 also lists Electricity as "Hourly" in the long-term forecasting block and "15 mins" in the imputation block (p. 14).
+  **Our reading:**
 
-- **Metrics** (p. 13): MSE and MAE for long-term forecasting (and imputation). For short-term forecasting, following N-BEATS, with $H$ future points, $m$ the periodicity of the data and $\mathbf{X}, \widehat{\mathbf{X}} \in \mathbb{R}^{H \times C}$ ground truth and prediction:
+  - Table 6 lists ETTh1/ETTh2 as "15 mins", while Appendix H calls them "hourly-collected" (p. 20); the 15-minute label looks like a typo.
+  - Table 6 also lists Electricity as "Hourly" in the long-term forecasting block and "15 mins" in the imputation block (p. 14).
+
+- **Metrics** (p. 13):
+  - MSE and MAE for long-term forecasting (and imputation).
+  - For short-term forecasting, following N-BEATS, with $H$ future points, $m$ the periodicity of the data and $\mathbf{X}, \widehat{\mathbf{X}} \in \mathbb{R}^{H \times C}$ ground truth and prediction:
 
 $$\text{SMAPE} = \frac{200}{H} \sum_{i=1}^{H} \frac{|\mathbf{X}_i - \widehat{\mathbf{X}}_i|}{|\mathbf{X}_i| + |\widehat{\mathbf{X}}_i|}, \qquad \text{MAPE} = \frac{100}{H} \sum_{i=1}^{H} \frac{|\mathbf{X}_i - \widehat{\mathbf{X}}_i|}{|\mathbf{X}_i|}$$
 
@@ -173,7 +235,14 @@ $$\text{MASE} = \frac{1}{H} \sum_{i=1}^{H} \frac{|\mathbf{X}_i - \widehat{\mathb
 
 ### Anomaly detection
 
-**Full results** (Table 15, p. 22; Table 5, p. 9, gives the F1 columns). Precision P, recall R and F1, in %; only the F1 and average F1 columns are marked, best in bold red and second underlined (P and R maxima are unmarked). Two inconsistencies as printed: the Stationary model's SMD F1 is 84.72 in Table 5 (p. 9) and 84.62 in Table 15 (p. 22; the table below uses 84.62, which fits its 82.08 average); and Table 15 underlines DLinear's MSL F1 (84.88) though ETSformer's is higher (85.03), which Table 5 underlines correctly:
+**Full results** (Table 15, p. 22; Table 5, p. 9, gives the F1 columns).
+
+Precision P, recall R and F1, in %; only the F1 and average F1 columns are marked, best in bold red and second underlined (P and R maxima are unmarked).
+
+Two inconsistencies as printed:
+
+- the Stationary model's SMD F1 is 84.72 in Table 5 (p. 9) and 84.62 in Table 15 (p. 22; the table below uses 84.62, which fits its 82.08 average);
+- and Table 15 underlines DLinear's MSL F1 (84.88) though ETSformer's is higher (85.03), which Table 5 underlines correctly:
 
 | Model | SMD P | SMD R | SMD F1 | MSL P | MSL R | MSL F1 | SMAP P | SMAP R | SMAP F1 | SWaT P | SWaT R | SWaT F1 | PSM P | PSM R | PSM F1 | Avg F1 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -197,8 +266,11 @@ $$\text{MASE} = \frac{1}{H} \sum_{i=1}^{H} \frac{|\mathbf{X}_i - \widehat{\mathb
 
 \* Anomaly Transformer with reconstruction error only (p. 22). "Stationary" is the Non-stationary Transformer (p. 22).
 
-- The canonical Transformer is worse (average F1 76.88%); the authors suggest that vanilla attention "can be distracted by the dominant normal time points", and that periodicity-aware models (TimesNet, FEDformer, Autoformer) do well because periodicity analysis "can highlight variations that violate the periodicity implicitly" (p. 8).
-- **Our reading:** the headline TimesNet (Inception) is not best on any single dataset; its first place in Table 5 comes from the ResNeXt variant, and from the average. SMAP F1 stays around 66.9–71.5 for every model, while SWaT and PSM reach the 90s.
+- The canonical Transformer is worse (average F1 76.88%).
+  - The authors suggest that vanilla attention "can be distracted by the dominant normal time points", and that periodicity-aware models (TimesNet, FEDformer, Autoformer) do well because periodicity analysis "can highlight variations that violate the periodicity implicitly" (p. 8).
+- **Our reading:**
+  - the headline TimesNet (Inception) is not best on any single dataset; its first place in Table 5 comes from the ResNeXt variant, and from the average.
+  - SMAP F1 stays around 66.9–71.5 for every model, while SWaT and PSM reach the 90s.
 
 **Choice of 2D backbone** (Table 8, p. 15; F1 in %; "Shared" uses the same parameters for the $k$ tensors, "Ind" separate ones):
 
@@ -211,7 +283,14 @@ $$\text{MASE} = \frac{1}{H} \sum_{i=1}^{H} \frac{|\mathbf{X}_i - \widehat{\mathb
 | Inception (Ind) | 84.17 | 87.18 | 70.89 | 92.36 | 93.41 | 85.60 |
 | Inception (Shared) | 85.12 | 84.18 | 70.85 | 92.10 | 95.21 | 85.49 |
 
-Efficiency of the same variants on anomaly detection (Figure 4 right, p. 6; parameters, training time per iteration as labeled): Inception (sharing) 0.067MB, 43.2ms; Inception (independent) 0.331MB, 60.2ms; ResNet 0.024MB, 30.5ms; ConvNext 2.196MB, 39.2ms; ResNext 0.103MB, 103.9ms; SwinBlock 0.052MB, 103.6ms.
+Efficiency of the same variants on anomaly detection (Figure 4 right, p. 6; parameters, training time per iteration as labeled):
+
+- Inception (sharing) 0.067MB, 43.2ms;
+- Inception (independent) 0.331MB, 60.2ms;
+- ResNet 0.024MB, 30.5ms;
+- ConvNext 2.196MB, 39.2ms;
+- ResNext 0.103MB, 103.9ms;
+- SwinBlock 0.052MB, 103.6ms.
 
 **Architecture ablations** (Table 9, p. 15, and Table 10, p. 16; F1 in %):
 
@@ -227,7 +306,11 @@ Efficiency of the same variants on anomaly detection (Figure 4 right, p. 6; para
 - Reshaping only the raw input, instead of the deep features at every block, lowers the average F1 from 85.49% to 84.85% (p. 15).
 - The softmax-weighted aggregation performs best among the three aggregations (p. 16).
 
-**Sensitivity to $k$** (Figure 8, p. 13): $k \in \{1, \dots, 5\}$; the authors report stable performance across $k$ in all four tasks shown, and note that for low-level tasks such as forecasting and anomaly detection the choice of $k$ "will affect the final performance more" (pp. 13–15). **Our reading** of the anomaly-detection panel: F1 moves by up to about 3 points across $k$ (SMD, dipping at $k = 3$), about 2 for PSM, and under 1 for SWaT and SMAP.
+**Sensitivity to $k$** (Figure 8, p. 13): $k \in \{1, \dots, 5\}$.
+
+The authors report stable performance across $k$ in all four tasks shown, and note that for low-level tasks such as forecasting and anomaly detection the choice of $k$ "will affect the final performance more" (pp. 13–15).
+
+**Our reading** of the anomaly-detection panel: F1 moves by up to about 3 points across $k$ (SMD, dipping at $k = 3$), about 2 for PSM, and under 1 for SWaT and SMAP.
 
 ### Long-term forecasting
 
@@ -260,8 +343,10 @@ Efficiency of the same variants on anomaly detection (Figure 4 right, p. 6; para
 
 ILI (prediction lengths 24, 36, 48, 60): 2.317 / 0.934, 1.972 / 0.920, 2.238 / 0.940, 2.027 / 0.928 (Table 13, p. 21).
 
-- Counting first places across Table 13: TimesNet 40, DLinear 14, Non-stationary Transformer 7, FEDformer 6, ETSformer 4, LightTS 1, the rest 0 (Table 13, p. 21). The text says TimesNet is state of the art "in more than 80% of cases" (p. 7).
-- LightTS and DLinear are marked as having "some mismatches between our input-output setting and their papers": their official code was run with only the input and output lengths changed (Table 13 footnote, p. 21).
+- Counting first places across Table 13: TimesNet 40, DLinear 14, Non-stationary Transformer 7, FEDformer 6, ETSformer 4, LightTS 1, the rest 0 (Table 13, p. 21).
+  - The text says TimesNet is state of the art "in more than 80% of cases" (p. 7).
+- LightTS and DLinear are marked as having "some mismatches between our input-output setting and their papers".
+  - Their official code was run with only the input and output lengths changed (Table 13 footnote, p. 21).
 
 ### Short-term forecasting (M4)
 
@@ -285,7 +370,9 @@ N-BEATS is run without its ensemble (Table 14 footnote, p. 22). TimesNet per sub
 
 ### Training on mixed datasets (Appendix H)
 
-ETTh1, ETTh2, ETTm1 and ETTm2 are mixed into one training set ("Unified") and compared with training on each subset ("Independent"), for **imputation** (p. 20; Table 12, p. 20). MSE / MAE per mask ratio:
+ETTh1, ETTh2, ETTm1 and ETTm2 are mixed into one training set ("Unified") and compared with training on each subset ("Independent"), for **imputation** (p. 20; Table 12, p. 20).
+
+MSE / MAE per mask ratio:
 
 | Model | Training | Ratio | ETTm1 | ETTm2 | ETTh1 | ETTh2 |
 |---|---|---|---|---|---|---|
@@ -315,15 +402,20 @@ ETTh1, ETTh2, ETTm1 and ETTm2 are mixed into one training set ("Unified") and co
 | FEDformer | Independent | 50% | 0.089 / 0.218 | 0.156 / 0.276 | 0.165 / 0.299 | 0.232 / 0.341 |
 
 - The authors: TimesNet "can handle this mixed dataset well and generally promote the model performance in four independent subsets", while for the other baselines mixed training "may decrease the model performance in some subsets" (p. 20).
-- **Our reading:** for TimesNet the gain is concentrated on the hourly subsets (ETTh1: 0.102 → 0.075 MSE at 50%), with the 15-minute subsets nearly unchanged. The TimesNet "Independent" ETTm1 50% MSE here is 0.037, while Table 16 reports 0.036 for the same setting (p. 23).
+- **Our reading:**
+  - for TimesNet the gain is concentrated on the hourly subsets (ETTh1: 0.102 → 0.075 MSE at 50%), with the 15-minute subsets nearly unchanged.
+  - The TimesNet "Independent" ETTm1 50% MSE here is 0.037, while Table 16 reports 0.036 for the same setting (p. 23).
 
 ## Assumptions and limitations
 
-- **Periodicity is averaged over variates:** $\mathbf{A}$ averages the amplitudes over the $C$ dimensions (p. 4), so all variates share the same $k$ periods. **Our reading:** with heterogeneous variates (as in SMD or SWaT), one set of periods is a compromise; the paper doesn't discuss it.
+- **Periodicity is averaged over variates:** $\mathbf{A}$ averages the amplitudes over the $C$ dimensions (p. 4), so all variates share the same $k$ periods.
+  - **Our reading:** with heterogeneous variates (as in SMD or SWaT), one set of periods is a compromise; the paper doesn't discuss it.
 - **Only the top-$k$ frequencies** in $\{1, \dots, [T/2]\}$ are used (p. 4); with a window of $T = 100$ (anomaly detection), only periods up to 100 points can be found.
 - **Non-periodic series** are handled by falling back to frequency 1 (p. 15), argued with the decomposition ablation (Table 9) and the Exchange showcase (Figure 9, p. 16).
-- **Anomaly detection uses one criterion, the reconstruction error, for all models** (p. 8); task-specific criteria (Anomaly Transformer's association discrepancy) are switched off (p. 9). The threshold and any point adjustment aren't described (pp. 8, 13, 22).
-- **Shared input embedding and projection** for all base models (p. 12): baseline numbers are not those of their original papers. For forecasting, an MLP initialization and Series Stationarization are added (p. 12); whether they apply to all base models or other tasks isn't stated.
+- **Anomaly detection uses one criterion, the reconstruction error, for all models** (p. 8); task-specific criteria (Anomaly Transformer's association discrepancy) are switched off (p. 9).
+  - The threshold and any point adjustment aren't described (pp. 8, 13, 22).
+- **Shared input embedding and projection** for all base models (p. 12): baseline numbers are not those of their original papers.
+  - For forecasting, an MLP initialization and Series Stationarization are added (p. 12); whether they apply to all base models or other tasks isn't stated.
 - **"All experiments are repeated three times"** (p. 12); standard deviations are reported only for classification ("within 0.1%", Table 17, p. 23).
 - **Future work** stated by the authors: large-scale pre-training with TimesNet as backbone (p. 9).
 - **Our reading:** the anomaly-detection table compares architectures under one reconstruction pipeline, which is useful for choosing a backbone, but says little about how TimesNet compares with dedicated detectors under their own criteria.
@@ -332,11 +424,21 @@ ETTh1, ETTh2, ETTm1 and ETTm2 are mixed into one training set ("Unified") and co
 
 **Our reading:**
 
-- **A candidate backbone for both of our tasks:** one architecture, trained with an MSE loss, serves forecasting and reconstruction-based anomaly detection (Table 7, p. 14). Merging needs the same architecture for all task models, which this provides.
-- **A concrete anomaly-detection protocol to reproduce:** SMD, MSL, SMAP, SWaT, PSM; windows of 100; reconstruction error as the score; precision, recall and F1 (pp. 6, 8; Table 6, p. 14). The threshold rule and point adjustment must be fixed by us and documented, since the paper doesn't state them.
-- **Small model, cheap task vectors:** 0.067 MB of parameters (Table 11, p. 19), independent of $k$ thanks to the shared inception block (p. 5). The width $d_{\text{model}}$ depends on the number of variates $C$ (p. 12): with a base-2 logarithm (the base isn't stated), datasets with $C$ = 38, 55, 25, 51, 25 would get $d_{\text{model}}$ = 64/64/32/64/32, i.e. different shapes (with natural or base-10 logs all would get the minimum, 32), and the embedding and projection layers depend on $C$ anyway. Merging across these datasets would need a common $d_{\text{model}}$ and per-dataset input/output layers.
-- **Data-dependent routing inside the model:** the periods (and so the reshape) are recomputed from each input's FFT at every layer (Equation 5, p. 5). Two task models merged in weight space would still pick periods per input; how interference shows up through this routing is an open question.
-- **Joint training already appears here:** the mixed-dataset experiment (Table 12, p. 20) is a small instance of joint training versus one model per dataset, for imputation on four ETT subsets; for TimesNet, joint training matches or beats independent training. It is a reference point for our joint-training baseline, not a test of merging.
+- **A candidate backbone for both of our tasks:** one architecture, trained with an MSE loss, serves forecasting and reconstruction-based anomaly detection (Table 7, p. 14).
+  - Merging needs the same architecture for all task models, which this provides.
+- **A concrete anomaly-detection protocol to reproduce:** SMD, MSL, SMAP, SWaT, PSM; windows of 100; reconstruction error as the score; precision, recall and F1 (pp. 6, 8; Table 6, p. 14).
+  - The threshold rule and point adjustment must be fixed by us and documented, since the paper doesn't state them.
+- **Small model, cheap task vectors:** 0.067 MB of parameters (Table 11, p. 19), independent of $k$ thanks to the shared inception block (p. 5).
+  - The width $d_{\text{model}}$ depends on the number of variates $C$ (p. 12):
+    - with a base-2 logarithm (the base isn't stated), datasets with $C$ = 38, 55, 25, 51, 25 would get $d_{\text{model}}$ = 64/64/32/64/32, i.e. different shapes (with natural or base-10 logs all would get the minimum, 32),
+    - and the embedding and projection layers depend on $C$ anyway.
+  - Merging across these datasets would need a common $d_{\text{model}}$ and per-dataset input/output layers.
+- **Data-dependent routing inside the model:** the periods (and so the reshape) are recomputed from each input's FFT at every layer (Equation 5, p. 5).
+  - Two task models merged in weight space would still pick periods per input; how interference shows up through this routing is an open question.
+- **Joint training already appears here:**
+  - the mixed-dataset experiment (Table 12, p. 20) is a small instance of joint training versus one model per dataset, for imputation on four ETT subsets;
+  - for TimesNet, joint training matches or beats independent training.
+  - It is a reference point for our joint-training baseline, not a test of merging.
 - **Forecasting protocol to reuse:** input 96, prediction lengths 96/192/336/720, MSE/MAE, with the ETT, Electricity, Traffic, Weather, Exchange benchmarks (Table 2, p. 7; Table 6, p. 14).
 
 ## Quotes worth keeping

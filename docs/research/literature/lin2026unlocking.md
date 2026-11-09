@@ -8,7 +8,19 @@
 
 ## In one paragraph
 
-The paper studies **continual model merging (CMM)**: task-adapted models from the same pre-trained backbone arrive one at a time, and the deployed merged model is updated after each arrival without retraining (p. 2). Instead of a one-step merge rule, **ODE-M** treats each update as a trajectory in parameter space from the current merged model $\theta_0 = \Psi_k$ to the incoming model $\theta_1 = \psi_{k+1}$ (p. 2). The trajectory follows a velocity field that points toward $\theta_1$, whose loss-increasing component (along the loss gradient on a small **calibration set**) is damped (pp. 4–5). The next merged model is the point reached at an **operating time** $t_k = w_k / \sum_{i=1}^k w_i$, which reduces to $1/k$ with equal task utilities (p. 5). The paper also proposes **utility-weighted** versions of the ACC and BWT metrics (p. 3). On CLIP ViT-B/32, ViT-B/16 and ViT-L/14 with streams of 8, 14 and 20 image classification tasks, ODE-M has the highest final ACC among the merging methods in every setting (the C. Fine-Tuned row is higher in 2 columns: ViT-B/32 and ViT-L/14 with 8 tasks), e.g. 79.6 vs 75.5 for OPCM on ViT-B/32 with 8 tasks (Table 1, p. 6), while its BWT is often worse than the baselines, especially on 20-task streams (Table 1, p. 6).
+The paper studies **continual model merging (CMM)**: task-adapted models from the same pre-trained backbone arrive one at a time, and the deployed merged model is updated after each arrival without retraining (p. 2).
+
+Instead of a one-step merge rule, **ODE-M** treats each update as a trajectory in parameter space from the current merged model $\theta_0 = \Psi_k$ to the incoming model $\theta_1 = \psi_{k+1}$ (p. 2):
+
+- The trajectory follows a velocity field that points toward $\theta_1$, whose loss-increasing component (along the loss gradient on a small **calibration set**) is damped (pp. 4–5).
+- The next merged model is the point reached at an **operating time** $t_k = w_k / \sum_{i=1}^k w_i$, which reduces to $1/k$ with equal task utilities (p. 5).
+
+The paper also proposes **utility-weighted** versions of the ACC and BWT metrics (p. 3).
+
+On CLIP ViT-B/32, ViT-B/16 and ViT-L/14 with streams of 8, 14 and 20 image classification tasks:
+
+- ODE-M has the highest final ACC among the merging methods in every setting (the C. Fine-Tuned row is higher in 2 columns: ViT-B/32 and ViT-L/14 with 8 tasks), e.g. 79.6 vs 75.5 for OPCM on ViT-B/32 with 8 tasks (Table 1, p. 6),
+- while its BWT is often worse than the baselines, especially on 20-task streams (Table 1, p. 6).
 
 ## Problem
 
@@ -25,7 +37,9 @@ How to update a deployed merged model when task-adapted models arrive sequential
 - An endpoint-only update rule doesn't regulate the transition between current and incoming models; if it passes through high-loss regions, the result may suffer functional degradation and interference.
 - It gives only a coarse handle on the stability–plasticity trade-off, since the relative contribution of old and new model is set implicitly by the merging rule.
 
-**Objective mismatch** (p. 3): macro-averaging over tasks "is equivalent to evaluating the deployed model under a uniform mixture over tasks". Tasks may differ in frequency or importance, so the paper models system performance as an expected utility under a non-uniform task mixture (p. 3).
+**Objective mismatch** (p. 3): macro-averaging over tasks "is equivalent to evaluating the deployed model under a uniform mixture over tasks".
+
+Tasks may differ in frequency or importance, so the paper models system performance as an expected utility under a non-uniform task mixture (p. 3).
 
 ## Method
 
@@ -81,7 +95,9 @@ In words: motion that decreases or keeps the loss is unrestricted; motion that i
 
 **Theory** (Section 3.3, p. 5; proofs in Appendix A, pp. 12–14):
 
-- **Theorem 3.3 (convergence)** (p. 5): if $g_t = \nabla\mathcal{L}(\theta(t)) \neq 0$ for almost every $t \in [0, 1)$, and there is $\rho \in [0, 1)$ with $\frac{\|\mathcal{P}_{g_t}(u_t)\|}{\|u_t\|} \le \rho$ along the trajectory, then the trajectory admits a continuous endpoint extension at $t = 1$ and $\lim_{t \to 1} \theta(t) = \theta_1$ (Eq. 15).
+- **Theorem 3.3 (convergence)** (p. 5):
+  - if $g_t = \nabla\mathcal{L}(\theta(t)) \neq 0$ for almost every $t \in [0, 1)$, and there is $\rho \in [0, 1)$ with $\frac{\|\mathcal{P}_{g_t}(u_t)\|}{\|u_t\|} \le \rho$ along the trajectory,
+  - then the trajectory admits a continuous endpoint extension at $t = 1$ and $\lim_{t \to 1} \theta(t) = \theta_1$ (Eq. 15).
 - The proof gives the rate $\|e(t)\| \le \|e(0)\| (1-t)^{1-\rho}$ for $t \in [0, 1)$, with $e(t) = \theta(t) - \theta_1$ (Eq. 31, p. 13).
 - **Theorem 3.4 (bounded loss barrier)** (p. 5): assuming a continuous endpoint extension $\theta(1) = \theta_1$ and differentiable $\gamma$ and $\mathcal{L}$, for all $t \in [0, 1)$:
 
@@ -96,7 +112,18 @@ $$t_k = \frac{w_k}{W_{k-1} + w_k} = \frac{w_k}{\sum_{i=1}^k w_i}, \quad \Psi_k =
 - With equal utilities, $t_k = 1/k$, so the retained contribution of the previous merged model grows as $(k-1)/k$ (p. 5).
 - A smaller operating time keeps more historical knowledge; a larger one gives more influence to the incoming model (p. 5).
 
-**Algorithm 1** (p. 18; description in Appendix C, p. 16). Inputs: the stream $\{\psi_k\}_{k=1}^K$, $\psi_0$, a calibration set $\mathcal{D}_{\text{cal}}$, a loss $\mathcal{L}(\theta; \mathcal{D}_{\text{cal}})$, step size $h$, scheduler $\alpha(t)$, time rule $t_k$. Steps:
+**Algorithm 1** (p. 18; description in Appendix C, p. 16).
+
+Inputs:
+
+- the stream $\{\psi_k\}_{k=1}^K$, $\psi_0$,
+- a calibration set $\mathcal{D}_{\text{cal}}$,
+- a loss $\mathcal{L}(\theta; \mathcal{D}_{\text{cal}})$,
+- step size $h$,
+- scheduler $\alpha(t)$,
+- time rule $t_k$.
+
+Steps:
 
 1. $\Psi_1 \leftarrow \psi_1$.
 2. For $k = 2, \dots, K$: $\theta_0 \leftarrow \Psi_{k-1}$, $\theta_1 \leftarrow \psi_k$, $\theta \leftarrow \theta_0$, $t \leftarrow 0$.
@@ -114,17 +141,23 @@ Note the appendix indexes the update as $\Psi_{k-1}, \psi_k \to \Psi_k$ (p. 16, 
 
 **Our reading:**
 
-- With $\gamma \equiv 1$, $v_t = u_t$ and the trajectory is the linear path, so ODE-M stopped at $t_k = 1/k$ would give $\Psi_k = (1 - 1/k)\Psi_{k-1} + (1/k)\psi_k$, the running average (the C.SWA recursion of Eq. 45, p. 17). ODE-M is therefore a gradient-rectified version of continual weight averaging, not of task arithmetic with a $\lambda$.
+- With $\gamma \equiv 1$, $v_t = u_t$ and the trajectory is the linear path, so ODE-M stopped at $t_k = 1/k$ would give $\Psi_k = (1 - 1/k)\Psi_{k-1} + (1/k)\psi_k$, the running average (the C.SWA recursion of Eq. 45, p. 17).
+  - ODE-M is therefore a gradient-rectified version of continual weight averaging, not of task arithmetic with a $\lambda$.
 - With $h = 0.05$ and $t_k = 1/k$, the number of Euler steps $\lceil t_k / h \rceil$ falls from 10 at $k = 2$ to 1 at $k = 20$: late in long streams the trajectory is a single rectified step.
 - $\Delta\mathcal{L}$ depends only on the endpoints, so it is constant within one merge although Algorithm 1 recomputes it inside the loop (p. 18).
-- The paper doesn't state which loss $\mathcal{L}$ is used on $\mathcal{D}_{\text{cal}}$, nor whether the classification heads enter the merge; with classification heads, cross-entropy on labeled calibration samples is the natural guess, but it isn't written.
+- The paper doesn't state which loss $\mathcal{L}$ is used on $\mathcal{D}_{\text{cal}}$, nor whether the classification heads enter the merge.
+  - With classification heads, cross-entropy on labeled calibration samples is the natural guess, but it isn't written.
 
 ## Experimental setup
 
 **Models** (p. 5, p. 6, p. 14):
 
 - CLIP image encoders: `openai/clip-vit-base-patch32` (ViT-B/32), `openai/clip-vit-base-patch16` (ViT-B/16), `openai/clip-vit-large-patch14` (ViT-L/14) (p. 14).
-- Task-adapted models: "We obtain the stream of task-adapted models and the corresponding datasets from FusionBench (Tang et al., 2025a) by fine-tuning each pre-trained backbone sequentially on 20 tasks" (p. 6); §4.2 adds "we construct a set of task-specific fine-tuned checkpoints starting from the same CLIP pre-trained weights" (p. 6), and p. 14 says each model comes from fine-tuning the backbone on its task: so "sequentially" means one task after another, each from the pre-trained weights, each with a task-specific classification head (p. 14); the setup follows OPCM (Tang et al., 2025b) (p. 5).
+- Task-adapted models:
+  - "We obtain the stream of task-adapted models and the corresponding datasets from FusionBench (Tang et al., 2025a) by fine-tuning each pre-trained backbone sequentially on 20 tasks" (p. 6);
+  - §4.2 adds "we construct a set of task-specific fine-tuned checkpoints starting from the same CLIP pre-trained weights" (p. 6),
+  - and p. 14 says each model comes from fine-tuning the backbone on its task: so "sequentially" means one task after another, each from the pre-trained weights, each with a task-specific classification head (p. 14);
+  - the setup follows OPCM (Tang et al., 2025b) (p. 5).
 
 **Task streams** (p. 14):
 
@@ -136,7 +169,9 @@ Note the appendix indexes the update as $\Psi_{k-1}, \psi_k \to \Psi_k$ (p. 16, 
 
 **Metrics:** ACC and BWT (Lin et al., 2022) (p. 6); their utility-weighted versions $\mathrm{ACC}_w$, $\mathrm{BWT}_w$ for Section 4.3 (p. 3, p. 6).
 
-**Baselines** (p. 6): parameter averaging (SWA), Continual Task Arithmetic, Continual Ties-Merging, OPCM. Their utility-aware forms (Appendix D, pp. 16–19), with $W_k = \sum_{i=1}^k w_i$ (Eq. 43) and $\eta_k = w_k / W_k$ (Eq. 44, p. 17), which is $1/k$ with equal utilities:
+**Baselines** (p. 6): parameter averaging (SWA), Continual Task Arithmetic, Continual Ties-Merging, OPCM.
+
+Their utility-aware forms (Appendix D, pp. 16–19), with $W_k = \sum_{i=1}^k w_i$ (Eq. 43) and $\eta_k = w_k / W_k$ (Eq. 44, p. 17), which is $1/k$ with equal utilities:
 
 - **Continual averaging** (Eqs. 45–46, p. 17):
 
@@ -148,15 +183,25 @@ Note the appendix indexes the update as $\Psi_{k-1}, \psi_k \to \Psi_k$ (p. 16, 
 
   With $\lambda_{\text{TA}} = 1$ this reduces to weighted averaging (p. 18). The value of $\lambda_{\text{TA}}$ used isn't given.
 
-- **Continual Ties-Merging** (Eqs. 50–53, p. 18): a pairwise Ties merge of $(1 - \eta_k)\Delta_{k-1}^{\text{TIES}}$ and $\eta_k \delta_k$, with $\Delta_{k-1}^{\text{TIES}} = \Psi_{k-1}^{\text{C.TIES}} - \psi_0$, then $\Psi_k^{\text{C.TIES}} = \psi_0 + \lambda_{\text{TIES}} \bar\delta_k^{\text{TIES}}$; trimming ratio, sign election and $\lambda_{\text{TIES}}$ follow the OPCM configuration (p. 18).
-- **OPCM** (Eqs. 54–58, pp. 18–19): the incoming task vector is projected with OPCM's orthogonal projection, $\hat\delta_k = \mathcal{P}_\alpha^{(k-1)}(\delta_k; \Delta_{k-1}^{\text{OPCM}})$ (applied to weight matrices of linear layers); $A_k^{\text{OPCM}} = (1 - \eta_k)A_{k-1}^{\text{OPCM}} + \eta_k \hat\delta_k$; $\Psi_k^{\text{OPCM}} = \psi_0 + A_k^{\text{OPCM}} / \lambda_k^{\text{OPCM}}$, with $\lambda_k^{\text{OPCM}}$ from OPCM's original scaling strategy (p. 19).
+- **Continual Ties-Merging** (Eqs. 50–53, p. 18):
+  - a pairwise Ties merge of $(1 - \eta_k)\Delta_{k-1}^{\text{TIES}}$ and $\eta_k \delta_k$, with $\Delta_{k-1}^{\text{TIES}} = \Psi_{k-1}^{\text{C.TIES}} - \psi_0$,
+  - then $\Psi_k^{\text{C.TIES}} = \psi_0 + \lambda_{\text{TIES}} \bar\delta_k^{\text{TIES}}$;
+  - trimming ratio, sign election and $\lambda_{\text{TIES}}$ follow the OPCM configuration (p. 18).
+- **OPCM** (Eqs. 54–58, pp. 18–19):
+  - the incoming task vector is projected with OPCM's orthogonal projection, $\hat\delta_k = \mathcal{P}_\alpha^{(k-1)}(\delta_k; \Delta_{k-1}^{\text{OPCM}})$ (applied to weight matrices of linear layers);
+  - $A_k^{\text{OPCM}} = (1 - \eta_k)A_{k-1}^{\text{OPCM}} + \eta_k \hat\delta_k$;
+  - $\Psi_k^{\text{OPCM}} = \psi_0 + A_k^{\text{OPCM}} / \lambda_k^{\text{OPCM}}$, with $\lambda_k^{\text{OPCM}}$ from OPCM's original scaling strategy (p. 19).
 
 **ODE-M implementation** (p. 6, p. 16):
 
 - Calibration set: "aggregates samples from previously seen tasks, with a total of 1024 examples" (p. 6); $|\mathcal{D}_{\text{cal}}| = 1024$ unless stated otherwise (p. 16).
 - Euler integration, fixed step size $h = 0.05$ (p. 6, p. 16).
 
-**Heterogeneous utility** (Section 4.3, p. 6): in each run, $\{w_i\}$ are sampled "from a fixed distribution" and normalized so that $\sum_i w_i = 1$; 10 independent draws. The distribution itself isn't specified. Baselines' sequential coefficients are modified to respect $\{w_i\}$ (p. 6, p. 7).
+**Heterogeneous utility** (Section 4.3, p. 6): in each run, $\{w_i\}$ are sampled "from a fixed distribution" and normalized so that $\sum_i w_i = 1$; 10 independent draws.
+
+The distribution itself isn't specified.
+
+Baselines' sequential coefficients are modified to respect $\{w_i\}$ (p. 6, p. 7).
 
 ## Results
 
@@ -181,9 +226,17 @@ Note the appendix indexes the update as $\Psi_{k-1}, \psi_k \to \Psi_k$ (p. 16, 
 | ODE-M | -4.2±3.9 | -7.8±3.2 | -9.4±2.2 | -6.6±2.8 | -8.1±3.0 | -9.9±3.5 | -4.0±2.4 | -7.4±2.5 | -10.3±2.7 |
 
 - The paper's summary: ODE-M "achieves the highest overall accuracy and ranks first for every stream length" (p. 6).
-- On BWT: "all methods exhibit negative BWT as the stream grows" and ODE-M "remains competitive with or better than prior baselines in most settings, especially for shorter streams"; improving ACC "can come with a more aggressive update and thus more negative BWT in some long-stream configurations" (p. 6).
-- The paper doesn't define the "Fine-Tuned" and "C. Fine-Tuned" rows. **Our reading:** "Fine-Tuned" is presumably the individual task models, each on its own task, and "C. Fine-Tuned" sequential fine-tuning on the stream; there is **no joint multi-task training** baseline. C. Fine-Tuned beats ODE-M in 2 columns: ViT-B/32 8 tasks (79.8 vs 79.6) and ViT-L/14 8 tasks (90.0 vs 87.7) (Table 1, p. 6).
-- **Our reading:** ODE-M's BWT is the worst of all methods in 5 of 9 columns (B/32 20, B/16 14 and 20, L/14 14 and 20) and second worst in B/32 14 and B/16 8 (7 of 9 columns worst or second worst; best only in B/32 8, −4.2), and C. Ties-Merging even has positive BWT on 14-task streams; a high final ACC here goes with more forgetting, not less.
+- On BWT:
+  - "all methods exhibit negative BWT as the stream grows" and ODE-M "remains competitive with or better than prior baselines in most settings, especially for shorter streams";
+  - improving ACC "can come with a more aggressive update and thus more negative BWT in some long-stream configurations" (p. 6).
+- The paper doesn't define the "Fine-Tuned" and "C. Fine-Tuned" rows.
+  - **Our reading:**
+    - "Fine-Tuned" is presumably the individual task models, each on its own task, and "C. Fine-Tuned" sequential fine-tuning on the stream; there is **no joint multi-task training** baseline.
+    - C. Fine-Tuned beats ODE-M in 2 columns: ViT-B/32 8 tasks (79.8 vs 79.6) and ViT-L/14 8 tasks (90.0 vs 87.7) (Table 1, p. 6).
+- **Our reading:**
+  - ODE-M's BWT is the worst of all methods in 5 of 9 columns (B/32 20, B/16 14 and 20, L/14 14 and 20) and second worst in B/32 14 and B/16 8 (7 of 9 columns worst or second worst; best only in B/32 8, −4.2),
+  - and C. Ties-Merging even has positive BWT on 14-task streams;
+  - a high final ACC here goes with more forgetting, not less.
 
 **Heterogeneous utility** (Table 2, p. 8). $\mathrm{ACC}_w$ and $\mathrm{BWT}_w$ (%), over 10 draws of $\{w_i\}$ (p. 6); the caption doesn't say what ± denotes:
 
@@ -203,7 +256,11 @@ Note the appendix indexes the update as $\Psi_{k-1}, \psi_k \to \Psi_k$ (p. 16, 
 | ODE-M | -5.8±1.6 | -4.9±1.4 | -8.1±1.7 | -4.5±1.1 | -5.9±1.2 | -6.2±1.9 | -2.5±1.0 | -4.4±1.1 | -7.8±1.4 |
 
 - The text states ODE-M improves $\mathrm{ACC}_w$ over OPCM "from 74.2 to 77.9 on ViT-B/32 with 8 tasks, from 81.0 to 84.6 on ViT-B/16 with 8 tasks", and "from 75.0 to 80.0 at 20 tasks" on ViT-L/14 (p. 7); these match Table 2.
-- The text also states ODE-M "improves upon OPCM in $\mathrm{BWT}_w$ across all settings (e.g., from −5.9 to −4.8 on ViT-B/32 with 8 tasks and from −5.9 to −4.8 on ViT-L/14 with 20 tasks)" (p. 7). **Our reading:** Table 2 doesn't support this: on ViT-B/32 with 8 tasks it prints OPCM −5.9, ODE-M −5.8; on ViT-L/14 with 20 tasks OPCM −5.9, ODE-M −7.8; and ODE-M is below OPCM in 6 of 9 columns.
+- The text also states ODE-M "improves upon OPCM in $\mathrm{BWT}_w$ across all settings (e.g., from −5.9 to −4.8 on ViT-B/32 with 8 tasks and from −5.9 to −4.8 on ViT-L/14 with 20 tasks)" (p. 7).
+  - **Our reading:** Table 2 doesn't support this:
+    - on ViT-B/32 with 8 tasks it prints OPCM −5.9, ODE-M −5.8;
+    - on ViT-L/14 with 20 tasks OPCM −5.9, ODE-M −7.8;
+    - and ODE-M is below OPCM in 6 of 9 columns.
 
 **Calibration set size** (Table 3, p. 8). Average accuracy (%) of ODE-M, 8-task stream, mean ± std over 5 runs, by number of calibration samples $n$:
 
@@ -213,7 +270,9 @@ Note the appendix indexes the update as $\Psi_{k-1}, \psi_k \to \Psi_k$ (p. 16, 
 | ViT-B/16 | 68.5±1.6 | 70.6±1.3 | 75.8±1.1 | 78.7±0.9 | 80.7±0.8 | 82.5±0.7 | 85.1±0.6 | 85.3±0.4 | 85.1±0.6 |
 | ViT-L/14 | 70.9±1.8 | 73.0±1.5 | 78.2±1.3 | 81.1±1.1 | 83.1±1.0 | 84.9±0.9 | 87.5±0.8 | 87.7±0.9 | 87.8±0.9 |
 
-The paper: diminishing returns beyond a moderate budget, "a few hundred samples already provide strong accuracy" (p. 7). **Our reading:** with $n \le 128$, ODE-M on ViT-B/32 (62.8–75.0) is below OPCM's 75.5 (Table 1), which needs no calibration data.
+The paper: diminishing returns beyond a moderate budget, "a few hundred samples already provide strong accuracy" (p. 7).
+
+**Our reading:** with $n \le 128$, ODE-M on ViT-B/32 (62.8–75.0) is below OPCM's 75.5 (Table 1), which needs no calibration data.
 
 **Euler step size** (Table 4, p. 8). Average accuracy (%), ViT-B/32, 8-task stream, five trials:
 
@@ -225,9 +284,19 @@ The paper: diminishing returns beyond a moderate budget, "a few hundred samples 
 - The text gives "80.0 ± 0.5 at $10^{-2}$" (p. 7), while Table 4 prints 79.8 ± 0.5 for 1e-2 and 80.0 ± 0.5 for 5e-3 (p. 8).
 - The default step 5e-2 gives 79.4 ± 0.6 in Table 4 (p. 8), against 79.6±1.9 in Table 1 (p. 6) and 79.6±1.5 at $n$ = 1024 in Table 3 (p. 8) for what should be the same configuration.
 
-**Runtime** (Table 5, p. 8): average wall-clock time to merge one incoming model over a 20-task stream: 123.9 s (ViT-B/32), 200.8 s (ViT-B/16), 246.8 s (ViT-L/14). The cost is mainly numerical integration with per-step gradients on the calibration set (p. 7). The hardware isn't stated.
+**Runtime** (Table 5, p. 8): average wall-clock time to merge one incoming model over a 20-task stream:
 
-**Two-task trajectory sweeps** (Table 6, p. 17). Accuracy along the ODE trajectory from $\theta_0$ (first task's model, $t = 0$) to $\theta_1$ (second task's model, $t = 1$); bold in the paper marks the best Avg:
+- 123.9 s (ViT-B/32),
+- 200.8 s (ViT-B/16),
+- 246.8 s (ViT-L/14).
+
+The cost is mainly numerical integration with per-step gradients on the calibration set (p. 7).
+
+The hardware isn't stated.
+
+**Two-task trajectory sweeps** (Table 6, p. 17).
+
+Accuracy along the ODE trajectory from $\theta_0$ (first task's model, $t = 0$) to $\theta_1$ (second task's model, $t = 1$); bold in the paper marks the best Avg:
 
 | Pair | Metric | 0.0 | 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1.0 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -247,9 +316,21 @@ The paper: diminishing returns beyond a moderate budget, "a few hundred samples 
 | | svn | 0.411 | 0.564 | 0.713 | 0.832 | 0.905 | 0.950 | 0.960 | 0.969 | 0.972 | 0.973 | 0.973 |
 | | Avg | 0.700 | 0.776 | 0.850 | 0.907 | 0.938 | **0.956** | 0.914 | 0.857 | 0.771 | 0.689 | 0.623 |
 
-The backbone for Table 6 isn't stated. **Our reading:** in all five pairs the printed Avg row is best at $t = 0.5$, which is $t_k = 1/k$ for $k = 2$; but in two pairs the printed Avg doesn't match its own rows at $t = 0.4$ (cars→resisc45: (0.787 + 0.936)/2 = 0.8615, printed 0.821; sun397→eurosat: (0.749 + 0.971)/2 = 0.860, printed 0.850), and recomputed, those two pairs peak at $t = 0.4$ (p. 17).
+The backbone for Table 6 isn't stated.
 
-**Operating time vs. the $1/k$ schedule** (Table 7, p. 17). At each merge, candidate operating times $t \in [0, 1]$ at interval 0.05 are evaluated and the best $t_k^\star$ is chosen "according to validation performance" (pp. 15–16). Spearman rank correlation between $\{1 - t_k^\star\}$ and $\{(k-1)/k\}$:
+**Our reading:**
+
+- in all five pairs the printed Avg row is best at $t = 0.5$, which is $t_k = 1/k$ for $k = 2$;
+- but in two pairs the printed Avg doesn't match its own rows at $t = 0.4$:
+  - cars→resisc45: (0.787 + 0.936)/2 = 0.8615, printed 0.821;
+  - sun397→eurosat: (0.749 + 0.971)/2 = 0.860, printed 0.850,
+- and recomputed, those two pairs peak at $t = 0.4$ (p. 17).
+
+**Operating time vs. the $1/k$ schedule** (Table 7, p. 17).
+
+At each merge, candidate operating times $t \in [0, 1]$ at interval 0.05 are evaluated and the best $t_k^\star$ is chosen "according to validation performance" (pp. 15–16).
+
+Spearman rank correlation between $\{1 - t_k^\star\}$ and $\{(k-1)/k\}$:
 
 | Architecture | 8 tasks | 14 tasks | 20 tasks |
 |---|---|---|---|
@@ -269,7 +350,8 @@ The paper reads this as support for the schedule $t_k = 1/k$ and its utility-awa
 
 ## Assumptions and limitations
 
-- **Data from past tasks at merge time:** the calibration set aggregates samples from previously seen tasks (p. 6); the authors state that the method "requires access to a loss function and first-order gradients on a calibration set during merging", which may not hold in black-box deployment, and that results depend on how representative the calibration data is (p. 19).
+- **Data from past tasks at merge time:** the calibration set aggregates samples from previously seen tasks (p. 6).
+  - The authors state that the method "requires access to a loss function and first-order gradients on a calibration set during merging", which may not hold in black-box deployment, and that results depend on how representative the calibration data is (p. 19).
 - **Numerical choices** (step size, time schedule) matter; "extremely coarse discretization or poorly chosen schedules can still degrade performance" (p. 19).
 - **Only vision classification:** CLIP ViT backbones and image classification streams; other modalities and larger models are left to future work (p. 19, p. 9).
 - **Merge-time overhead:** 123.9–246.8 s per merge (Table 5, p. 8); more efficient integration is future work (p. 9).
@@ -286,11 +368,22 @@ The paper reads this as support for the schedule $t_k = 1/k$ and its utility-awa
 
 **Our reading:**
 
-- **Baseline definitions for sequential merging:** the paper gives explicit recursions for continual averaging (Eq. 45), continual task arithmetic with $\lambda_{\text{TA}}$ (Eqs. 47–49) and continual Ties (Eqs. 50–53), all driven by the ratio $\eta_k = w_k / W_k$. These are a ready template for our sequential merging baselines, and the $\eta_k$ form lets us weight periods differently (e.g. favor recent periods of a drifting signal).
-- **A third option between joint training and merging:** ODE-M merges with gradients from a small replay set of past tasks. For time series this is cheap to try: forecasting has a natural loss (e.g. MSE on calibration windows), and reconstruction-based anomaly detection can use an unsupervised loss on normal data, so no labels are needed. It sits between data-free merging and joint training on all data; the comparison must state how much past data each method sees.
-- **Joint training is missing here:** the paper compares only to individual and sequentially fine-tuned models (Table 1, p. 6). Our joint-training vs. task-arithmetic comparison has to add that reference itself.
-- **What to measure, following the paper:** the loss barrier between the current merged model and the incoming model (Eqs. 5–6), ACC and BWT per step, and the two-model sweeps of Table 6 (accuracy along the path at $t \in \{0, 0.1, \dots, 1\}$). For successive periods of the same signal, barriers may be much lower than between unrelated image tasks.
-- **The $1/k$ schedule** (Eq. 18) is the running average; testing whether the best operating time follows $1/k$ (Table 7) is a direct check for streams of time-series tasks, where the newest data may matter more than $1/k$ allows.
+- **Baseline definitions for sequential merging:** the paper gives explicit recursions for continual averaging (Eq. 45), continual task arithmetic with $\lambda_{\text{TA}}$ (Eqs. 47–49) and continual Ties (Eqs. 50–53), all driven by the ratio $\eta_k = w_k / W_k$.
+  - These are a ready template for our sequential merging baselines, and the $\eta_k$ form lets us weight periods differently (e.g. favor recent periods of a drifting signal).
+- **A third option between joint training and merging:** ODE-M merges with gradients from a small replay set of past tasks.
+  - For time series this is cheap to try:
+    - forecasting has a natural loss (e.g. MSE on calibration windows),
+    - and reconstruction-based anomaly detection can use an unsupervised loss on normal data, so no labels are needed.
+  - It sits between data-free merging and joint training on all data; the comparison must state how much past data each method sees.
+- **Joint training is missing here:** the paper compares only to individual and sequentially fine-tuned models (Table 1, p. 6).
+  - Our joint-training vs. task-arithmetic comparison has to add that reference itself.
+- **What to measure, following the paper:**
+  - the loss barrier between the current merged model and the incoming model (Eqs. 5–6),
+  - ACC and BWT per step,
+  - and the two-model sweeps of Table 6 (accuracy along the path at $t \in \{0, 0.1, \dots, 1\}$).
+  - For successive periods of the same signal, barriers may be much lower than between unrelated image tasks.
+- **The $1/k$ schedule** (Eq. 18) is the running average.
+  - Testing whether the best operating time follows $1/k$ (Table 7) is a direct check for streams of time-series tasks, where the newest data may matter more than $1/k$ allows.
 - **Forgetting vs. final accuracy:** the paper's best-ACC method also forgets more on long streams (Table 1); we should report both and not rank on ACC alone.
 - **Practical cost:** with 1024 calibration samples and $h = 0.05$, a merge takes minutes on ViT-sized models (Table 5); our models are likely much smaller, so the cost should matter less.
 

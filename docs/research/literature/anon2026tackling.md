@@ -8,7 +8,24 @@
 
 ## In one paragraph
 
-The paper splits distribution shift in time-series forecasting into two types: **temporal shift**, where marginal distributions change over time and conditional ones stay the same, and **concept drift**, where conditional distributions change and marginal ones stay the same (Definitions 2.1–2.2, p. 2). It argues that existing forecasting work mostly handles temporal shift (through normalization), while concept drift is largely overlooked (p. 1, pp. 2–3). It proposes **SAM** (soft attention masking), which builds a surrogate exogenous feature $\mathbf{X}^{\text{SUR}}$ from "invariant patterns" in both the lookback and the horizon windows of the exogenous series, and **ShifTS**, a model-agnostic framework that first removes temporal shift with RevIN and then applies SAM (pp. 3–6). On six datasets (ILI, Exchange, ETTh1/ETTh2/ETTm1/ETTm2), with univariate targets and exogenous features, ShifTS lowers MSE and MAE on average (IMP.) for all six base forecasting models tested, though not in every cell: e.g. ERM wins for TimeMixer on ILI $H$ = 48 and on ETTh1 $H$ = 96 MAE, and the Table 4 caption calls the results "near-consistent" (Table 1, p. 7; Table 4, p. 16), and with Crossformer it is best in 6 of 8 averaged evaluations against concept-drift, temporal-shift and combined baselines (Table 2, p. 8).
+The paper splits distribution shift in time-series forecasting into two types:
+
+- **temporal shift**, where marginal distributions change over time and conditional ones stay the same, and
+- **concept drift**, where conditional distributions change and marginal ones stay the same (Definitions 2.1–2.2, p. 2).
+
+It argues that existing forecasting work mostly handles temporal shift (through normalization), while concept drift is largely overlooked (p. 1, pp. 2–3).
+
+It proposes:
+
+- **SAM** (soft attention masking), which builds a surrogate exogenous feature $\mathbf{X}^{\text{SUR}}$ from "invariant patterns" in both the lookback and the horizon windows of the exogenous series, and
+- **ShifTS**, a model-agnostic framework that first removes temporal shift with RevIN and then applies SAM (pp. 3–6).
+
+On six datasets (ILI, Exchange, ETTh1/ETTh2/ETTm1/ETTm2), with univariate targets and exogenous features:
+
+- ShifTS lowers MSE and MAE on average (IMP.) for all six base forecasting models tested, though not in every cell:
+  - e.g. ERM wins for TimeMixer on ILI $H$ = 48 and on ETTh1 $H$ = 96 MAE, and
+  - the Table 4 caption calls the results "near-consistent" (Table 1, p. 7; Table 4, p. 16), and
+- with Crossformer it is best in 6 of 8 averaged evaluations against concept-drift, temporal-shift and combined baselines (Table 2, p. 8).
 
 ## Problem
 
@@ -20,7 +37,11 @@ from historical data $(\mathbf{X}_t^L, \mathbf{Y}_t^L)$, with
 
 $$\mathbf{X}_t^L = [x_{t-L+1}, x_{t-L+2}, \dots, x_t] \in \mathbf{X}, \qquad \mathbf{Y}_t^L = [y_{t-L+1}, y_{t-L+2}, \dots, y_t] \in \mathbf{Y}$$
 
-where $L$ is the length of the **lookback window** and $H$ the number of forecast steps, the **horizon window** (p. 2). (The paper prints the first element as "$yt + 1$", p. 2.) $\mathbf{Y}^H = \{\mathbf{Y}_t^H\}$ for $\forall t$ is the collection of horizon series over all time steps, and likewise $\mathbf{Y}^L$, $\mathbf{X}^L$ (p. 2).
+where $L$ is the length of the **lookback window** and $H$ the number of forecast steps, the **horizon window** (p. 2).
+
+(The paper prints the first element as "$yt + 1$", p. 2.)
+
+$\mathbf{Y}^H = \{\mathbf{Y}_t^H\}$ for $\forall t$ is the collection of horizon series over all time steps, and likewise $\mathbf{Y}^L$, $\mathbf{X}^L$ (p. 2).
 
 - Conventional forecasting learns $f_\theta : (\mathbf{X}^L, \mathbf{Y}^L) \to \mathbf{Y}^H$ by empirical risk minimization (ERM) (p. 2).
 - **Scope:** univariate forecasting with exogenous features, $d_{\mathbf{Y}} = 1$ and $d_{\mathbf{X}} \ge 1$ (p. 2).
@@ -31,7 +52,8 @@ where $L$ is the length of the **lookback window** and $H$ the number of forecas
 
 - Invariant-learning methods need **environment labels**, "typically unavailable in time-series datasets" (p. 1, p. 3).
 - They assume **all correlated exogenous features** needed to determine the target are accessible, which often doesn't hold for time series ("lookback window information is not sufficiently determining the horizon target") (p. 3).
-- The few concept-drift methods built for time series are designed for **online** settings, which require iterative retraining over time steps (p. 1), and are validated only on limited synthetic datasets (p. 3).
+- The few concept-drift methods built for time series are designed for **online** settings, which require iterative retraining over time steps (p. 1),
+  and are validated only on limited synthetic datasets (p. 3).
 
 ## Definitions: the taxonomy of distribution shift
 
@@ -62,15 +84,22 @@ which "should be generalizable for both training and testing time steps" (p. 2).
 
   $$\mathrm{P}(\mathbf{Y}_i^H \mid \mathbf{X}_i^L) \neq \mathrm{P}(\mathbf{Y}_j^H \mid \mathbf{X}_j^L) \quad \text{for some } i, j \in t$$
 
-- Concept drift in time series is "the changing correlations between $\mathbf{X}$ and $\mathbf{Y}$ over time" (p. 3); "The correlations between $\mathbf{X}$ and $\mathbf{Y}$ can change over time, making the conditional distributions $\mathrm{P}(\mathbf{Y}^H \mid \mathbf{X}^L)$ unstable and less predictable" (p. 3).
+- Concept drift in time series is "the changing correlations between $\mathbf{X}$ and $\mathbf{Y}$ over time" (p. 3);
+  "The correlations between $\mathbf{X}$ and $\mathbf{Y}$ can change over time, making the conditional distributions $\mathrm{P}(\mathbf{Y}^H \mid \mathbf{X}^L)$ unstable and less predictable" (p. 3).
 
 **How existing methods handle temporal shift** (pp. 2–3): through normalization, "ensuring $\mathrm{P}(\mathbf{Y}^H) = \mathrm{P}(\mathbf{Y}^L)$ by both normalizing to standard 0-1 distributions" (citing RevIN, Non-stationary Transformers, Dish-TS).
 
 **Appendix B, the distinction in words** (p. 13):
 
-- **Temporal shift:** changes in the statistical properties of a **univariate** series (mean, variance, autocorrelation structure) over time, e.g. mean and variance differing between the lookback and horizon windows. "This issue is inherent in time series forecasting and can occur on any given time series data, regardless of whether the data pertains to the target series or exogenous features" (p. 13).
-- **Concept drift:** changes in the **correlations between exogenous features and the target** over time; it "involves multiple correlated time series and is not an inherent issue in univariate time series analysis" (p. 13).
-- Illustrations (p. 14): Figure 4 shows a target series whose mean and variance vary across periods (temporal shift); Figure 5 shows an exogenous feature whose increases lead to target increases early on and to decreases later (concept drift). In both, N-BEATS+RevIN tracks the ground truth and plain N-BEATS doesn't (Figures 4–5, p. 14; figures adapted from the RevIN repository, footnote 2, p. 13).
+- **Temporal shift:** changes in the statistical properties of a **univariate** series (mean, variance, autocorrelation structure) over time.
+  - E.g. mean and variance differing between the lookback and horizon windows.
+  - "This issue is inherent in time series forecasting and can occur on any given time series data, regardless of whether the data pertains to the target series or exogenous features" (p. 13).
+- **Concept drift:** changes in the **correlations between exogenous features and the target** over time;
+  it "involves multiple correlated time series and is not an inherent issue in univariate time series analysis" (p. 13).
+- Illustrations (p. 14):
+  - Figure 4 shows a target series whose mean and variance vary across periods (temporal shift);
+  - Figure 5 shows an exogenous feature whose increases lead to target increases early on and to decreases later (concept drift).
+  - In both, N-BEATS+RevIN tracks the ground truth and plain N-BEATS doesn't (Figures 4–5, p. 14; figures adapted from the RevIN repository, footnote 2, p. 13).
 
 **Dataset-level diagnosis** (Figure 6, p. 15):
 
@@ -79,25 +108,42 @@ which "should be generalizable for both training and testing time steps" (p. 2).
 
 **Our reading:**
 
-- The two definitions are verbal and mirror each other (marginals change and conditionals fixed vs. the reverse); they don't cover the case where both change at once, although the ablation concludes the two "co-exist in time series data" (p. 9) and ETT is said to show both (p. 15).
-- "Conditional" is always $\mathbf{Y}^H$ given the **exogenous** $\mathbf{X}$; a change in $\mathrm{P}(\mathbf{Y}^H \mid \mathbf{Y}^L)$ (the target's own dynamics) isn't assigned to either type. So "concept drift" here is narrower than the general machine-learning sense, and by the paper's own account concept drift "is not an inherent issue in univariate time series analysis" (p. 13).
+- The two definitions are verbal and mirror each other (marginals change and conditionals fixed vs. the reverse).
+  - They don't cover the case where both change at once, although the ablation concludes the two "co-exist in time series data" (p. 9) and ETT is said to show both (p. 15).
+- "Conditional" is always $\mathbf{Y}^H$ given the **exogenous** $\mathbf{X}$.
+  - A change in $\mathrm{P}(\mathbf{Y}^H \mid \mathbf{Y}^L)$ (the target's own dynamics) isn't assigned to either type.
+  - So "concept drift" here is narrower than the general machine-learning sense, and by the paper's own account concept drift "is not an inherent issue in univariate time series analysis" (p. 13).
 - "Temporal shift" is essentially covariate (virtual) shift applied across time, which is why normalization (RevIN-style) is presented as its remedy.
-- The decomposition of $\mathrm{P}(\mathbf{Y}^H)$ on p. 2 is printed as a sum of two products; it isn't a standard identity (the law of total probability would condition on both $\mathbf{X}^L$ and $\mathbf{Y}^L$ jointly). We read it as informal.
+- The decomposition of $\mathrm{P}(\mathbf{Y}^H)$ on p. 2 is printed as a sum of two products.
+  - It isn't a standard identity (the law of total probability would condition on both $\mathbf{X}^L$ and $\mathbf{Y}^L$ jointly).
+  - We read it as informal.
 
 ## Method
 
 ### SAM: soft attention masking (Section 3.1, pp. 3–5)
 
-**Intuition** (p. 3): $\mathbf{X}^L$ alone may lack the information needed to predict $\mathbf{Y}^H$; there may be patterns in the **horizon** window of the exogenous features, $\mathbf{X}^H$, jointly with $\mathbf{X}^L$, that influence the target. Modeling $P(\mathbf{Y}^H \mid \mathbf{X}^L, \mathbf{X}^H)$ "leads to a more stable conditional distribution" than $P(\mathbf{Y}^H \mid \mathbf{X}^L)$ (p. 3). The authors "assume that incorporating causal relationships from the horizon window enables more complete causality modeling", given that the future can't influence the past (e.g. $\mathbf{X}_{t+1}^H \nrightarrow \mathbf{Y}_t^H$) (p. 3).
+**Intuition** (p. 3): $\mathbf{X}^L$ alone may lack the information needed to predict $\mathbf{Y}^H$.
+
+- There may be patterns in the **horizon** window of the exogenous features, $\mathbf{X}^H$, jointly with $\mathbf{X}^L$, that influence the target.
+- Modeling $P(\mathbf{Y}^H \mid \mathbf{X}^L, \mathbf{X}^H)$ "leads to a more stable conditional distribution" than $P(\mathbf{Y}^H \mid \mathbf{X}^L)$ (p. 3).
+- The authors "assume that incorporating causal relationships from the horizon window enables more complete causality modeling", given that the future can't influence the past (e.g. $\mathbf{X}_{t+1}^H \nrightarrow \mathbf{Y}_t^H$) (p. 3).
 
 **Two obstacles** to modeling $P(\mathbf{Y}^H \mid \mathbf{X}^L, \mathbf{X}^H)$ directly (pp. 3–4):
 
 1. $\mathbf{X}^H$ is unknown at test time; predicting it via $P(\mathbf{X}^H \mid \mathbf{X}^L)$ "can be as challenging as predicting $\mathbf{Y}^H$ directly" (p. 4).
 2. Not every pattern in $\mathbf{X}^H$ is causally related to the target; modeling all of them adds noisy relationships (p. 4).
 
-**Two-step approach** (p. 4): first identify the patterns in $[\mathbf{X}^L, \mathbf{X}^H]$ that give stable conditional distributions ("invariant patterns"), then model those conditionals. A pattern is considered stable if its correlation with the target stays consistent over all or most time steps; sporadic or local correlations "are likely spurious" (p. 4). The invariant patterns are aggregated into a **surrogate feature** $\mathbf{X}^{\text{SUR}}$, and the model learns $P(\mathbf{Y}^H \mid \mathbf{X}^{\text{SUR}})$ (p. 4, Figure 1(b), p. 3).
+**Two-step approach** (p. 4):
 
-- Claimed trade-off (p. 4): $P(\mathbf{Y}^H \mid \mathbf{X}^{\text{SUR}})$ is stable, but estimating $\mathbf{X}^{\text{SUR}}$ adds error; "practical evaluations demonstrate that the benefits ... outweigh the potential estimation errors", because $\mathbf{X}^{\text{SUR}}$ "contains only partial information, which is easier to predict than the entire $\mathbf{X}^H$" (p. 4).
+1. First identify the patterns in $[\mathbf{X}^L, \mathbf{X}^H]$ that give stable conditional distributions ("invariant patterns"),
+2. then model those conditionals.
+
+A pattern is considered stable if its correlation with the target stays consistent over all or most time steps; sporadic or local correlations "are likely spurious" (p. 4).
+
+The invariant patterns are aggregated into a **surrogate feature** $\mathbf{X}^{\text{SUR}}$, and the model learns $P(\mathbf{Y}^H \mid \mathbf{X}^{\text{SUR}})$ (p. 4, Figure 1(b), p. 3).
+
+- Claimed trade-off (p. 4): $P(\mathbf{Y}^H \mid \mathbf{X}^{\text{SUR}})$ is stable, but estimating $\mathbf{X}^{\text{SUR}}$ adds error;
+  "practical evaluations demonstrate that the benefits ... outweigh the potential estimation errors", because $\mathbf{X}^{\text{SUR}}$ "contains only partial information, which is easier to predict than the entire $\mathbf{X}^H$" (p. 4).
 
 **Implementation** (p. 4):
 
@@ -113,7 +159,9 @@ $$\text{Sparsity:} \quad \mathcal{M}_{ij} = \mathcal{M}_{ij} \cdot \mathbb{1}_{(
 
 $$\text{Normalize:} \quad \mathcal{M}_j = \frac{\mathcal{M}_j}{|\mathcal{M}_j|}$$
 
-- Softmax computes each pattern's weight toward $\mathbf{Y}^H$; sparsity keeps only weights at or above the mean $\mu(\mathcal{M}_j)$; the high-weight patterns "consistently contribute to the target across all instances at all time steps" and are regarded as invariant (p. 4).
+- Softmax computes each pattern's weight toward $\mathbf{Y}^H$;
+  sparsity keeps only weights at or above the mean $\mu(\mathcal{M}_j)$;
+  the high-weight patterns "consistently contribute to the target across all instances at all time steps" and are regarded as invariant (p. 4).
 - Invariant patterns, intuitively: $P(\mathbf{Y}_i^H \mid \mathbf{X}_{i-k}^H) \approx P(\mathbf{Y}_j^H \mid \mathbf{X}_{j-k}^H)$ for some $k \in [0, L]$ and $i, j \in t$ (p. 4).
 
 **Surrogate feature** (Equation 2, p. 4):
@@ -128,9 +176,13 @@ $$\mathcal{L}_{\text{SUR}} = \mathrm{MSE}(\mathbf{X}^{\text{SUR}}, \hat{\mathbf{
 
 ### Temporal shift first (Section 3.2, p. 5)
 
-- Claim: mitigating temporal shift "is equally critical and serves as a prerequisite for effectively managing concept drift" (p. 5): a stable $P(\mathbf{Y}^H \mid \mathbf{X}^{\text{SUR}})$ is hard to learn if the marginals $P(\mathbf{Y}^H)$ or $P(\mathbf{X}^{\text{SUR}})$ change over time (p. 5).
-- Remedy: learn the conditional under standardized marginals with instance normalization: normalize before the model, denormalize after, so that $P(\mathbf{X}_{\text{Norm}}^L) \approx P(\mathbf{X}_{\text{Norm}}^H) \sim \mathrm{Dist}(0, 1)$ and $P(\mathbf{Y}_{\text{Norm}}^L) \approx P(\mathbf{Y}_{\text{Norm}}^H) \sim \mathrm{Dist}(0, 1)$ (p. 5).
-- Choice: **RevIN**, for its simplicity and effectiveness; SAN and N-S Transformer are left out of the framework because they "often require modifications to forecasting models or additional pre-training strategies" (p. 5).
+- Claim: mitigating temporal shift "is equally critical and serves as a prerequisite for effectively managing concept drift" (p. 5):
+  a stable $P(\mathbf{Y}^H \mid \mathbf{X}^{\text{SUR}})$ is hard to learn if the marginals $P(\mathbf{Y}^H)$ or $P(\mathbf{X}^{\text{SUR}})$ change over time (p. 5).
+- Remedy: learn the conditional under standardized marginals with instance normalization: normalize before the model, denormalize after,
+  so that $P(\mathbf{X}_{\text{Norm}}^L) \approx P(\mathbf{X}_{\text{Norm}}^H) \sim \mathrm{Dist}(0, 1)$
+  and $P(\mathbf{Y}_{\text{Norm}}^L) \approx P(\mathbf{Y}_{\text{Norm}}^H) \sim \mathrm{Dist}(0, 1)$ (p. 5).
+- Choice: **RevIN**, for its simplicity and effectiveness;
+  SAN and N-S Transformer are left out of the framework because they "often require modifications to forecasting models or additional pre-training strategies" (p. 5).
 
 ### ShifTS: the integrated framework (Section 3.3, pp. 5–6; Figure 2, p. 5)
 
@@ -164,7 +216,8 @@ then the loss of Equation 4 and an update of $f$, $\mathcal{M}$, $\mathrm{Agg}$.
 **Our reading:**
 
 - The forecasting model $f$ outputs both the target and the surrogate features; the aggregation MLP adds a residual correction to the target. At test time no horizon data is used.
-- The mask $\mathcal{M}$ is learned jointly; "invariant across time steps" is enforced only through one shared mask over the whole training set, not through any explicit invariance penalty across environments.
+- The mask $\mathcal{M}$ is learned jointly;
+  "invariant across time steps" is enforced only through one shared mask over the whole training set, not through any explicit invariance penalty across environments.
 - Line 9 of Algorithm 1 is printed as $f_{i+1} \leftarrow f_i$, $\mathcal{M}_{i+1} \leftarrow \mathcal{M}_i$, $\mathrm{Agg}_{i+1} \leftarrow \mathrm{Agg}_i$ (p. 6): the gradient step is implied, not written.
 
 ## Experimental setup
@@ -180,8 +233,12 @@ then the loss of Equation 4 and an update of $f$, $\mathcal{M}$, $\mathrm{Agg}$.
 
 (p. 6 reads "Two-hourly/minutely reported electricity transformer temperature (ETTh1/ETTh2 and ETTm1/ETTm2, respectively)"; **our reading:** "two" most likely counts the two sub-datasets per granularity, consistent with "minutely and hourly" in C.1, p. 13.)
 
-- **Excluded:** Traffic (PeMS) and Weather, for "near-stationary behavior, with only moderate distribution shift issues" (p. 6); Electricity is also excluded, with "strong periodic signals" making shift "less prevalent" (p. 14; Figure 6, p. 15).
-- **Preprocessing:** train/validation/test splits and target-variable selection follow prior works (Wu et al. 2022, Nie et al. 2023, Liu et al. 2024b); all datasets "preprocessed using the zero-mean normalization method" (p. 14). The specific target variable per dataset isn't named.
+- **Excluded:**
+  - Traffic (PeMS) and Weather, for "near-stationary behavior, with only moderate distribution shift issues" (p. 6);
+  - Electricity is also excluded, with "strong periodic signals" making shift "less prevalent" (p. 14; Figure 6, p. 15).
+- **Preprocessing:** train/validation/test splits and target-variable selection follow prior works (Wu et al. 2022, Nie et al. 2023, Liu et al. 2024b);
+  all datasets "preprocessed using the zero-mean normalization method" (p. 14).
+  The specific target variable per dataset isn't named.
 
 **Windows** (C.2, pp. 14–15):
 
@@ -190,7 +247,10 @@ then the loss of Equation 4 and an update of $f$, $\mathcal{M}$, $\mathrm{Agg}$.
 | ETT, Exchange | 96 | 96, 192, 336, 720 | 48 |
 | ILI | 36 | 24, 36, 48, 60 | 18 |
 
-**Forecasting models** (p. 6): Informer, Pyraformer, Crossformer, PatchTST, TimeMixer, iTransformer (the last two called state of the art); five transformer-based and one MLP-based (p. 7). Implementations and suggested hyperparameters from the Time Series Library, "with additional tuning" (p. 15); an extra MLP layer at the end of PatchTST to use exogenous features, following Liu et al. 2024a (p. 15).
+**Forecasting models** (p. 6): Informer, Pyraformer, Crossformer, PatchTST, TimeMixer, iTransformer (the last two called state of the art); five transformer-based and one MLP-based (p. 7).
+
+- Implementations and suggested hyperparameters from the Time Series Library, "with additional tuning" (p. 15);
+- an extra MLP layer at the end of PatchTST to use exogenous features, following Liu et al. 2024a (p. 15).
 
 **Distribution-shift baselines** (pp. 6–7), all with Crossformer as the forecasting model (p. 8):
 
@@ -201,7 +261,9 @@ then the loss of Equation 4 and an update of $f$, $\mathcal{M}$, $\mathrm{Agg}$.
 - Temporal-shift baselines use the configurations of their own papers (p. 15).
 - Minutely ETT is excluded from this comparison, following Liu et al. 2024a, as it closely resembles hourly ETT (p. 8).
 
-**Metrics** (p. 7): $\mathrm{MSE} = \frac{1}{n}\sum_{i=1}^n (\boldsymbol{y} - \hat{\boldsymbol{y}})^2$ and $\mathrm{MAE} = \frac{1}{n}\sum_{i=1}^n |\boldsymbol{y} - \hat{\boldsymbol{y}}|$. "IMP." is "the average improvements over all horizons of ShifTS vs ERM" (Table 1 caption, p. 7).
+**Metrics** (p. 7): $\mathrm{MSE} = \frac{1}{n}\sum_{i=1}^n (\boldsymbol{y} - \hat{\boldsymbol{y}})^2$ and $\mathrm{MAE} = \frac{1}{n}\sum_{i=1}^n |\boldsymbol{y} - \hat{\boldsymbol{y}}|$.
+
+"IMP." is "the average improvements over all horizons of ShifTS vs ERM" (Table 1 caption, p. 7).
 
 **Hardware:** NVIDIA Tesla V100 32GB (p. 7).
 
@@ -289,7 +351,12 @@ Ties, bold on both sides as printed (p. 7): ETTm1 $H$ = 336 PatchTST MSE (0.058)
 | ETTm2 | 720 | 1.175 / 0.879 | 0.564 / 0.592 | 2.920 / 1.537 | 0.196 / 0.347 | 0.246 / 0.387 | 0.198 / 0.346 |
 | ETTm2 | IMP. | | 33.4% / 23.0% | | 82.8% / 63.2% | | 8.5% / 4.1% |
 
-ERM is better (bold) than ShifTS for TimeMixer on ILI $H$ = 48 (0.737 / 0.692 vs 0.741 / 0.711) and on ETTh1 $H$ = 96 MAE (0.184 vs 0.187); ties on TimeMixer ETTh1 $H$ = 96 MSE (0.059) and ETTm1 $H$ = 192 MSE (0.047) (p. 16). The caption accordingly says "near-consistent" gains (p. 16). (The Pyraformer ETTm1 $H$ = 192 ERM MAE is printed with four decimals, 0.4112, p. 16.)
+ERM is better (bold) than ShifTS for TimeMixer on ILI $H$ = 48 (0.737 / 0.692 vs 0.741 / 0.711) and on ETTh1 $H$ = 96 MAE (0.184 vs 0.187);
+ties on TimeMixer ETTh1 $H$ = 96 MSE (0.059) and ETTm1 $H$ = 192 MSE (0.047) (p. 16).
+
+The caption accordingly says "near-consistent" gains (p. 16).
+
+(The Pyraformer ETTm1 $H$ = 192 ERM MAE is printed with four decimals, 0.4112, p. 16.)
 
 **Comparison with distribution-shift methods, Crossformer** (Table 2, p. 8). Averages over the four horizons, MSE / MAE; **bold** = best, *italics* = second best (underlined in the paper):
 
@@ -320,7 +387,10 @@ ShifTS is best in 6 and second in 2 of 8 evaluations (p. 8); on ETTh2 MAE, SAN a
 | 720 | 1.165 | 1.001 | **0.981** |
 | Avg. | 0.470 | 0.415 | **0.407** |
 
-**Ablation, Exchange, $H$ = 96** (Figure 3(b), p. 9). MSE as printed on the bars. ShifTS\TS drops temporal-shift handling (RevIN), ShifTS\CD drops SAM (p. 9); for PatchTST and iTransformer, which already normalize, ShifTS\TS keeps their standard norm/denorm plus SAM, and ShifTS\CD replaces that norm/denorm with RevIN (p. 15):
+**Ablation, Exchange, $H$ = 96** (Figure 3(b), p. 9). MSE as printed on the bars.
+
+- ShifTS\TS drops temporal-shift handling (RevIN), ShifTS\CD drops SAM (p. 9);
+- for PatchTST and iTransformer, which already normalize, ShifTS\TS keeps their standard norm/denorm plus SAM, and ShifTS\CD replaces that norm/denorm with RevIN (p. 15):
 
 | Model | Base | ShifTS\TS | ShifTS\CD | ShifTS |
 |---|---|---|---|---|
@@ -328,15 +398,32 @@ ShifTS is best in 6 and second in 2 of 8 evaluations (p. 8); on ETTh2 MAE, SAN a
 | PatchTST | 0.13 | 0.117 | 0.122 | 0.102 |
 | iTransformer | 0.135 | 0.115 | 0.122 | 0.115 |
 
-- The authors' reading (p. 9): handling both shifts gives the lowest error; for models that already normalize (PatchTST, iTransformer), mitigating concept drift helps more than adding RevIN; for Crossformer, which has no temporal-shift mitigation, temporal shift matters more. They conclude "mitigating temporal shift is a necessity in mitigating concept drift" (p. 9).
+- The authors' reading (p. 9):
+  - handling both shifts gives the lowest error;
+  - for models that already normalize (PatchTST, iTransformer), mitigating concept drift helps more than adding RevIN;
+  - for Crossformer, which has no temporal-shift mitigation, temporal shift matters more.
+  - They conclude "mitigating temporal shift is a necessity in mitigating concept drift" (p. 9).
 
-**When ShifTS helps most** (p. 8; Figure 3(a), p. 9): gains are larger on ILI and Exchange than on ETT; across datasets, the gain correlates positively and linearly with $\boldsymbol{I}(\mathbf{X}^H; \mathbf{Y}^H)$, with $p = 0.012 \le 0.05$ (p. 8). With iTransformer, the gain is about 15% on ILI and Exchange (p. 8).
+**When ShifTS helps most** (p. 8; Figure 3(a), p. 9):
+
+- Gains are larger on ILI and Exchange than on ETT;
+- across datasets, the gain correlates positively and linearly with $\boldsymbol{I}(\mathbf{X}^H; \mathbf{Y}^H)$, with $p = 0.012 \le 0.05$ (p. 8).
+- With iTransformer, the gain is about 15% on ILI and Exchange (p. 8).
 
 **Our reading:**
 
-- **"IMP." is the mean of the per-horizon relative MSE (or MAE) reductions.** Recomputed from the printed cells, this matches e.g. Crossformer ILI (81.9%), PatchTST ILI (12.0%), iTransformer Exchange (15.2%) and ETTh1 (5.1%), but not every cell fits: iTransformer ILI MSE gives 11.9% (printed 13.8%), Crossformer Exchange MSE 51.5% (53.5%), Crossformer ETTm1 MSE 77.6% (77.3%), PatchTST ETTm2 16.1/8.7% (15.9/8.6%) (Table 1, p. 7); Informer ETTh2 MSE 87.4% (82.0%) and TimeMixer ETTh1 MSE 17.5% (23.3%) (Table 4, p. 16). A ratio-of-means definition fits worse; the paper doesn't define IMP.
-- **Table 3 vs Table 1:** ShifTS on Exchange $H$ = 192 is 0.207 in Table 3 (p. 9) but 0.203 in Table 1 (p. 7). Table 3's 0.207 averages to 0.470, matching Table 2's Exchange ShifTS MSE (p. 8); Table 1's 0.203 would give 0.469, so the Table 1 cell is probably the misprint.
-- **The large gains come with weak baselines:** the Crossformer, Informer and Pyraformer ERM numbers are much worse than RevIN alone (Table 2: Crossformer ILI 3.705 vs 0.815 with RevIN, p. 8). Against RevIN, ShifTS improves Crossformer ILI MSE from 0.815 to 0.668 and ETTh1 from 0.085 to 0.076 (p. 8). With models that already normalize (PatchTST, iTransformer, TimeMixer), gains on ETT are 2–23%, 8 of the 12 ETT MSE values between 2% and 9% (pp. 7, 16).
+- **"IMP." is the mean of the per-horizon relative MSE (or MAE) reductions.**
+  - Recomputed from the printed cells, this matches e.g. Crossformer ILI (81.9%), PatchTST ILI (12.0%), iTransformer Exchange (15.2%) and ETTh1 (5.1%), but not every cell fits:
+    - iTransformer ILI MSE gives 11.9% (printed 13.8%), Crossformer Exchange MSE 51.5% (53.5%), Crossformer ETTm1 MSE 77.6% (77.3%), PatchTST ETTm2 16.1/8.7% (15.9/8.6%) (Table 1, p. 7);
+    - Informer ETTh2 MSE 87.4% (82.0%) and TimeMixer ETTh1 MSE 17.5% (23.3%) (Table 4, p. 16).
+  - A ratio-of-means definition fits worse; the paper doesn't define IMP.
+- **Table 3 vs Table 1:** ShifTS on Exchange $H$ = 192 is 0.207 in Table 3 (p. 9) but 0.203 in Table 1 (p. 7).
+  - Table 3's 0.207 averages to 0.470, matching Table 2's Exchange ShifTS MSE (p. 8);
+  - Table 1's 0.203 would give 0.469, so the Table 1 cell is probably the misprint.
+- **The large gains come with weak baselines:**
+  - The Crossformer, Informer and Pyraformer ERM numbers are much worse than RevIN alone (Table 2: Crossformer ILI 3.705 vs 0.815 with RevIN, p. 8).
+  - Against RevIN, ShifTS improves Crossformer ILI MSE from 0.815 to 0.668 and ETTh1 from 0.085 to 0.076 (p. 8).
+  - With models that already normalize (PatchTST, iTransformer, TimeMixer), gains on ETT are 2–23%, 8 of the 12 ETT MSE values between 2% and 9% (pp. 7, 16).
 - In the iTransformer ablation, ShifTS\TS and ShifTS score the same (0.115): adding RevIN brings nothing there (Figure 3(b), p. 9).
 - No variance across runs is reported, so small differences (third decimal on ETTm1/ETTm2) can't be judged.
 - The concept-drift baselines depend on the arbitrary $k$ time segments used as environments (p. 15), with $k$ unstated.
@@ -344,24 +431,41 @@ ShifTS is best in 6 and second in 2 of 8 evaluations (p. 8); on ETTh2 MAE, SAN a
 ## Assumptions and limitations
 
 - **Univariate target with exogenous features** ($d_{\mathbf{Y}} = 1$, $d_{\mathbf{X}} \ge 1$, p. 2); concept drift as defined needs exogenous features at all (p. 13).
-- **Horizon patterns of exogenous features are assumed causally informative** for the target (p. 3: "We assume that incorporating causal relationships from the horizon window enables more complete causality modeling"); ShifTS helps less when $\boldsymbol{I}(\mathbf{X}^H; \mathbf{Y}^H)$ is low (p. 8).
+- **Horizon patterns of exogenous features are assumed causally informative** for the target (p. 3: "We assume that incorporating causal relationships from the horizon window enables more complete causality modeling");
+  ShifTS helps less when $\boldsymbol{I}(\mathbf{X}^H; \mathbf{Y}^H)$ is low (p. 8).
 - **Invariance is assumed to mean "consistent correlation across most time steps"** (p. 4); patterns with sporadic correlations are treated as spurious.
 - **Marginals must be stabilized first:** RevIN is assumed sufficient; more advanced temporal-shift methods are out of scope (p. 5), though Table 3 shows SAN would help (p. 9).
 - **Standard offline forecasting** with fixed train/validation/test splits (p. 14); no online or continual setting.
 - **Datasets chosen for having shift:** near-stationary datasets are excluded: Traffic and Weather (p. 6), Electricity (p. 14).
 - **Stated by the authors** (Appendix E, p. 16): (1) no theoretical guarantee, e.g. no analysis of how much the error bound tightens; (2) SAM and ShifTS "are not the only possible solutions".
-- **Our reading:** no seeds or variances; the main comparison with distribution-shift baselines uses only Crossformer, the model with the weakest ERM baseline; and the claim that estimating $\mathbf{X}^{\text{SUR}}$ is easier than $\mathbf{X}^H$ (p. 4) is argued, not measured.
+- **Our reading:**
+  - no seeds or variances;
+  - the main comparison with distribution-shift baselines uses only Crossformer, the model with the weakest ERM baseline; and
+  - the claim that estimating $\mathbf{X}^{\text{SUR}}$ is easier than $\mathbf{X}^H$ (p. 4) is argued, not measured.
 
 ## Relevance to this thesis
 
 **Our reading:**
 
-- **Vocabulary for drift.** The paper gives a clean two-way split for time series: **temporal shift** (marginals change: mean, variance, autocorrelation of a series) and **concept drift** (the relationship between exogenous features and the target changes). When we describe the drift between our tasks (successive periods or datasets), we can say which kind each one is; most of what happens between periods of one signal is temporal shift in this vocabulary.
-- **Temporal shift has a cheap, standard remedy:** instance normalization (RevIN) before the model and denormalization after. Any comparison of joint training vs task arithmetic on drifting series should fix whether RevIN-style normalization is used, because it alone changes errors by large factors (Table 2, p. 8: Crossformer ILI MSE 3.705 → 0.815).
-- **Environment labels from time:** splitting the training set into $k$ equal-length time segments as "environments" (p. 15) is close to how we may define tasks (periods of a series); it's a precedent for treating time segments as distinct tasks.
-- **Dataset selection:** the paper uses ETTh1/ETTh2/ETTm1/ETTm2, Exchange and ILI precisely because they show distribution shift, and excludes Traffic, Electricity and Weather as near-stationary (p. 6, p. 14). That is a useful argument when choosing forecasting datasets where drift matters.
-- **Standard forecasting protocol** to align with: lookback 96, horizons {96, 192, 336, 720} for ETT and Exchange; lookback 36, horizons {24, 36, 48, 60} for ILI; MSE and MAE; TSLib implementations (pp. 14–15).
-- **Not covered:** anomaly detection, multivariate targets, continual or sequential training, and model merging. The paper's concept drift is about $\mathbf{X} \to \mathbf{Y}$ correlations, which for unsupervised anomaly detection (no target) has no direct counterpart.
+- **Vocabulary for drift.** The paper gives a clean two-way split for time series:
+  - **temporal shift** (marginals change: mean, variance, autocorrelation of a series) and
+  - **concept drift** (the relationship between exogenous features and the target changes).
+  - When we describe the drift between our tasks (successive periods or datasets), we can say which kind each one is;
+    most of what happens between periods of one signal is temporal shift in this vocabulary.
+- **Temporal shift has a cheap, standard remedy:** instance normalization (RevIN) before the model and denormalization after.
+  - Any comparison of joint training vs task arithmetic on drifting series should fix whether RevIN-style normalization is used,
+    because it alone changes errors by large factors (Table 2, p. 8: Crossformer ILI MSE 3.705 → 0.815).
+- **Environment labels from time:** splitting the training set into $k$ equal-length time segments as "environments" (p. 15) is close to how we may define tasks (periods of a series);
+  it's a precedent for treating time segments as distinct tasks.
+- **Dataset selection:** the paper uses ETTh1/ETTh2/ETTm1/ETTm2, Exchange and ILI precisely because they show distribution shift, and excludes Traffic, Electricity and Weather as near-stationary (p. 6, p. 14).
+  - That is a useful argument when choosing forecasting datasets where drift matters.
+- **Standard forecasting protocol** to align with:
+  - lookback 96, horizons {96, 192, 336, 720} for ETT and Exchange;
+  - lookback 36, horizons {24, 36, 48, 60} for ILI;
+  - MSE and MAE;
+  - TSLib implementations (pp. 14–15).
+- **Not covered:** anomaly detection, multivariate targets, continual or sequential training, and model merging.
+  - The paper's concept drift is about $\mathbf{X} \to \mathbf{Y}$ correlations, which for unsupervised anomaly detection (no target) has no direct counterpart.
 
 ## Quotes worth keeping
 

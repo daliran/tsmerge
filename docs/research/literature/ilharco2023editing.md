@@ -8,13 +8,26 @@
 
 ## In one paragraph
 
-The paper proposes editing a pre-trained model through **task vectors**: the difference between a model's weights after fine-tuning on a task and its pre-trained weights (p. 2). Arithmetic on these vectors steers the model: **negating** a task vector makes the model worse at that task with little change elsewhere (Section 3); **adding** task vectors produces one model that does well on several tasks, sometimes better than fine-tuning on one task (Section 4); and **analogies** ("A is to B as C is to D") improve a task with little or no data for it (Section 5). The experiments use CLIP image classifiers, GPT-2 and T5. Adding the task vectors of 8 image classification tasks gives one model with 91.2% average normalized accuracy, against 100% for 8 separate fine-tuned models (p. 5); adding pairs keeps 98.9% (p. 5).
+The paper proposes editing a pre-trained model through **task vectors**: the difference between a model's weights after fine-tuning on a task and its pre-trained weights (p. 2).
+
+Arithmetic on these vectors steers the model:
+
+- **negating** a task vector makes the model worse at that task with little change elsewhere (Section 3);
+- **adding** task vectors produces one model that does well on several tasks, sometimes better than fine-tuning on one task (Section 4); and
+- **analogies** ("A is to B as C is to D") improve a task with little or no data for it (Section 5).
+
+The experiments use CLIP image classifiers, GPT-2 and T5.
+
+Adding the task vectors of 8 image classification tasks gives one model with 91.2% average normalized accuracy, against 100% for 8 separate fine-tuned models (p. 5); adding pairs keeps 98.9% (p. 5).
 
 ## Problem
 
 How to change ("edit") the behavior of a pre-trained model after pre-training — improve it on a downstream task, remove an unwanted behavior, add a capability — cheaply, without retraining, and without access to the training data (pp. 1–2).
 
-**Setting:** models that can be fine-tuned without adding parameters ("open-ended" models: open-vocabulary image classifiers, text-to-text models) (p. 3); all task vectors come from the **same architecture** (p. 2, p. 8) and the **same pre-trained initialization** (p. 8).
+**Setting:**
+
+- models that can be fine-tuned without adding parameters ("open-ended" models: open-vocabulary image classifiers, text-to-text models) (p. 3);
+- all task vectors come from the **same architecture** (p. 2, p. 8) and the **same pre-trained initialization** (p. 8).
 
 ## Method
 
@@ -39,7 +52,9 @@ With $\theta = \theta_{\text{pre}}$ and $\lambda = 1$, this gives back the fine-
 **Choosing $\lambda$:**
 
 - In general: on held-out validation sets (p. 2, p. 3).
-- **Addition:** one single $\lambda$ for the sum of all task vectors, searched in $\{0, 0.05, 0.1, \dots, 1.0\}$. One coefficient per task vector "could improve performance", but exploring all combinations is impractical when the number of tasks isn't small, "due to the curse of dimensionality"; the authors suggest more sophisticated strategies, such as black-box optimization, as future work (p. 24).
+- **Addition:** one single $\lambda$ for the sum of all task vectors, searched in $\{0, 0.05, 0.1, \dots, 1.0\}$.
+  - One coefficient per task vector "could improve performance", but exploring all combinations is impractical when the number of tasks isn't small, "due to the curse of dimensionality".
+  - The authors suggest more sophisticated strategies, such as black-box optimization, as future work (p. 24).
 - **Negation (image classification):** the largest $\lambda$ in $\{0, 0.05, \dots, 1.0\}$ whose model keeps at least 95% of the pre-trained model's accuracy on the control task (p. 19).
 - **Analogies (domain generalization):** two separate coefficients, one for the sentiment task vector and one for both language-modeling task vectors (p. 6).
 
@@ -51,7 +66,8 @@ With $\theta = \theta_{\text{pre}}$ and $\lambda = 1$, this gives back the fine-
 
   $$\theta_{\text{pre}} + 0.5(\tau_1 + \tau_2) = 0.5(\theta_1 + \theta_2)$$
 
-- Linearly combining weights *approximates* ensembling the models' outputs; the approximation holds where the loss is locally well approximated by a linear expansion (the NTK regime), and when it holds exactly, weight averaging and ensembles are exactly equivalent (pp. 18–19, citing prior work).
+- Linearly combining weights *approximates* ensembling the models' outputs.
+  - The approximation holds where the loss is locally well approximated by a linear expansion (the NTK regime), and when it holds exactly, weight averaging and ensembles are exactly equivalent (pp. 18–19, citing prior work).
 - Empirically, for two task vectors, the accuracy of the added model closely follows that of the ensemble of the two fine-tuned models, slightly lower on average, with a Pearson correlation of 0.99 (p. 19, Figure 8, p. 18).
 
 ## Experimental setup
@@ -60,15 +76,28 @@ With $\theta = \theta_{\text{pre}}$ and $\lambda = 1$, this gives back the fine-
 
 - Models: CLIP ViT-B/32, ViT-B/16, ViT-L/14 (Table 1, p. 4).
 - Tasks: Cars, DTD, EuroSAT, GTSRB, MNIST, RESISC45, SUN397, SVHN (8 tasks) (p. 3); control task for negation: ImageNet (p. 3).
-- Fine-tuning (p. 19, B.1): 2000 iterations, batch size 128, learning rate 1e-5, cosine annealing with 200 warm-up steps, AdamW with weight decay 0.1; the classification layer (built from CLIP's text encoder) is **frozen**, so no parameters are added.
-- Negation baselines (p. 19, B.2): fine-tuning with gradient ascent (minimizing $-\ell$); and a random vector with the same norm as the task vector, layer by layer: $\tau_{\text{scaled}}^{(L)} = \tau_{\text{rand}}^{(L)} \, \|\tau^{(L)}\| / \|\tau_{\text{rand}}^{(L)}\|$, $\tau_{\text{rand}}^{(L)} \sim \mathcal{N}(0, I)$, the per-layer vectors then concatenated into one vector used like a task vector.
+- Fine-tuning (p. 19, B.1):
+  - 2000 iterations, batch size 128, learning rate 1e-5, cosine annealing with 200 warm-up steps, AdamW with weight decay 0.1.
+  - The classification layer (built from CLIP's text encoder) is **frozen**, so no parameters are added.
+- Negation baselines (p. 19, B.2):
+  - fine-tuning with gradient ascent (minimizing $-\ell$); and
+  - a random vector with the same norm as the task vector, layer by layer: $\tau_{\text{scaled}}^{(L)} = \tau_{\text{rand}}^{(L)} \, \|\tau^{(L)}\| / \|\tau_{\text{rand}}^{(L)}\|$, $\tau_{\text{rand}}^{(L)} \sim \mathcal{N}(0, I)$.
+    - The per-layer vectors then concatenated into one vector used like a task vector.
 - Multi-task baseline (p. 25, D.2): one model fine-tuned jointly on the 8 tasks, same hyperparameters, frozen heads.
 
 **Text:**
 
-- Toxicity (Section 3.2, pp. 3–4): GPT-2 (small, medium, large); task vectors from fine-tuning on Civil Comments samples with toxicity score above 0.8; the "fine-tuned on non-toxic" baseline uses samples with toxicity below 0.2; toxicity measured with Detoxify on 1000 generations; control: perplexity on WikiText-103.
+- Toxicity (Section 3.2, pp. 3–4):
+  - GPT-2 (small, medium, large).
+  - Task vectors from fine-tuning on Civil Comments samples with toxicity score above 0.8.
+  - The "fine-tuned on non-toxic" baseline uses samples with toxicity below 0.2.
+  - Toxicity measured with Detoxify on 1000 generations.
+  - Control: perplexity on WikiText-103.
 - Addition for single tasks (Section 4.2, p. 5): T5-base on 4 GLUE tasks; 427 candidate checkpoints from the Hugging Face Hub; best checkpoint and $\lambda$ chosen on held-out validation data.
-- Analogies (Section 5, p. 6): T5 small, base, large; sentiment on Yelp and Amazon; $\hat{\tau}_{\text{yelp;sent}} = \tau_{\text{amazon;sent}} + (\tau_{\text{yelp;lm}} - \tau_{\text{amazon;lm}})$, where the "lm" vectors come from (unsupervised) language modeling on each dataset's inputs.
+- Analogies (Section 5, p. 6):
+  - T5 small, base, large.
+  - Sentiment on Yelp and Amazon.
+  - $\hat{\tau}_{\text{yelp;sent}} = \tau_{\text{amazon;sent}} + (\tau_{\text{yelp;lm}} - \tau_{\text{amazon;lm}})$, where the "lm" vectors come from (unsupervised) language modeling on each dataset's inputs.
 
 ## Results
 
@@ -101,8 +130,10 @@ For ViT-L/14, negation lowers target accuracy by 45.8 points (64.8 → 19.0) wit
 - Adding the task vectors of **all subsets** of the 8 tasks ($2^8$): accuracy averaged over all 8 tasks increases with the number of vectors added; with all 8, the best model reaches **91.2%** (p. 5, Figure 3).
 - Averaged only over the tasks whose vectors were added, the gap to separate fine-tuned models **grows with the number of tasks** (p. 26, D.4, Figure 16).
 - The best multi-task model is often not the one using all available task vectors (p. 25).
-- **Joint multi-task fine-tuning** on the 8 tasks reaches **0.994** normalized accuracy, against **0.912** for the best task-vector model (p. 25, D.2). The authors' counterpoint: multi-task training "is less modular", "requiring a new fine-tuning round every time a new task is added", while task vectors combine "without any additional training and without the need to store or transfer the data used to create them" (p. 25).
-- **Choosing which vectors to add:** since adding and evaluating is cheap, practitioners "could try out many subsets of task vectors", or use a greedy algorithm to discard vectors that don't improve accuracy (p. 25); likewise, task vectors that bring no improvement on validation data can simply be discarded (p. 25, D.1).
+- **Joint multi-task fine-tuning** on the 8 tasks reaches **0.994** normalized accuracy, against **0.912** for the best task-vector model (p. 25, D.2).
+  - The authors' counterpoint: multi-task training "is less modular", "requiring a new fine-tuning round every time a new task is added", while task vectors combine "without any additional training and without the need to store or transfer the data used to create them" (p. 25).
+- **Choosing which vectors to add:** since adding and evaluating is cheap, practitioners "could try out many subsets of task vectors", or use a greedy algorithm to discard vectors that don't improve accuracy (p. 25).
+  - Likewise, task vectors that bring no improvement on validation data can simply be discarded (p. 25, D.1).
 - **Random seeds:** 5 MNIST and 5 EuroSAT fine-tunings, all 25 pairs added: little impact on the edited models' accuracy (p. 25, D.1, Figure 14).
 
 **Scaling coefficient** (p. 25–26, D.3, Figure 15):
@@ -112,7 +143,9 @@ For ViT-L/14, negation lowers target accuracy by 45.8 points (64.8 → 19.0) wit
 - The optimal $\lambda$ tends to decrease as more task vectors are added (Figure 15 left, p. 26; **our reading** of the plot: from about 0.4 for 2 tasks to about 0.3 for 8).
 - Accuracy as a function of $\lambda$ drops faster beyond its optimum the more task vectors are added (Figure 15 right, p. 26): with many tasks, a wrong $\lambda$ costs more.
 
-**Adding an ImageNet task vector** (D.5, pp. 26–27; Figure 17, p. 27). An ImageNet task vector, fine-tuned for 4 epochs (about 40 thousand steps), added to each of the 8 task vectors in turn. Accuracy (%), as printed on the bars:
+**Adding an ImageNet task vector** (D.5, pp. 26–27; Figure 17, p. 27). An ImageNet task vector, fine-tuned for 4 epochs (about 40 thousand steps), added to each of the 8 task vectors in turn.
+
+Accuracy (%), as printed on the bars:
 
 | Other task | ImageNet: task vectors (fine-tuned 85.5, pre-trained 75.5) | Other task: pre-trained / task vectors / fine-tuned |
 |---|---|---|
@@ -143,11 +176,15 @@ In most experiments, the added model "is competitive with the fine-tuned models 
 | Task analogies | 89.9 | 93.0 | 95.1 | 89.0 | 92.7 | 95.2 |
 | Fine-tuned on target | 91.1 | 93.4 | 95.5 | 90.2 | 93.2 | 95.5 |
 
-**Analogies, subpopulations** (p. 7, Figure 4): with no data from the target subpopulation, task vectors improve accuracy by 3.4 points on average over the pre-trained model; the gain is roughly that of collecting about a hundred labeled samples.
+**Analogies, subpopulations** (p. 7, Figure 4):
+
+- With no data from the target subpopulation, task vectors improve accuracy by 3.4 points on average over the pre-trained model.
+- The gain is roughly that of collecting about a hundred labeled samples.
 
 **Analyses** (Section 6, pp. 7–8):
 
-- **Task vectors are close to orthogonal:** cosine similarities between the CLIP task vectors of 9 tasks (the 8 above plus KITTI) are mostly 0.01–0.06; the largest is 0.18, between MNIST and SVHN, two digit-recognition tasks (Figure 5, p. 7). The authors *speculate* that this near-orthogonality is what lets vectors be added with little interference (p. 7).
+- **Task vectors are close to orthogonal:** cosine similarities between the CLIP task vectors of 9 tasks (the 8 above plus KITTI) are mostly 0.01–0.06; the largest is 0.18, between MNIST and SVHN, two digit-recognition tasks (Figure 5, p. 7).
+  - The authors *speculate* that this near-orthogonality is what lets vectors be added with little interference (p. 7).
 - **Learning rate:** larger learning rates hurt the added model more than they hurt individual fine-tuned models; the authors recommend caution with large learning rates when building task vectors (Figure 6, p. 8).
 - **During fine-tuning,** intermediate task vectors quickly align with the final one, and adding intermediate vectors from two tasks reaches high accuracy after a few hundred steps (Figure 7, p. 8).
 
@@ -159,16 +196,25 @@ In most experiments, the added model "is competitive with the fine-tuned models 
 - **Interference grows with the number of tasks:** the added model falls further behind separate models, and further behind joint multi-task training (0.912 vs 0.994 on 8 tasks) (p. 25, p. 26).
 - **The near-orthogonality explanation is offered as speculation** ("speculate", p. 7).
 - $\lambda$ is chosen on held-out validation data (p. 2), while the paper presents task arithmetic as working "all without requiring access to data or additional training" (p. 2).
-- **Our reading:** the near-orthogonality explanation isn't tested causally in the paper; choosing $\lambda$ needs validation data from the tasks involved, so the method isn't data-free at selection time; and the domains studied are images and text only (classification, generation, sentiment), with nothing on time series, regression or anomaly detection.
+- **Our reading:**
+  - the near-orthogonality explanation isn't tested causally in the paper;
+  - choosing $\lambda$ needs validation data from the tasks involved, so the method isn't data-free at selection time; and
+  - the domains studied are images and text only (classification, generation, sentiment), with nothing on time series, regression or anomaly detection.
 
 ## Relevance to this thesis
 
 **Our reading:**
 
-- **The baseline definition** of task arithmetic for the thesis: task vector $\tau_t = \theta_{\text{ft}}^t - \theta_{\text{pre}}$, merged model $\theta_{\text{pre}} + \lambda \sum_t \tau_t$ with one $\lambda$ chosen on validation data. Our experiments should reproduce this exact form before testing variants.
-- **The direct comparison we study already appears here:** on 8 image tasks, joint multi-task training (0.994) beats added task vectors (0.912) (p. 25). Whether the gap holds, grows or shrinks for time-series anomaly detection and forecasting is open.
-- **What to measure, following the paper:** normalized accuracy (per-task, relative to its own fine-tuned model), the optimal $\lambda$ as a function of the number of tasks, and the cosine similarity between task vectors (the paper's proposed explanation for low interference).
-- **Settings that may not carry over:** the paper's tasks are different datasets from one strong pre-trained model (CLIP); our tasks may be successive periods of the same signal, where task vectors could be far from orthogonal.
+- **The baseline definition** of task arithmetic for the thesis: task vector $\tau_t = \theta_{\text{ft}}^t - \theta_{\text{pre}}$, merged model $\theta_{\text{pre}} + \lambda \sum_t \tau_t$ with one $\lambda$ chosen on validation data.
+  - Our experiments should reproduce this exact form before testing variants.
+- **The direct comparison we study already appears here:** on 8 image tasks, joint multi-task training (0.994) beats added task vectors (0.912) (p. 25).
+  - Whether the gap holds, grows or shrinks for time-series anomaly detection and forecasting is open.
+- **What to measure, following the paper:**
+  - normalized accuracy (per-task, relative to its own fine-tuned model);
+  - the optimal $\lambda$ as a function of the number of tasks; and
+  - the cosine similarity between task vectors (the paper's proposed explanation for low interference).
+- **Settings that may not carry over:** the paper's tasks are different datasets from one strong pre-trained model (CLIP).
+  - Our tasks may be successive periods of the same signal, where task vectors could be far from orthogonal.
 - **Learning-rate caution** (p. 8) matters for how we fine-tune before merging.
 
 ## Quotes worth keeping

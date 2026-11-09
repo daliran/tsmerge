@@ -7,14 +7,21 @@
 
 ## What it is
 
-The benchmark code behind the time-series survey [wang2026deep](wang2026deep.md): many deep time-series models and datasets behind one interface, covering forecasting, imputation, classification and anomaly detection. Benchmark numbers in the papers we read often come from it, so its defaults are the de-facto protocol.
+The benchmark code behind the time-series survey [wang2026deep](wang2026deep.md): many deep time-series models and datasets behind one interface, covering forecasting, imputation, classification and anomaly detection.
+
+Benchmark numbers in the papers we read often come from it, so its defaults are the de-facto protocol.
 
 ## Why this file is a checklist
 
-Our notes found protocol details the papers don't state. The code is where they're settled, but reading all of it now would be work without a use. So this file lists what to check, each with where the question came from; an item is checked when an experiment needs the answer.
+Our notes found protocol details the papers don't state.
+
+The code is where they're settled, but reading all of it now would be work without a use.
+
+So this file lists what to check, each with where the question came from; an item is checked when an experiment needs the answer.
 
 - **Pinned:** every answer refers to the commit above, with `file:line`. If we move to a newer commit, the checked items are checked again.
-- **Read-only:** a local clone, if needed, lives outside the repository or in a git-ignored folder; nothing from the library is copied in. Copying code would be a separate decision, and its MIT license would then require keeping its copyright notice.
+- **Read-only:** a local clone, if needed, lives outside the repository or in a git-ignored folder; nothing from the library is copied in.
+  - Copying code would be a separate decision, and its MIT license would then require keeping its copyright notice.
 
 ## Things to check
 

@@ -4,7 +4,7 @@
 
 **Will cover:** learning from data that arrive over time without starting again each time; its scenarios and families of methods.
 
-- **Builds on:** [Responding to drift](../../change-over-time/responding-to-drift.md), [Pretraining and fine-tuning](../pretraining-and-fine-tuning.md), [Joint training](../joint-training.md).
+- **Builds on:** [Responding to drift](../../drift/responding-to-drift.md), [Pretraining and fine-tuning](../pretraining-and-fine-tuning.md), [Joint training](../joint-training.md).
 - **Used by:**
   - [Transfer matrix](transfer-matrix.md)
   - [Forgetting](forgetting.md)

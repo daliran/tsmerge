@@ -133,7 +133,7 @@ Setting it up: [setup.md](setup.md#9-vs-code); using it: [running.md](running.md
 
 - `docs/research/literature/`: one verified distillation note per paper, the source of truth for what it says, and code references (a checklist per library).
   - `references.bib` there is the bibliography, one entry per source, keyed by bibkey (`ilharco2023editing`).
-- `docs/research/knowledge/`: general theory for people, one concept per doc (signals, time series, change over time, evaluation, models, learning); figures drawn by one script per `assets/` folder.
+- `docs/research/knowledge/`: general theory for people, one concept per doc (signals, time series, evaluation, anomaly detection, drift, models, learning); figures drawn by one script per `assets/` folder.
 - `docs/research/method/`: everything specific to this work (protocol, experiments, findings), created as it's needed.
 - `docs/research/decisions/` and `docs/research/questions/`: research decisions (`RD-`) and open research questions (`RQ-`), including how the research docs themselves work.
 - The PDFs themselves stay local, in the git-ignored `docs/research/literature/papers/` folder, beside their notes: the repository is public, and most papers can't be redistributed ([RD-0001](../research/decisions/RD-0001-literature.md)).

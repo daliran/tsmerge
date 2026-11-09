@@ -9,7 +9,7 @@
   - [Kinds of drift](kinds-of-drift.md)
   - [Drift detection](drift-detection.md)
   - [Responding to drift](responding-to-drift.md)
-  - [Drift in time series](../time-series/change-over-time/drift-in-time-series.md)
+  - [Drift in time series](../time-series/drift/drift-in-time-series.md)
 
 ## Sources to use
 

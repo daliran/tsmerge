@@ -7,7 +7,7 @@
   - [Windows](../data-preparation/windows.md)
   - [Splitting](../data-preparation/splitting.md)
   - [Forecast evaluation](../evaluation/forecast-evaluation.md)
-  - [Drift in time series](../change-over-time/drift-in-time-series.md)
+  - [Drift in time series](../drift/drift-in-time-series.md)
   - [Forecasting models](../models/forecasting-models.md)
 
 ## The task

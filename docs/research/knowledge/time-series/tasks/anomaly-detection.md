@@ -16,7 +16,7 @@
   - [Splitting](../data-preparation/splitting.md)
   - [Point adjustment](../evaluation/point-adjustment.md)
   - [VUS](../evaluation/vus.md)
-  - [Drift in time series](../change-over-time/drift-in-time-series.md)
+  - [Drift in time series](../drift/drift-in-time-series.md)
 
 ## The task
 
@@ -60,7 +60,7 @@ The TSLib benchmark reports F1, "a balanced combination of precision and recall"
   - A low threshold catches more anomalies but raises false alarms; a high one does the opposite.
   - Some papers don't state how they choose it: TimesNet and the TSLib survey both leave the threshold rule out ([wu2023timesnet](../../../literature/wu2023timesnet.md), pp. 8, 13, 22; [wang2026deep](../../../literature/wang2026deep.md), p. 12).
 - **False alarms:** methods "still often incur high false positives on real-world datasets" ([pang2021deep](../../../literature/pang2021deep.md), p. 4).
-- **"Normal" can change over time.** If the series drifts, behavior that was abnormal may become normal, and the other way round ([drift in time series](../change-over-time/drift-in-time-series.md)).
+- **"Normal" can change over time.** If the series drifts, behavior that was abnormal may become normal, and the other way round ([drift in time series](../drift/drift-in-time-series.md)).
 
 ## Key points
 

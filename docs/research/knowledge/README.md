@@ -1,12 +1,12 @@
 # Knowledge
 
-General theory for people, one concept per doc: what a signal and a time series are, how series change over time, how results are judged, the models, and how models learn and are combined.
+General theory for people, one concept per doc: what a signal and a time series are, how data drift over time, how results are judged, the models, and how models learn and are combined.
 
 **Nothing here is specific to this work.** A knowledge doc explains a concept for any reader: no statements about this project, its data, its choices or its results. What this work uses, chooses or finds belongs in [method/](../method/README.md) or in a [research decision](../decisions/README.md).
 
 ## How it's organized
 
-- **Generic at the top, specific below:** a concept that applies to any data sits in a top-level folder (`evaluation/`, `anomaly-detection/`, `change-over-time/`, `models/`, `learning/`); the same topic specific to time series sits under `time-series/`.
+- **Generic at the top, specific below:** a concept that applies to any data sits in a top-level folder (`evaluation/`, `anomaly-detection/`, `drift/`, `models/`, `learning/`); the same topic specific to time series sits under `time-series/`.
 - **One concept per doc,** each starting with the idea in one sentence, then its **Builds on** and **Used by** links, so you can walk the concepts in either direction.
 - **Placeholders** (`Status: placeholder`) mark docs to write: each says what it will cover and which sources to use. They're written and reviewed one at a time.
 
@@ -17,10 +17,10 @@ Read top-down the first time; the numbers are a suggested path, not a requiremen
 | # | Area | What it covers | Status |
 |---|---|---|---|
 | 1 | [signals/](signals/) | [signals](signals/signals.md), [sampling](signals/sampling.md), [Fourier transform](signals/fourier-transform.md) | 3 written |
-| 2 | [time-series/](time-series/README.md) | what a series is, its structure, the tasks, data preparation; the time-series side of evaluation, change over time and models; datasets | 12 written, 8 placeholders |
+| 2 | [time-series/](time-series/README.md) | what a series is, its structure, the tasks, data preparation; the time-series side of evaluation, drift and models; datasets | 12 written, 8 placeholders |
 | 3 | [evaluation/](evaluation/) | [regression errors](evaluation/regression-errors.md), [precision, recall and F1](evaluation/precision-recall-f1.md); [AUROC](evaluation/auroc.md), [AUPRC](evaluation/auprc.md), [comparing results](evaluation/comparing-results.md) | 2 written, 3 placeholders |
 | 4 | [anomaly-detection/](anomaly-detection/) | [anomaly detection](anomaly-detection/anomaly-detection.md), [kinds of anomalies](anomaly-detection/kinds-of-anomalies.md), [methods](anomaly-detection/methods.md) | 3 written |
-| 5 | [change-over-time/](change-over-time/) | [distribution shift](change-over-time/distribution-shift.md), [kinds of drift](change-over-time/kinds-of-drift.md), [drift detection](change-over-time/drift-detection.md), [responding to drift](change-over-time/responding-to-drift.md) | 4 placeholders |
+| 5 | [drift/](drift/) | [distribution shift](drift/distribution-shift.md), [kinds of drift](drift/kinds-of-drift.md), [drift detection](drift/drift-detection.md), [responding to drift](drift/responding-to-drift.md) | 4 placeholders |
 | 6 | [models/](models/) | [transformers](models/transformers.md), [masked autoencoder](models/masked-autoencoder.md) | 2 placeholders |
 | 7 | [learning/](learning/README.md) | pretraining and fine-tuning, joint training, foundation models, continual learning, model merging | 24 placeholders |
 

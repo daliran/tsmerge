@@ -4,11 +4,11 @@
 
 - **Builds on:** [Patterns](patterns.md), [Decomposition](decomposition.md).
 - **Used by:**
-  - [Distribution shift](../../change-over-time/distribution-shift.md)
+  - [Distribution shift](../../drift/distribution-shift.md)
   - [Autocorrelation](autocorrelation.md)
   - [Forecasting](../tasks/forecasting.md)
   - [Normalization](../data-preparation/normalization.md)
-  - [Drift in time series](../change-over-time/drift-in-time-series.md)
+  - [Drift in time series](../drift/drift-in-time-series.md)
 
 ## Does the series keep its character?
 
@@ -35,7 +35,7 @@ It wanders with no fixed level, so it isn't stationary; its differences $y_t - y
 - Models that assume the statistical properties stay the same rely on what they learned staying valid.
 - When those properties change, what was learned may stop being valid.
 
-An unexpected change in the statistical properties over time is called **drift** ([drift in time series](../change-over-time/drift-in-time-series.md), [distribution shift](../../change-over-time/distribution-shift.md)).
+An unexpected change in the statistical properties over time is called **drift** ([drift in time series](../drift/drift-in-time-series.md), [distribution shift](../../drift/distribution-shift.md)).
 Drift is narrower than non-stationarity: a known trend or seasonality makes a series non-stationary, but it's a regular pattern, not drift.
 
 A common way to make a series more stationary is **differencing**: instead of the values, look at the changes between consecutive values. This can help stabilize the mean of a series by removing changes in its level ([FPP3, 9.1][fpp-stationarity]).

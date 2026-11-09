@@ -16,7 +16,7 @@ Read top-down the first time; the numbers are a suggested path, not a requiremen
 
 | # | Folder | Docs | Status |
 |---|---|---|---|
-| 1 | [signals/](signals/) | [signals](signals/signals.md), [sampling](signals/sampling.md) | written |
+| 1 | [signals/](signals/) | [signals](signals/signals.md), [sampling](signals/sampling.md), [Fourier transform](signals/fourier-transform.md) | written |
 | 2 | [time-series/](time-series/) | [time series](time-series/time-series.md) | written |
 | 3 | [time-series/structure/](time-series/structure/) | [patterns](time-series/structure/patterns.md), [decomposition](time-series/structure/decomposition.md), [stationarity](time-series/structure/stationarity.md), [autocorrelation](time-series/structure/autocorrelation.md) | written |
 | 4 | [time-series/tasks/](time-series/tasks/) | [tasks](time-series/tasks/tasks.md), [forecasting](time-series/tasks/forecasting.md), [imputation](time-series/tasks/imputation.md), [anomaly detection](time-series/tasks/anomaly-detection.md), [classification](time-series/tasks/classification.md) | written |

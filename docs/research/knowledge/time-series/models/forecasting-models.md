@@ -5,6 +5,7 @@
 **Will cover:** the main families of deep forecasting models, the long-horizon lineage, and the simple linear baselines they are compared with.
 
 - **Builds on:**
+  - [Fourier transform](../../signals/fourier-transform.md)
   - [Forecasting](../tasks/forecasting.md)
   - [Normalization](../data-preparation/normalization.md)
   - [Transformers](../../models/transformers.md)

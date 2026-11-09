@@ -3,7 +3,7 @@
 **In one sentence:** a signal is something that changes, recorded as a function, so it can carry information about the thing that produced it.
 
 - **Builds on:** nothing: a starting point.
-- **Used by:** [Sampling](sampling.md), [Time series](../time-series/time-series.md).
+- **Used by:** [Sampling](sampling.md), [Fourier transform](fourier-transform.md), [Time series](../time-series/time-series.md).
 
 ## What a signal is
 

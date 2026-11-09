@@ -2,7 +2,7 @@
 
 **In one sentence:** most time series are a mix of a few simple patterns (a long-term direction, regular repetitions, slower irregular waves, and a remainder with everything else), and recognizing them is the first step to understanding, predicting or checking a series.
 
-- **Builds on:** [Time series](../time-series.md).
+- **Builds on:** [Fourier transform](../../signals/fourier-transform.md), [Time series](../time-series.md).
 - **Used by:**
   - [Decomposition](decomposition.md)
   - [Stationarity](stationarity.md)
@@ -39,6 +39,8 @@ Seasonality means **repetition at a fixed, known period**. The word comes from t
 - **yearly:** heating in winter, cooling in summer.
 
 The **period** is the number of steps before the pattern repeats: in an hourly series, daily seasonality has a period of 24 and a weekly one 168.
+
+When the periods aren't known in advance, the series' spectrum shows them: each seasonal period appears as a peak ([Fourier transform](../../signals/fourier-transform.md#finding-periods-in-a-time-series)).
 
 **A series can have more than one seasonality** at once: "one series can have more than one seasonal pattern" ([FPP3, 2.3][fpp-patterns]).
 

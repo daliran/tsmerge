@@ -152,7 +152,117 @@ def aliasing() -> None:
     save(fig, "aliasing")
 
 
+def nyquist_reconstruction() -> None:
+    """A signal with no frequency above 3 Hz, rebuilt from its samples with the
+    Whittaker-Shannon (sinc) formula: exact above 6 samples per second, wrong below."""
+    t = np.linspace(0, 2, 2000)
+
+    def signal(x):
+        return np.sin(2 * np.pi * 1 * x) + 0.6 * np.sin(2 * np.pi * 3 * x + 0.5)
+
+    fig, axes = plt.subplots(2, 1, figsize=(9, 5.2), sharex=True)
+    for ax, fs, ok in ((axes[0], 8, True), (axes[1], 4, False)):
+        # Samples well beyond the plotted span, so the finite sum is accurate inside it.
+        n = np.arange(-20, 22, 1 / fs)
+        rebuilt = np.sinc((t[:, None] - n[None, :]) * fs) @ signal(n)
+        shown = (n >= 0) & (n <= 2)
+        ax.plot(t, signal(t), color=GRAY, lw=3, alpha=0.5, label="original signal")
+        ax.plot(
+            t,
+            rebuilt,
+            color=GREEN if ok else RED,
+            ls="-" if ok else "--",
+            label="rebuilt from the samples",
+        )
+        ax.plot(n[shown], signal(n[shown]), "o", color=BLUE, ms=6, label="samples")
+        verdict = (
+            "more than 2B = 6: rebuilt exactly" if ok else "fewer than 2B = 6: wrong"
+        )
+        ax.set_title(f"{fs} samples per second, {verdict}", loc="left", fontsize=10)
+        ax.set_ylabel("value")
+        ax.set_ylim(-2.2, 2.4)
+        ax.legend(loc="upper right", fontsize=8, ncols=3)
+    axes[1].set_xlabel("time (s)")
+    fig.suptitle(
+        "A signal with no frequency above B = 3 Hz, rebuilt from its samples",
+        fontweight="bold",
+    )
+    save(fig, "nyquist-reconstruction")
+
+
+def fourier_sum() -> None:
+    """A signal made of three sine waves, and its spectrum: one peak per wave."""
+    fs, seconds = 100, 2
+    t = np.arange(0, seconds, 1 / fs)
+    parts = [(2, 1.0), (5, 0.5), (11, 0.3)]
+    waves = [a * np.sin(2 * np.pi * f * t) for f, a in parts]
+    x = np.sum(waves, axis=0)
+    fig, axes = plt.subplots(1, 2, figsize=(10, 3.4), width_ratios=[1.4, 1])
+    for (f, a), w, c in zip(parts, waves, (BLUE, ORANGE, GREEN), strict=True):
+        axes[0].plot(t, w - 3, color=c, lw=1, label=f"{f} Hz, strength {a}")
+    axes[0].plot(t, x + 1.5, color="black", lw=1.4, label="their sum: the signal")
+    axes[0].set(
+        xlabel="time (s)", yticks=[], title="Time domain: the signal and its parts"
+    )
+    axes[0].legend(loc="upper right", fontsize=7, ncols=2)
+    axes[0].set_ylim(-4.6, 4.2)
+    freqs = np.fft.rfftfreq(t.size, 1 / fs)
+    strength = 2 * np.abs(np.fft.rfft(x)) / t.size
+    axes[1].stem(freqs, strength, basefmt=" ", markerfmt=".", linefmt=GRAY)
+    for f, a in parts:
+        axes[1].annotate(f"{f} Hz", (f, a), textcoords="offset points", xytext=(4, 4))
+    axes[1].set(
+        xlabel="frequency (Hz)",
+        ylabel="strength",
+        xlim=(0, 20),
+        title="Frequency domain: one peak per wave",
+    )
+    save(fig, "fourier-sum")
+
+
+def fourier_periods() -> None:
+    """An hourly series with daily and weekly seasonality, and its spectrum."""
+    hours = np.arange(24 * 7 * 8)  # eight weeks
+    x = (
+        np.sin(2 * np.pi * hours / 24)
+        + 0.6 * np.sin(2 * np.pi * hours / 168)
+        + 0.3 * RNG.standard_normal(hours.size)
+    )
+    fig, axes = plt.subplots(2, 1, figsize=(9, 5.2))
+    axes[0].plot(hours / 24, x, color=BLUE, lw=0.7)
+    axes[0].set(
+        xlabel="time (days)",
+        ylabel="value",
+        title="Eight weeks of an hourly series: daily and weekly seasonality, noise",
+    )
+    per_day = np.fft.rfftfreq(hours.size, 1 / 24)  # cycles per day
+    strength = 2 * np.abs(np.fft.rfft(x)) / hours.size
+    axes[1].plot(per_day, strength, color=BLUE, lw=1)
+    for f, label in (
+        (1 / 7, "weekly: 1 cycle every 7 days"),
+        (1, "daily: 1 cycle per day"),
+    ):
+        k = np.argmin(np.abs(per_day - f))
+        axes[1].annotate(
+            label,
+            (per_day[k], strength[k]),
+            textcoords="offset points",
+            xytext=(8, -4),
+            fontsize=9,
+        )
+    axes[1].set(
+        xlabel="frequency (cycles per day)",
+        ylabel="strength",
+        xlim=(0, 3),
+        title="Its spectrum: one peak per seasonal period",
+    )
+    save(fig, "fourier-periods")
+
+
 if __name__ == "__main__":
     signal_examples()
     analog_to_digital()
     aliasing()
+    nyquist_reconstruction()
+    fourier_sum()
+    fourier_periods()

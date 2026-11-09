@@ -3,7 +3,7 @@
 **In one sentence:** the Fourier transform rewrites a signal as a sum of sine waves, telling how strong each frequency is and where each wave starts, so patterns that repeat show up as peaks.
 
 - **Builds on:** [Signals](signals.md), [Sampling](sampling.md).
-- **Used by:** [Patterns](../time-series/structure/patterns.md), [Forecasting models](../time-series/models/forecasting-models.md).
+- **Used by:** [Patterns](../time-series/structure/patterns.md), [Decomposition](../time-series/structure/decomposition.md), [Forecasting models](../time-series/models/forecasting-models.md).
 
 ## The idea
 
@@ -62,6 +62,8 @@ A pattern that repeats every $p$ steps is a wave with frequency $1/p$ cycles per
 
 - **Top:** eight weeks of a signal sampled every hour, with a pattern that repeats every day and one that repeats every week, plus noise. The two patterns are hard to separate by eye.
 - **Bottom:** its spectrum has one clear peak per repeating pattern: at 1 cycle per day (period 24 hours) and at 1 cycle every 7 days (period 168 hours). The noise spreads thinly over all frequencies.
+
+Methods that take a signal apart into a slow part, repeating patterns and a rest need these periods as input ([where Fourier fits](../time-series/structure/decomposition.md#where-fourier-fits)).
 
 Deep learning models for time-based signals use the same idea:
 

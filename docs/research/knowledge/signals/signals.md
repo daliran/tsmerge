@@ -23,7 +23,7 @@ In plain words:
 
 ![Four signals, each a function of something different: time, space, frequency, position](assets/signal-examples.png)
 
-The four examples above have something in common: each one maps an input (time, a position in an image, a frequency, a position in a DNA sequence) to a value.
+The four examples above have something in common: each one maps an input (time, a position in an image, a frequency, a position in a DNA (deoxyribonucleic acid) sequence) to a value.
 
 ## Kinds of signals
 
@@ -34,7 +34,7 @@ Signals can be grouped in several ways. Two questions sort most of them.
 | Kind | Examples |
 |---|---|
 | **Physical** | sound (air pressure), temperature, voltage and current, light |
-| **Biological** | heartbeat (ECG), brain activity (EEG): "a biosignal is any signal in a living organism that can be continually measured" ([Signal][signal]) |
+| **Biological** | heartbeat (ECG, electrocardiogram), brain activity (EEG, electroencephalogram): "a biosignal is any signal in a living organism that can be continually measured" ([Signal][signal]) |
 | **Industrial** | the sensors and actuators of a plant: flow, level, pressure, valve positions |
 | **Images and video** | an image is brightness as a function of position; a video is "a sequence of images" ([Signal][signal]) |
 | **Symbolic** | a DNA sequence (one letter out of four at each position), the letters of a text |

@@ -10,4 +10,4 @@
 ## Sources to use
 
 - [tang2025merging](../../../literature/tang2025merging.md): the accuracy matrix of continual merging (p. 34).
-- [lin2026unlocking](../../../literature/lin2026unlocking.md): the performance $a_{k,i}$ of the model after $k$ tasks on task $i$, and ACC and BWT computed from it.
+- [lin2026unlocking](../../../literature/lin2026unlocking.md): the performance $a_{k,i}$ of the model after $k$ tasks on task $i$, and ACC (average accuracy) and BWT (backward transfer) computed from it.

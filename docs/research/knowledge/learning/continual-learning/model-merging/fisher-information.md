@@ -9,5 +9,5 @@
 
 ## Sources to use
 
-- [porrello2026dataless](../../../../literature/porrello2026dataless.md): curvature (KFAC).
+- [porrello2026dataless](../../../../literature/porrello2026dataless.md): curvature (KFAC, Kronecker-Factored Approximate Curvature).
 - [li2025became](../../../../literature/li2025became.md): Bayesian merging.

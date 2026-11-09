@@ -9,6 +9,6 @@
 
 ## Sources to use
 
-- [mathur2016swat](../../../literature/mathur2016swat.md): the SWaT testbed.
+- [mathur2016swat](../../../literature/mathur2016swat.md): the SWaT (Secure Water Treatment) testbed.
 - [wu2023timesnet](../../../literature/wu2023timesnet.md): benchmark dataset table.
-- The papers of the other datasets (e.g. ETT, PSM, SMD). Not in the bibliography yet: to find, verify and add to [references.bib](../../../literature/references.bib).
+- The papers of the other datasets (e.g. ETT (Electricity Transformer dataset), PSM (Pooled Server Metrics), SMD (Server Machine Dataset)). Not in the bibliography yet: to find, verify and add to [references.bib](../../../literature/references.bib).

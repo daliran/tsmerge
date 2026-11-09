@@ -10,7 +10,7 @@
 A signal can be continuous or discrete:
 
 - **physical quantities** (pressure, temperature, voltage) are continuous, and **recording** them on a computer makes them discrete;
-- **some signals are discrete by nature:** a DNA sequence, a daily closing price, a monthly count. There is nothing between two steps to record.
+- **some signals are discrete by nature:** a DNA (deoxyribonucleic acid) sequence, a daily closing price, a monthly count. There is nothing between two steps to record.
 
 | | Continuous | Discrete |
 |---|---|---|

@@ -13,7 +13,7 @@
 
 ## Why cut a series into windows
 
-A real series can be very long: the SWaT training set alone has 396,000 steps ([wu2023timesnet](../../../literature/wu2023timesnet.md), Table 6, p. 14). Feeding it whole to a model doesn't work, for four reasons:
+A real series can be very long: the SWaT (Secure Water Treatment) training set alone has 396,000 steps ([wu2023timesnet](../../../literature/wu2023timesnet.md), Table 6, p. 14). Feeding it whole to a model doesn't work, for four reasons:
 
 1. **Models expect a fixed input size.** Many models are built for inputs of one size, e.g. 96 steps × 7 channels.
 2. **Memory and compute.** The cost of processing an input grows with its length; hundreds of thousands of steps at once don't fit on a GPU.
@@ -97,7 +97,7 @@ So the window size is $W = L + H$. For each window, the model is given the conte
 
 The sliding only cuts the windows. During training, they are usually shuffled and grouped into batches, not fed to the model in time order.
 
-The common benchmark setting, used by the TSLib benchmark, is a **context of 96 steps** with **horizons of 96, 192, 336 and 720 steps** (on the small ILI dataset: context 36, horizons 24–60) ([wang2026deep](../../../literature/wang2026deep.md), p. 12).
+The common benchmark setting, used by the TSLib (Time-Series-Library) benchmark, is a **context of 96 steps** with **horizons of 96, 192, 336 and 720 steps** (on the small ILI (influenza-like illness) dataset: context 36, horizons 24–60) ([wang2026deep](../../../literature/wang2026deep.md), p. 12).
 
 The same paper notes that results depend strongly on the context length, and reruns its experiments searching over it ([wang2026deep](../../../literature/wang2026deep.md), pp. 12–13).
 

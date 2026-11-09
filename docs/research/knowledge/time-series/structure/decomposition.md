@@ -32,7 +32,7 @@ A decomposition then has **one seasonal part per period**. In the additive case,
 
 $$y_t = S^{\text{day}}_t + S^{\text{week}}_t + T_t + R_t$$
 
-STL handles this directly: it "is designed to deal with multiple seasonality. It will return multiple seasonal components, as well as a trend and remainder component" ([FPP3, 12.1][fpp-complex]).
+STL (Seasonal and Trend decomposition using Loess) handles this directly: it "is designed to deal with multiple seasonality. It will return multiple seasonal components, as well as a trend and remainder component" ([FPP3, 12.1][fpp-complex]).
 
 Decomposition is useful in itself, to see what drives a series.
 
@@ -140,7 +140,7 @@ Its limits ([FPP3, 3.6][fpp-stl]):
 
 - **finding the seasonal periods** a decomposition needs as input: each one is a peak in the spectrum ([finding periods](../../signals/fourier-transform.md#finding-periods-in-a-time-based-signal));
 - **modeling a seasonality** with sine and cosine terms, for example in a regression; useful for long periods and for several seasonalities at once ([FPP3, 7.4][fpp-fourier]; [FPP3, 12.1][fpp-complex]);
-- **in deep time-series models,** as a building block: TimesNet finds a series' main periods with the FFT, and models such as Autoformer, FEDformer, FiLM and FITS work with chosen frequencies ([wang2026deep](../../../literature/wang2026deep.md), p. 5).
+- **in deep time-series models,** as a building block: TimesNet finds a series' main periods with the FFT (fast Fourier transform), and models such as Autoformer, FEDformer, FiLM and FITS (a linear model that works in the frequency domain) work with chosen frequencies ([wang2026deep](../../../literature/wang2026deep.md), p. 5).
 
 ## Key points
 

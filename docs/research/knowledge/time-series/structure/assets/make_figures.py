@@ -251,6 +251,44 @@ def smoothing_window() -> None:
     print("wrote smoothing-window.png")
 
 
+def to_stationary() -> None:
+    """Three non-stationary series and the transformation that makes each stationary:
+    differencing, seasonal differencing, logarithm then seasonal differencing."""
+    t = np.arange(24 * 10)
+    trend = 0.05 * t + np.cumsum(0.3 * RNG.standard_normal(t.size))
+    seasonal = (
+        0.03 * t + 2 * np.sin(2 * np.pi * t / 24) + 0.3 * RNG.standard_normal(t.size)
+    )
+    growing = np.exp(0.008 * t) * (1 + 0.4 * np.sin(2 * np.pi * t / 24))
+    growing = growing * np.exp(0.05 * RNG.standard_normal(t.size))
+    rows = [
+        (trend, "a trend", np.diff(trend), "differencing: $y_t - y_{t-1}$"),
+        (
+            seasonal,
+            "a trend and a daily seasonality",
+            seasonal[24:] - seasonal[:-24],
+            "seasonal differencing: $y_t - y_{t-24}$",
+        ),
+        (
+            growing,
+            "swings growing with the level",
+            np.log(growing)[24:] - np.log(growing)[:-24],
+            "logarithm, then seasonal differencing",
+        ),
+    ]
+    fig, axes = plt.subplots(3, 2, figsize=(11, 7), sharex=True)
+    for row, (before, what, after, how) in zip(axes, rows, strict=True):
+        row[0].plot(t, before, color=RED, lw=1)
+        row[0].set_title(f"not stationary: {what}", loc="left", fontsize=10)
+        row[1].plot(t[t.size - after.size :], after, color=GREEN, lw=1)
+        row[1].set_title(f"stationary after {how}", loc="left", fontsize=10)
+        for ax in row:
+            ax.set_yticks([])
+    for ax in axes[-1]:
+        ax.set_xlabel("time step (hours, 10 days)")
+    save(fig, "to-stationary")
+
+
 if __name__ == "__main__":
     decomposition()
     additive_multiplicative()
@@ -259,3 +297,4 @@ if __name__ == "__main__":
     stationarity()
     autocorrelation()
     smoothing_window()
+    to_stationary()

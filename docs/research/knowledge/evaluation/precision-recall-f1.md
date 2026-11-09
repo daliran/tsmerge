@@ -34,7 +34,7 @@ In anomaly detection, for example, the positives are the anomalous steps: precis
 
 $$\text{accuracy} = \frac{tp + tn}{tp + tn + fp + fn}$$
 
-It's the only one of these measures that counts true negatives. The TSLib benchmark reports accuracy for [classification](../time-series/tasks/classification.md) and F1 for anomaly detection ([wang2026deep](../../literature/wang2026deep.md), p. 11); its overview figure lists both measures for both tasks (Figure 8, p. 10).
+It's the only one of these measures that counts true negatives. The TSLib (Time-Series-Library) benchmark reports accuracy for [classification](../time-series/tasks/classification.md) and F1 for anomaly detection ([wang2026deep](../../literature/wang2026deep.md), p. 11); its overview figure lists both measures for both tasks (Figure 8, p. 10).
 
 When one answer is rare, as anomalies are, accuracy is misleading: always answering "normal" scores high while finding nothing. Precision and recall look only at the rare class, which is why anomaly detection uses them.
 
@@ -44,7 +44,7 @@ A model usually gives a score, not a call; a **threshold** turns scores into cal
 
 So these measures describe one threshold, not the model.
 
-Threshold-free alternatives: [AUROC](auroc.md), [AUPRC](auprc.md).
+Threshold-free alternatives: [AUROC (area under the receiver operating characteristic curve)](auroc.md), [AUPRC (area under the precision-recall curve)](auprc.md).
 
 ## Key points
 

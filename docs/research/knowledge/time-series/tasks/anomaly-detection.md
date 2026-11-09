@@ -42,15 +42,15 @@ Anomalies can be **point**, **contextual** or **collective** ([kinds of anomalie
 
 Labeled anomalies are rare, so most methods learn **what normal looks like**, then flag what doesn't fit ([learning settings](../../anomaly-detection/anomaly-detection.md#learning-settings-labels-are-usually-missing)).
 
-The settings have clashing names. Time-series work may call training on normal data only "unsupervised": the TSLib survey, for one, calls reconstruction "a classical task for unsupervised point-wise representation learning" ([wang2026deep](../../../literature/wang2026deep.md), p. 12).
+The settings have clashing names. Time-series work may call training on normal data only "unsupervised": the TSLib (Time-Series-Library) survey, for one, calls reconstruction "a classical task for unsupervised point-wise representation learning" ([wang2026deep](../../../literature/wang2026deep.md), p. 12).
 
 ### How it's judged
 
 By comparing the flagged steps with the true anomalies:
 
 - **precision, recall and F1** once a threshold is set ([precision, recall and F1](../../evaluation/precision-recall-f1.md));
-- threshold-free measures such as [AUROC](../../evaluation/auroc.md) and [AUPRC](../../evaluation/auprc.md);
-- and measures adapted to anomalies that last several steps ([point adjustment](../evaluation/point-adjustment.md), [VUS](../evaluation/vus.md)).
+- threshold-free measures such as [AUROC (area under the receiver operating characteristic curve)](../../evaluation/auroc.md) and [AUPRC (area under the precision-recall curve)](../../evaluation/auprc.md);
+- and measures adapted to anomalies that last several steps ([point adjustment](../evaluation/point-adjustment.md), [VUS (volume under the surface)](../evaluation/vus.md)).
 
 The TSLib benchmark reports F1, "a balanced combination of precision and recall" ([wang2026deep](../../../literature/wang2026deep.md), p. 11); its overview figure lists both accuracy and F1 for anomaly detection (Figure 8, p. 10).
 

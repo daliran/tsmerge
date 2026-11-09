@@ -28,7 +28,7 @@ Each has its own doc: [forecasting](forecasting.md), [imputation](imputation.md)
 
 ## One family
 
-The TSLib benchmark treats the tasks as one problem: it unifies them "as a representation learning task with domain-specific heads", a backbone shared across tasks with a small task-specific part on top ([wang2026deep](../../../literature/wang2026deep.md), p. 11).
+The TSLib (Time-Series-Library) benchmark treats the tasks as one problem: it unifies them "as a representation learning task with domain-specific heads", a backbone shared across tasks with a small task-specific part on top ([wang2026deep](../../../literature/wang2026deep.md), p. 11).
 
 Not every model is evaluated on every task, though: TiDE, which needs timestamps, is tested on long-term forecasting only ([wang2026deep](../../../literature/wang2026deep.md), p. 13).
 

@@ -52,6 +52,7 @@ tsmerge is a master's thesis repo (AI Engineering, Unimore) on joint training vs
 ## Writing and documentation
 
 - **US English** in everything written to the repository.
+- **Spell out acronyms:** in every document, the first use of an acronym gives its full name, e.g. "ACF (autocorrelation function)" or "autocorrelation function (ACF)". Later uses in the same document can use the acronym alone. Names of methods or models that are acronyms are spelled out too, when the full name exists, e.g. "STL (Seasonal and Trend decomposition using Loess)". Units (GB), product and model codes (P100, A40), ids (ED-0001), file formats (PNG, JSON) and citation labels whose full reference is in the document's sources (FPP3, bibkeys) are exempt. When no full name can be verified, describe the method in a few words instead.
 - **Readable Markdown, written for humans.** A blank line between blocks, short paragraphs, one idea per line, and bullet lists for anything that enumerates. Split long sections with headings.
 - **Document what and why, as you go.**
   - Every script, configuration file and folder says what it does and why it exists: in the folder's README, a decision, or a short comment.

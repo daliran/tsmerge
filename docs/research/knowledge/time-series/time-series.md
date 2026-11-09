@@ -69,8 +69,8 @@ Real benchmark datasets range from a handful of channels to hundreds. These coun
 | ETTh1, ETTh2 | electricity | 7 | hour |
 | Exchange | currency exchange rates | 8 | day |
 | Weather | weather station | 21 | 10 minutes |
-| PSM | server machines | 25 | (not stated) |
-| SWaT | a water-treatment plant | 51 | (not stated) |
+| PSM (Pooled Server Metrics) | server machines | 25 | (not stated) |
+| SWaT (Secure Water Treatment) | a water-treatment plant | 51 | (not stated) |
 | Electricity | electricity | 321 | hour |
 | Traffic | transportation | 862 | hour |
 
@@ -80,12 +80,12 @@ Real benchmark datasets range from a handful of channels to hundreds. These coun
 
 The same idea, an ordered list of values, with one or more channels, fits a surprising range of data.
 
-Strictly, a time series is ordered by time. DNA, text and images are not: they are **ordered sequences** that borrow time-series tools, because the same tools work on any ordered list.
+Strictly, a time series is ordered by time. DNA (deoxyribonucleic acid), text and images are not: they are **ordered sequences** that borrow time-series tools, because the same tools work on any ordered list.
 
 | Data | The index $t$ is… | Channels | Values |
 |---|---|---|---|
-| **Audio** | time, 44,100 steps per second for CD sound ([Sampling][sampling]) | 1 (mono), 2 (stereo) | air pressure |
-| **Heartbeat (ECG)** | time | one per electrode | voltage |
+| **Audio** | time, 44,100 steps per second for CD (compact disc) sound ([Sampling][sampling]) | 1 (mono), 2 (stereo) | air pressure |
+| **Heartbeat (ECG, electrocardiogram)** | time | one per electrode | voltage |
 | **Industrial plant** | time | one per sensor or actuator (51 for SWaT, table above) | flows, levels, on/off states |
 | **Stock price** | time (each trading day or minute) | 1 per stock, or several (open, high, low, close) | prices |
 | **DNA** | **position** in the sequence | 4 after encoding (A, C, G, T) | 0 or 1 |

@@ -28,12 +28,12 @@ The further ahead, the harder: "The further ahead we forecast, the more uncertai
 **How it's judged:** by the **forecast error**, "the difference between an observed value and its forecast" ([FPP3, 5.8][fpp-accuracy]):
 
 - measured on data the model has never seen
-- and summarized by measures such as MAE and MSE ([regression errors](../../evaluation/regression-errors.md)).
+- and summarized by measures such as MAE (mean absolute error) and MSE (mean squared error) ([regression errors](../../evaluation/regression-errors.md)).
 
-In the TSLib benchmark ([wang2026deep](../../../literature/wang2026deep.md)):
+In the TSLib (Time-Series-Library) benchmark ([wang2026deep](../../../literature/wang2026deep.md)):
 
 - long-term forecasting is judged by MSE and MAE (p. 11);
-- short-term forecasting by SMAPE and MASE (p. 11), and its results figure reports the average OWA (Figure 9, p. 12).
+- short-term forecasting by SMAPE (symmetric mean absolute percentage error) and MASE (mean absolute scaled error) (p. 11), and its results figure reports the average OWA (Figure 9, p. 12). OWA combines the two measures, each divided by the value of a simple baseline forecast ([wu2023timesnet](../../../literature/wu2023timesnet.md), p. 13).
 
 **What makes it hard:** the future may not behave like the past.
 When the series' behavior changes over time (drift), patterns learned from the past can stop holding ([stationarity](../structure/stationarity.md)).

@@ -20,7 +20,7 @@ Read top-down the first time; the numbers are a suggested path, not a requiremen
 |---|---|---|---|
 | 1 | [signals/](signals/) | [signals](signals/signals.md), [sampling](signals/sampling.md), [Fourier transform](signals/fourier-transform.md) | 3 written |
 | 2 | [time-series/](time-series/README.md) | what a series is, its structure, the tasks, data preparation; the time-series side of evaluation, drift and models; datasets | 12 written, 8 placeholders |
-| 3 | [evaluation/](evaluation/) | [regression errors](evaluation/regression-errors.md), [precision, recall and F1](evaluation/precision-recall-f1.md); [AUROC](evaluation/auroc.md), [AUPRC](evaluation/auprc.md), [comparing results](evaluation/comparing-results.md) | 2 written, 3 placeholders |
+| 3 | [evaluation/](evaluation/) | [regression errors](evaluation/regression-errors.md), [precision, recall and F1](evaluation/precision-recall-f1.md); [AUROC (area under the receiver operating characteristic curve)](evaluation/auroc.md), [AUPRC (area under the precision-recall curve)](evaluation/auprc.md), [comparing results](evaluation/comparing-results.md) | 2 written, 3 placeholders |
 | 4 | [anomaly-detection/](anomaly-detection/) | [anomaly detection](anomaly-detection/anomaly-detection.md), [kinds of anomalies](anomaly-detection/kinds-of-anomalies.md), [methods](anomaly-detection/methods.md) | 3 written |
 | 5 | [drift/](drift/) | [distribution shift](drift/distribution-shift.md), [kinds of drift](drift/kinds-of-drift.md), [drift detection](drift/drift-detection.md), [responding to drift](drift/responding-to-drift.md) | 4 placeholders |
 | 6 | [models/](models/) | [transformers](models/transformers.md), [masked autoencoder](models/masked-autoencoder.md) | 2 placeholders |

@@ -1,6 +1,6 @@
 # Decomposition
 
-**In one sentence:** decomposition takes a series apart into its trend-cycle, its seasonality and what's left, either by adding the parts or by multiplying them.
+**In one sentence:** decomposition takes a series apart into its trend-cycle, its seasonalities (one or more) and what's left, either by adding the parts or by multiplying them.
 
 - **Builds on:** [Patterns](patterns.md).
 - **Used by:** [Stationarity](stationarity.md).
@@ -23,6 +23,16 @@ In the textbook's words ([FPP3, 3.2][fpp-components]):
 Taking the logarithm turns a multiplicative series into an additive one, since $\log y_t = \log S_t + \log T_t + \log R_t$ ([FPP3, 3.2][fpp-components]).
 
 ![Additive: the seasonal swings keep the same size as the series rises. Multiplicative: they grow with it](assets/additive-multiplicative.png)
+
+### Several seasonalities
+
+The formulas above have one seasonal part, but many series have more ([patterns](patterns.md#seasonality)). "Higher frequency time series often exhibit more complicated seasonal patterns. For example, daily data may have a weekly pattern as well as an annual pattern. Hourly data usually has three types of seasonality: a daily pattern, a weekly pattern, and an annual pattern" ([FPP3, 12.1][fpp-complex]).
+
+A decomposition then has **one seasonal part per period**. In the additive case, for an hourly series with daily and weekly seasonality:
+
+$$y_t = S^{\text{day}}_t + S^{\text{week}}_t + T_t + R_t$$
+
+STL handles this directly: it "is designed to deal with multiple seasonality. It will return multiple seasonal components, as well as a trend and remainder component" ([FPP3, 12.1][fpp-complex]).
 
 Decomposition is useful in itself, to see what drives a series.
 
@@ -68,6 +78,7 @@ A series can have irregular ups and downs at several scales at once, for example
 ## Key points
 
 - **Decomposition** takes a series apart: **additive** when swings stay the same size, **multiplicative** when they grow with the level.
+- A series with **several seasonalities** (e.g. daily and weekly) gets **one seasonal part per period**.
 - With a robust decomposition, unusual values tend to show up in the remainder; classical decomposition isn't robust to them.
 - The **trend-cycle** is estimated by **smoothing**: whatever slow movement survives it. A larger window keeps only slower movements; faster cycles end up in the remainder.
 
@@ -78,8 +89,10 @@ A series can have irregular ups and downs at several scales at once, for example
 - Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 3.6, STL decomposition][fpp-stl]: robust decomposition, unusual values in the remainder, the trend window. Read on 2026-11-09.
 - Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 3.3, Moving averages][fpp-ma]: estimating the trend-cycle by smoothing, window size and smoothness. Read on 2026-11-09.
 - Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 2.3, Time series patterns][fpp-patterns]: the length of cycles; trend or cycle depending on how much is seen. Read on 2026-11-09.
+- Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 12.1, Complex seasonality][fpp-complex]: several seasonal patterns, STL with several seasonal components. Read on 2026-11-09.
 
 [fpp-components]: https://otexts.com/fpp3/decomposition.html#sec-components
+[fpp-complex]: https://otexts.com/fpp3/advanced.html#sec-complexseasonality
 [fpp-ma]: https://otexts.com/fpp3/decomposition.html#sec-moving-averages
 [fpp-patterns]: https://otexts.com/fpp3/graphics.html#sec-tspatterns
 [fpp-classical]: https://otexts.com/fpp3/decomposition.html#sec-classical-decomposition

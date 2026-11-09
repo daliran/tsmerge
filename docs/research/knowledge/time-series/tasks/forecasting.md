@@ -25,6 +25,10 @@
 
 The further ahead, the harder: "The further ahead we forecast, the more uncertainty is associated with the forecast", so prediction intervals usually widen as the horizon grows ([FPP3, 5.5][fpp-intervals]).
 
+![An hourly series: the context (the past, given), then the horizon, with the forecast, a band of uncertainty that widens with the horizon, and what really happened](assets/forecasting-example.png)
+
+The model sees only the context, the past, and predicts the horizon. The band shows the uncertainty growing the further ahead the forecast goes; what really happened is shown dashed, for comparison.
+
 **How it's judged:** by the **forecast error**, "the difference between an observed value and its forecast" ([FPP3, 5.8][fpp-accuracy]):
 
 - measured on data the model has never seen

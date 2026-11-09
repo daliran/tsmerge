@@ -20,6 +20,10 @@ More generally, "imputation is the process of replacing missing data with substi
 
 Unlike forecasting, the model can usually use what comes **both before and after** a gap.
 
+![A series with two gaps (shaded): the values filled in, next to the missing truth](assets/imputation-example.png)
+
+The shaded stretches are missing. The model fills them in using the values on both sides; the dashed line is the truth, which the model never sees.
+
 **How it's judged:** in benchmarks:
 
 - values are hidden on purpose from a complete series: in the TSLib (Time-Series-Library) benchmark, time points are masked at random, with ratios of 12.5%, 25%, 37.5% and 50% ([wang2026deep](../../../literature/wang2026deep.md), p. 12),

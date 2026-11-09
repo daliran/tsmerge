@@ -16,6 +16,10 @@
 - **given:** a whole series (or a segment);
 - **produce:** one label out of a fixed set.
 
+![Six short motion recordings, two each of walking, running and cycling: each recording gets one label](assets/classification-example.png)
+
+Each recording is a whole series, and the model gives it one label. The three activities differ in rhythm and shape: running is faster and stronger than walking, cycling has a more complex cycle.
+
 **How it's judged:** by **accuracy**, the share of series labeled correctly ([precision, recall and F1](../../evaluation/precision-recall-f1.md#accuracy); [wang2026deep](../../../literature/wang2026deep.md), p. 11).
 
 **What makes it hard:** the clues can be anywhere in the series, and two classes can differ only in subtle details.

@@ -93,5 +93,115 @@ def tasks() -> None:
     save(fig, "tasks")
 
 
+def daily(t, noise=0.15):
+    """An hourly series with a daily pattern, a slight trend and noise."""
+    return np.sin(2 * np.pi * t / 24) + 0.004 * t + noise * RNG.standard_normal(t.size)
+
+
+def forecasting_example() -> None:
+    """The context, the forecast for the horizon with a widening band, and the truth."""
+    t = np.arange(168)
+    y = daily(t)
+    L = 120
+    h = t[L:]
+    forecast = np.sin(2 * np.pi * h / 24) + 0.004 * h
+    band = 0.12 * np.sqrt(np.arange(1, h.size + 1))
+    fig, ax = plt.subplots(figsize=(10, 3.4))
+    ax.plot(t[:L], y[:L], color=BLUE, label="the past: the context (given)")
+    ax.plot(h, y[L:], color=GRAY, ls="--", label="what really happened")
+    ax.plot(h, forecast, color=ORANGE, lw=2, label="the forecast")
+    ax.fill_between(
+        h,
+        forecast - band,
+        forecast + band,
+        color=ORANGE,
+        alpha=0.2,
+        label="uncertainty: grows with the horizon",
+    )
+    ax.axvline(L - 0.5, color="black", lw=0.8)
+    ax.text(L / 2, 2.6, "context", ha="center")
+    ax.text(L + (t.size - L) / 2, 2.6, "horizon", ha="center")
+    ax.set(xlabel="time step (hours)", ylabel="value", ylim=(-2.4, 3.0))
+    ax.legend(loc="lower left", fontsize=8, ncols=2)
+    save(fig, "forecasting-example")
+
+
+def imputation_example() -> None:
+    """A series with two gaps, the values filled in, and the hidden truth."""
+    t = np.arange(200)
+    y = daily(t)
+    gaps = ((t >= 40) & (t < 56)) | ((t >= 120) & (t < 152))
+    filled = np.sin(2 * np.pi * t / 24) + 0.004 * t
+    fig, ax = plt.subplots(figsize=(10, 3.2))
+    observed = np.where(gaps, np.nan, y)
+    ax.plot(t, observed, color=BLUE, label="observed")
+    ax.plot(
+        t, np.where(gaps, y, np.nan), color=GRAY, ls="--", label="missing: the truth"
+    )
+    ax.plot(t, np.where(gaps, filled, np.nan), color=ORANGE, lw=2, label="filled in")
+    for start, end in ((40, 56), (120, 152)):
+        ax.axvspan(start - 0.5, end - 0.5, color=GRAY, alpha=0.12)
+    ax.set(xlabel="time step (hours)", ylabel="value", ylim=(-1.8, 2.6))
+    ax.legend(loc="upper left", fontsize=8, ncols=3)
+    save(fig, "imputation-example")
+
+
+def anomaly_detection_example() -> None:
+    """A series, its anomaly score per step, and the threshold that flags steps."""
+    t = np.arange(240)
+    expected = np.sin(2 * np.pi * t / 48)
+    y = expected + 0.1 * RNG.standard_normal(t.size)
+    y[70] += 2.0  # a point anomaly
+    y[150:175] = 0.05 * RNG.standard_normal(25)  # a collective one: the rhythm stops
+    score = np.convolve(np.abs(y - expected), np.ones(3) / 3, mode="same")
+    threshold = 0.35
+    flagged = score > threshold
+    fig, axes = plt.subplots(2, 1, figsize=(10, 4.6), sharex=True)
+    axes[0].plot(t, y, color=BLUE)
+    axes[0].set(ylabel="value", title="the series")
+    axes[1].plot(t, score, color=GRAY)
+    axes[1].axhline(threshold, color=RED, ls="--", label="threshold")
+    axes[1].set(
+        xlabel="time step",
+        ylabel="score",
+        title="the anomaly score per step; above the threshold, the step is flagged",
+    )
+    axes[1].legend(loc="upper right", fontsize=8)
+    for ax in axes:
+        for k in np.flatnonzero(flagged):
+            ax.axvspan(k - 0.5, k + 0.5, color=RED, alpha=0.15, lw=0)
+    save(fig, "anomaly-detection-example")
+
+
+def classification_example() -> None:
+    """Short motion recordings of three activities: one label per recording."""
+    t = np.arange(100)
+    kinds = [
+        ("walking", lambda: np.sin(2 * np.pi * t / 25)),
+        ("running", lambda: 2 * np.sin(2 * np.pi * t / 10)),
+        (
+            "cycling",
+            lambda: 0.8 * np.sin(2 * np.pi * t / 18) + 0.4 * np.sin(2 * np.pi * t / 9),
+        ),
+    ]
+    fig, axes = plt.subplots(2, 3, figsize=(10, 4), sharey=True)
+    for col, (label, make) in enumerate(kinds):
+        for row in range(2):
+            x = make() + 0.2 * RNG.standard_normal(t.size)
+            axes[row, col].plot(t, x, color=[BLUE, ORANGE, GREEN][col], lw=1)
+            axes[row, col].set_title(f"label: {label}", fontsize=10)
+            axes[row, col].set_yticks([])
+            if row == 1:
+                axes[row, col].set_xlabel("time step")
+    fig.suptitle(
+        "Each recording gets one label: walking, running or cycling", fontweight="bold"
+    )
+    save(fig, "classification-example")
+
+
 if __name__ == "__main__":
     tasks()
+    forecasting_example()
+    imputation_example()
+    anomaly_detection_example()
+    classification_example()

@@ -31,6 +31,10 @@ In general, anomalies are observations that "deviate significantly from the majo
 - **given:** a series;
 - **produce:** an **anomaly score** for each step, then a decision, normal or anomalous, by comparing the score with a **threshold**.
 
+![A series with a sudden spike and a stretch where the rhythm stops, and below it the anomaly score per step: the steps where the score exceeds the threshold are flagged](assets/anomaly-detection-example.png)
+
+The model gives every step a score (bottom); where the score crosses the threshold, the step is flagged (shaded). Here it catches a sudden spike and a stretch where the regular rhythm stops.
+
 ### Kinds of anomalies
 
 Anomalies can be **point**, **contextual** or **collective** ([kinds of anomalies](../../anomaly-detection/kinds-of-anomalies.md)). In a time series:

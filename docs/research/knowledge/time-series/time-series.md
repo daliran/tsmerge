@@ -31,7 +31,9 @@ where $x_t$ is the value at step $t$. The steps are usually equally spaced: ever
 
 A table of data where each row is a separate person, product or patient has no natural order: shuffling the rows changes nothing.
 
-A time series is different. "Time series data have a natural temporal ordering", which distinguishes it from "cross-sectional studies, in which there is no natural ordering of the observations" ([Time series][ts]).
+An image is in between. Its pixels are ordered by **position**: a digital image "contains a fixed number of rows and columns of pixels" ([Digital image][image]), so shuffling them destroys the picture. But position has no past and future: every pixel is available at once ([time-based vs not time-based](../signals/signals.md#time-based-vs-not-time-based)).
+
+A time series is ordered too, but in **time**. "Time series data have a natural temporal ordering", which distinguishes it from "cross-sectional studies, in which there is no natural ordering of the observations" ([Time series][ts]).
 
 Three consequences follow, and they matter for everything later:
 
@@ -47,7 +49,7 @@ How many values are recorded at each step?
 
 | | Univariate | Multivariate |
 |---|---|---|
-| **At each step** | one value | several values, one per **channel** (also called variable or variate) |
+| **At each step** | one value | several values, one per **channel** (also called variable, variate or **feature**) |
 | **Written** | $x_t \in \mathbb{R}$ | $\mathbf{x}_t \in \mathbb{R}^{C}$, with $C$ channels |
 | **The whole series** | a list of $T$ numbers | a table of $T$ rows and $C$ columns ($T \times C$) |
 | **Example** | a room's temperature every hour | temperature, humidity and power load of a building, every hour |
@@ -57,6 +59,8 @@ How many values are recorded at each step?
 In a multivariate series all channels **share the same clock**: row $t$ holds every channel's value at the same moment.
 
 The channels often influence each other (the power load follows the temperature), and that relation is information a model can use.
+
+In machine learning, each channel is a **feature**: "an individual measurable property or characteristic of a data set" ([Feature][feature]). The temperature, the humidity and the power load are three features of the same series.
 
 Real benchmark datasets range from a handful of channels to hundreds. These counts come from the TimesNet paper's dataset table ([wu2023timesnet](../../literature/wu2023timesnet.md), Table 6, p. 14); the domains are described in words, from the paper's text and Table 6:
 
@@ -76,7 +80,7 @@ Real benchmark datasets range from a handful of channels to hundreds. These coun
 
 The same idea, an ordered list of values, with one or more channels, fits a surprising range of data.
 
-Strictly, a time series is ordered by time. DNA and text are not: they are **ordered sequences** that borrow time-series tools, because the same tools work on any ordered list.
+Strictly, a time series is ordered by time. DNA, text and images are not: they are **ordered sequences** that borrow time-series tools, because the same tools work on any ordered list.
 
 | Data | The index $t$ is… | Channels | Values |
 |---|---|---|---|
@@ -86,6 +90,7 @@ Strictly, a time series is ordered by time. DNA and text are not: they are **ord
 | **Stock price** | time (each trading day or minute) | 1 per stock, or several (open, high, low, close) | prices |
 | **DNA** | **position** in the sequence | 4 after encoding (A, C, G, T) | 0 or 1 |
 | **Text** | position of each word or character | one per symbol, after encoding | 0 or 1 |
+| **Image** | **position**, with two indexes: row and column | 3 for a color image (red, green, blue), 1 for grayscale ([Channel][channel]) | brightness |
 | **Video** | time, one step per frame | one per pixel and color | brightness |
 
 ![Audio is a one-channel series indexed by time; DNA becomes a four-channel series indexed by position](assets/as-time-series.png)
@@ -98,7 +103,7 @@ Two examples from the figure:
   - This is called **one-hot encoding**.
   - The result is a 4-channel series indexed by position.
 
-**What changes when the index isn't time:** a DNA sequence has an order but no past and future. Every position is known at once, so a model may look both ways.
+**What changes when the index isn't time:** a DNA sequence or an image has an order but no past and future. Every position is known at once, so a model may look both ways. An image also needs two indexes, row and column, where a series has one.
 
 The tools carry over; the rule "never use the future" only applies when the index really is time and the task is to predict what comes next.
 
@@ -123,8 +128,8 @@ Two practical points, which later docs come back to:
 
 - A **time series** is a time-ordered list of values, usually equally spaced: a sampled, time-based signal.
 - **Order matters**, neighbors are related, and a model that predicts what comes next must never use the future.
-- **Univariate:** one value per step. **Multivariate:** several channels sharing the same clock, a $T \times C$ table.
-- **Many data types can be treated as time series:** audio, sensors, prices, and even DNA and text, ordered sequences where the index is position rather than time.
+- **Univariate:** one value per step. **Multivariate:** several channels (in machine learning, **features**) sharing the same clock, a $T \times C$ table.
+- **Many data types can be treated as time series:** audio, sensors, prices, and even DNA, text and images, ordered by position rather than time.
 - Values can be **real numbers, counts or symbols**; symbols are encoded as numbers, e.g. one-hot.
 
 ## Sources
@@ -132,8 +137,13 @@ Two practical points, which later docs come back to:
 - [Time series (Wikipedia)][ts]: definition, equal spacing, temporal ordering, types of values. Read on 2026-11-08.
 - [Signal (Wikipedia)][signal]: discrete-time signals as time series. Read on 2026-11-08.
 - [Sampling (signal processing) (Wikipedia)][sampling]: audio sampling rates. Read on 2026-11-08; telephone rate read on 2026-11-09.
+- [Digital image (Wikipedia)][image], [Channel (digital image) (Wikipedia)][channel]: pixels in rows and columns, color channels. Read on 2026-11-09.
+- [Feature (machine learning) (Wikipedia)][feature]: channels as features. Read on 2026-11-09.
 - [wu2023timesnet](../../literature/wu2023timesnet.md): channel counts and sampling intervals of benchmark datasets.
 
 [ts]: https://en.wikipedia.org/wiki/Time_series
 [signal]: https://en.wikipedia.org/wiki/Signal
 [sampling]: https://en.wikipedia.org/wiki/Sampling_(signal_processing)
+[image]: https://en.wikipedia.org/wiki/Digital_image
+[channel]: https://en.wikipedia.org/wiki/Channel_(digital_image)
+[feature]: https://en.wikipedia.org/wiki/Feature_(machine_learning)

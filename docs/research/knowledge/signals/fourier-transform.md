@@ -34,16 +34,16 @@ A plot of strengths alone, like the spectra on this page, is easier to read but 
 
 ## For sampled data: the discrete Fourier transform
 
-A recorded series is a finite list of samples, so in practice the **discrete Fourier transform (DFT)** is used.
+A recorded signal is a finite list of samples, so in practice the **discrete Fourier transform (DFT)** is used.
 
-- **What it does:** it turns "a finite sequence of equally-spaced samples" into a sequence of the same length, describing the series' frequency content ([Discrete Fourier transform][dft]).
+- **What it does:** it turns "a finite sequence of equally-spaced samples" into a sequence of the same length, describing the signal's frequency content ([Discrete Fourier transform][dft]).
 - **The formula,** for $N$ samples $x_0, \dots, x_{N-1}$ ([Discrete Fourier transform][dft]):
 
 $$X_k = \sum_{n=0}^{N-1} x_n \, e^{-i 2\pi \frac{k}{N} n}, \qquad k = 0, \dots, N-1$$
 
 - **What $k$ means:** component $k$ completes $k$ cycles over the $N$ samples. With $f_s$ samples per second, its frequency is $k \, f_s / N$.
 - **Resolution:** neighboring components are $f_s / N$ apart. A longer stretch of data (larger $N$) separates frequencies more finely; a short one blurs close frequencies together. This loss of detail from a limited stretch is called **leakage** ([Discrete Fourier transform][dft]).
-- **The highest frequency:** for a real-valued series, the DFT "is symmetric around the middle point, and so only half of the transform points are needed to reconstruct the original signal" ([Discrete Fourier transform][dft]).
+- **The highest frequency:** for a real-valued signal, the DFT "is symmetric around the middle point, and so only half of the transform points are needed to reconstruct the original signal" ([Discrete Fourier transform][dft]).
   - The useful half reaches the **Nyquist frequency**, $f_s/2$.
   - Nothing faster can be seen in the samples, as [sampling](sampling.md#sampling-fast-enough) explains.
 
@@ -52,21 +52,21 @@ $$X_k = \sum_{n=0}^{N-1} x_n \, e^{-i 2\pi \frac{k}{N} n}, \qquad k = 0, \dots, 
 The **fast Fourier transform (FFT)** is "an algorithm that computes the discrete Fourier transform (DFT), or its inverse" ([Fast Fourier transform][fft]).
 
 - **Same result, much faster:** it reduces the cost from $O(n^2)$ to $O(n \log n)$ for $n$ samples ([Fast Fourier transform][fft]).
-- **Why it matters:** computing the spectrum of a long series, or of every window a model reads, becomes cheap. In practice, "taking the Fourier transform" of a series means running an FFT.
+- **Why it matters:** computing the spectrum of a long signal, or of every short stretch a model reads, becomes cheap. In practice, "taking the Fourier transform" of sampled data means running an FFT.
 
-## Finding periods in a time series
+## Finding periods in a time-based signal
 
 A pattern that repeats every $p$ steps is a wave with frequency $1/p$ cycles per step, so it shows up as a peak at that frequency.
 
-![Eight weeks of an hourly series with daily and weekly seasonality, and its spectrum with peaks at 1 cycle per day and 1 cycle every 7 days](assets/fourier-periods.png)
+![Eight weeks of an hourly signal with a daily and a weekly repeating pattern, and its spectrum with peaks at 1 cycle per day and 1 cycle every 7 days](assets/fourier-periods.png)
 
-- **Top:** eight weeks of an hourly series with a daily and a weekly [seasonality](../time-series/structure/patterns.md#seasonality), plus noise. The two patterns are hard to separate by eye.
-- **Bottom:** its spectrum has one clear peak per seasonal period: at 1 cycle per day (period 24 hours) and at 1 cycle every 7 days (period 168 hours). The noise spreads thinly over all frequencies.
+- **Top:** eight weeks of a signal sampled every hour, with a pattern that repeats every day and one that repeats every week, plus noise. The two patterns are hard to separate by eye.
+- **Bottom:** its spectrum has one clear peak per repeating pattern: at 1 cycle per day (period 24 hours) and at 1 cycle every 7 days (period 168 hours). The noise spreads thinly over all frequencies.
 
-Deep time-series models use the same idea:
+Deep learning models for time-based signals use the same idea:
 
-- **TimesNet** finds a series' dominant periods with an FFT. It keeps the $k$ frequencies with the largest amplitudes, and turns each frequency $f_i$ into a period $p_i = \lceil T / f_i \rceil$ for a series of length $T$ ([wu2023timesnet](../../literature/wu2023timesnet.md), p. 4).
-- **A survey of deep time-series models** counts Fourier analysis among the basic modules shared by many models. Some use it to pick periods or keep chosen frequencies; others model the series directly in the frequency domain ([wang2026deep](../../literature/wang2026deep.md), Section 3.3, pp. 4–5).
+- **TimesNet** finds a signal's dominant periods with an FFT. It keeps the $k$ frequencies with the largest amplitudes, and turns each frequency $f_i$ into a period $p_i = \lceil T / f_i \rceil$ for a signal of length $T$ ([wu2023timesnet](../../literature/wu2023timesnet.md), p. 4).
+- **A survey of such models** counts Fourier analysis among the basic modules shared by many models. Some use it to pick periods or keep chosen frequencies; others model the signal directly in the frequency domain ([wang2026deep](../../literature/wang2026deep.md), Section 3.3, pp. 4–5).
 
 ## Key points
 
@@ -74,7 +74,7 @@ Deep time-series models use the same idea:
 - Time domain and frequency domain are two views of the same signal; both amplitude and phase are needed to go back.
 - For sampled data, the **DFT** of $N$ samples gives components $f_s/N$ apart, up to the **Nyquist frequency** $f_s/2$; longer stretches separate frequencies more finely.
 - The **FFT** computes the DFT in $O(n \log n)$ instead of $O(n^2)$.
-- A seasonal pattern with period $p$ shows up as a **peak at frequency $1/p$**: the spectrum finds periods.
+- A pattern that repeats every $p$ steps shows up as a **peak at frequency $1/p$**: the spectrum finds periods.
 
 ## Sources
 
@@ -83,7 +83,7 @@ Deep time-series models use the same idea:
 - [Fast Fourier transform (Wikipedia)][fft]: the algorithm and its cost. Read on 2026-11-09.
 - [Frequency domain (Wikipedia)][fd]: the phase is needed to define the signal. Read on 2026-11-09.
 - [wu2023timesnet](../../literature/wu2023timesnet.md): period discovery with the FFT.
-- [wang2026deep](../../literature/wang2026deep.md): Fourier analysis as a basic module of deep time-series models.
+- [wang2026deep](../../literature/wang2026deep.md): Fourier analysis as a basic module of deep learning models for time-based signals.
 
 [ft]: https://en.wikipedia.org/wiki/Fourier_transform
 [dft]: https://en.wikipedia.org/wiki/Discrete_Fourier_transform

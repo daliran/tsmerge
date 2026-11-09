@@ -40,7 +40,7 @@ Seasonality means **repetition at a fixed, known period**. The word comes from t
 
 The **period** is the number of steps before the pattern repeats: in an hourly series, daily seasonality has a period of 24 and a weekly one 168.
 
-When the periods aren't known in advance, the series' spectrum shows them: each seasonal period appears as a peak ([Fourier transform](../../signals/fourier-transform.md#finding-periods-in-a-time-series)).
+When the periods aren't known in advance, the series' spectrum shows them: each seasonal period appears as a peak ([Fourier transform](../../signals/fourier-transform.md#finding-periods-in-a-time-based-signal)).
 
 **A series can have more than one seasonality** at once: "one series can have more than one seasonal pattern" ([FPP3, 2.3][fpp-patterns]).
 

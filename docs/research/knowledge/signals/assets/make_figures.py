@@ -221,7 +221,7 @@ def fourier_sum() -> None:
 
 
 def fourier_periods() -> None:
-    """An hourly series with daily and weekly seasonality, and its spectrum."""
+    """An hourly signal with daily and weekly repeating patterns, and its spectrum."""
     hours = np.arange(24 * 7 * 8)  # eight weeks
     x = (
         np.sin(2 * np.pi * hours / 24)
@@ -233,7 +233,7 @@ def fourier_periods() -> None:
     axes[0].set(
         xlabel="time (days)",
         ylabel="value",
-        title="Eight weeks of an hourly series: daily and weekly seasonality, noise",
+        title="Eight weeks of an hourly signal: daily and weekly patterns, noise",
     )
     per_day = np.fft.rfftfreq(hours.size, 1 / 24)  # cycles per day
     strength = 2 * np.abs(np.fft.rfft(x)) / hours.size
@@ -254,7 +254,7 @@ def fourier_periods() -> None:
         xlabel="frequency (cycles per day)",
         ylabel="strength",
         xlim=(0, 3),
-        title="Its spectrum: one peak per seasonal period",
+        title="Its spectrum: one peak per repeating pattern",
     )
     save(fig, "fourier-periods")
 

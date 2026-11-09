@@ -3,11 +3,11 @@
 **In one sentence:** anomaly detection flags the steps, or stretches, of a series that don't behave as normal.
 
 - **Builds on:**
-  - [Patterns](../structure/patterns.md)
-  - [Tasks](tasks.md)
   - [Precision, recall and F1](../../evaluation/precision-recall-f1.md)
   - [AUROC](../../evaluation/auroc.md)
   - [AUPRC](../../evaluation/auprc.md)
+  - [Patterns](../structure/patterns.md)
+  - [Tasks](tasks.md)
 - **Used by:**
   - [Windows](../data-preparation/windows.md)
   - [Splitting](../data-preparation/splitting.md)

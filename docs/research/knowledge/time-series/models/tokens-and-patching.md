@@ -4,7 +4,7 @@
 
 **Will cover:** what a model reads as one token of a series: a single step, a patch of steps, or a whole channel.
 
-- **Builds on:** [Time series](../time-series.md), [Transformers](../../models/transformers.md).
+- **Builds on:** [Transformers](../../models/transformers.md), [Time series](../time-series.md).
 - **Used by:** [Forecasting models](forecasting-models.md).
 
 ## Sources to use

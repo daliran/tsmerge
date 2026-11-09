@@ -5,11 +5,11 @@
 **Will cover:** drift in a series: how it differs from trend, seasonality and non-stationarity, and the shifts specific to forecasting (temporal shift vs concept drift).
 
 - **Builds on:**
+  - [Distribution shift](../../change-over-time/distribution-shift.md)
+  - [Kinds of drift](../../change-over-time/kinds-of-drift.md)
   - [Stationarity](../structure/stationarity.md)
   - [Forecasting](../tasks/forecasting.md)
   - [Anomaly detection](../tasks/anomaly-detection.md)
-  - [Distribution shift](../../change-over-time/distribution-shift.md)
-  - [Kinds of drift](../../change-over-time/kinds-of-drift.md)
 - **Used by:** the [method](../../../method/README.md).
 
 ## Sources to use

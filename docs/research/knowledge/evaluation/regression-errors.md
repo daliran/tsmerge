@@ -4,9 +4,9 @@
 
 - **Builds on:** nothing: a starting point.
 - **Used by:**
+  - [Comparing results](comparing-results.md)
   - [Forecasting](../time-series/tasks/forecasting.md)
   - [Imputation](../time-series/tasks/imputation.md)
-  - [Comparing results](comparing-results.md)
   - [Forecast evaluation](../time-series/evaluation/forecast-evaluation.md)
 
 ## Errors and their averages

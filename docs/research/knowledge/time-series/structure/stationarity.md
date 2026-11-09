@@ -4,10 +4,10 @@
 
 - **Builds on:** [Patterns](patterns.md), [Decomposition](decomposition.md).
 - **Used by:**
+  - [Distribution shift](../../change-over-time/distribution-shift.md)
   - [Autocorrelation](autocorrelation.md)
   - [Forecasting](../tasks/forecasting.md)
   - [Normalization](../data-preparation/normalization.md)
-  - [Distribution shift](../../change-over-time/distribution-shift.md)
   - [Drift in time series](../change-over-time/drift-in-time-series.md)
 
 ## Does the series keep its character?

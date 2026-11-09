@@ -7,9 +7,9 @@
 - **Builds on:**
   - [Parameter isolation](../parameter-isolation.md)
   - [Loss landscape](loss-landscape.md)
-  - [Task arithmetic](task-arithmetic.md)
   - [Fisher information](fisher-information.md)
-- **Used by:** [Co-observation](../co-observation.md), [Interference reduction](interference-reduction.md), [Continual merging](continual-merging.md).
+  - [Task arithmetic](task-arithmetic.md)
+- **Used by:** [Interference reduction](interference-reduction.md), [Continual merging](continual-merging.md), [Co-observation](../co-observation.md).
 
 ## Sources to use
 

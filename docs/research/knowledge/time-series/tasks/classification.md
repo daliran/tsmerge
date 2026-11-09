@@ -2,7 +2,7 @@
 
 **In one sentence:** classification gives a whole series one label out of a fixed set.
 
-- **Builds on:** [Tasks](tasks.md), [Precision, recall and F1](../../evaluation/precision-recall-f1.md).
+- **Builds on:** [Precision, recall and F1](../../evaluation/precision-recall-f1.md), [Tasks](tasks.md).
 - **Used by:** the [method](../../../method/README.md).
 
 ## The task

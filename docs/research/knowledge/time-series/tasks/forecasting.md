@@ -2,7 +2,7 @@
 
 **In one sentence:** forecasting predicts the next values of a series from its past.
 
-- **Builds on:** [Stationarity](../structure/stationarity.md), [Tasks](tasks.md), [Regression errors](../../evaluation/regression-errors.md).
+- **Builds on:** [Regression errors](../../evaluation/regression-errors.md), [Stationarity](../structure/stationarity.md), [Tasks](tasks.md).
 - **Used by:**
   - [Windows](../data-preparation/windows.md)
   - [Splitting](../data-preparation/splitting.md)

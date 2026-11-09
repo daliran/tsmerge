@@ -4,11 +4,11 @@
 
 - **Builds on:** nothing: a starting point.
 - **Used by:**
-  - [Anomaly detection](../time-series/tasks/anomaly-detection.md)
-  - [Classification](../time-series/tasks/classification.md)
   - [AUROC](auroc.md)
   - [AUPRC](auprc.md)
   - [Comparing results](comparing-results.md)
+  - [Anomaly detection](../time-series/tasks/anomaly-detection.md)
+  - [Classification](../time-series/tasks/classification.md)
   - [Point adjustment](../time-series/evaluation/point-adjustment.md)
 
 ## Counting hits and misses

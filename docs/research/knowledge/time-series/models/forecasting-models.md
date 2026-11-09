@@ -6,9 +6,9 @@
 
 - **Builds on:**
   - [Fourier transform](../../signals/fourier-transform.md)
+  - [Transformers](../../models/transformers.md)
   - [Forecasting](../tasks/forecasting.md)
   - [Normalization](../data-preparation/normalization.md)
-  - [Transformers](../../models/transformers.md)
   - [Tokens and patching](tokens-and-patching.md)
 - **Used by:** the [method](../../../method/README.md).
 

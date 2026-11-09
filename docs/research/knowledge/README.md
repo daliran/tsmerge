@@ -12,25 +12,18 @@ General theory for people, one concept per doc: what a signal and a time series 
 
 ## Reading order
 
-Read top-down the first time; the numbers are a suggested path, not a requirement.
+Read top-down the first time; the numbers are a suggested path, not a requirement. The two large areas, time series and learning, have their own README with the detailed reading order.
 
-| # | Folder | Docs | Status |
+| # | Area | What it covers | Status |
 |---|---|---|---|
-| 1 | [signals/](signals/) | [signals](signals/signals.md), [sampling](signals/sampling.md), [Fourier transform](signals/fourier-transform.md) | written |
-| 2 | [time-series/](time-series/) | [time series](time-series/time-series.md) | written |
-| 3 | [time-series/structure/](time-series/structure/) | [patterns](time-series/structure/patterns.md), [decomposition](time-series/structure/decomposition.md), [stationarity](time-series/structure/stationarity.md), [autocorrelation](time-series/structure/autocorrelation.md) | written |
-| 4 | [time-series/tasks/](time-series/tasks/) | [tasks](time-series/tasks/tasks.md), [forecasting](time-series/tasks/forecasting.md), [imputation](time-series/tasks/imputation.md), [anomaly detection](time-series/tasks/anomaly-detection.md), [classification](time-series/tasks/classification.md) | written |
-| 5 | [time-series/data-preparation/](time-series/data-preparation/) | [windows](time-series/data-preparation/windows.md), [splitting](time-series/data-preparation/splitting.md); [normalization](time-series/data-preparation/normalization.md) | written; 1 placeholder |
-| 6 | [evaluation/](evaluation/) | [regression errors](evaluation/regression-errors.md), [precision, recall and F1](evaluation/precision-recall-f1.md); [AUROC](evaluation/auroc.md), [AUPRC](evaluation/auprc.md), [comparing results](evaluation/comparing-results.md) | 2 written; 3 placeholders |
-| 7 | [time-series/evaluation/](time-series/evaluation/) | [forecast evaluation](time-series/evaluation/forecast-evaluation.md), [point adjustment](time-series/evaluation/point-adjustment.md), [VUS](time-series/evaluation/vus.md) | placeholders |
-| 8 | [change-over-time/](change-over-time/) | [distribution shift](change-over-time/distribution-shift.md), [kinds of drift](change-over-time/kinds-of-drift.md), [drift detection](change-over-time/drift-detection.md), [responding to drift](change-over-time/responding-to-drift.md) | placeholders |
-| 9 | [time-series/change-over-time/](time-series/change-over-time/) | [drift in time series](time-series/change-over-time/drift-in-time-series.md) | placeholder |
-| 10 | [models/](models/) | [transformers](models/transformers.md), [masked autoencoder](models/masked-autoencoder.md) | placeholders |
-| 11 | [time-series/models/](time-series/models/) | [tokens and patching](time-series/models/tokens-and-patching.md), [forecasting models](time-series/models/forecasting-models.md) | placeholders |
-| 12 | [learning/](learning/) | [self-supervised learning](learning/self-supervised-learning.md), [pretraining and fine-tuning](learning/pretraining-and-fine-tuning.md), [parameter-efficient fine-tuning](learning/parameter-efficient-fine-tuning.md), [joint training](learning/joint-training.md) | placeholders |
-| 13 | [learning/continual-learning/](learning/continual-learning/) | [continual learning](learning/continual-learning/continual-learning.md), [forgetting and plasticity](learning/continual-learning/forgetting-and-plasticity.md), [co-observation](learning/continual-learning/co-observation.md), [sequential fine-tuning](learning/continual-learning/sequential-fine-tuning.md), [replay](learning/continual-learning/replay.md), [regularization](learning/continual-learning/regularization.md), [parameter isolation](learning/continual-learning/parameter-isolation.md) | placeholders |
-| 14 | [learning/continual-learning/model-merging/](learning/continual-learning/model-merging/) | [weight-space geometry](learning/continual-learning/model-merging/weight-space-geometry.md), [loss landscape](learning/continual-learning/model-merging/loss-landscape.md), [task arithmetic](learning/continual-learning/model-merging/task-arithmetic.md), [model merging](learning/continual-learning/model-merging/model-merging.md), [interference reduction](learning/continual-learning/model-merging/interference-reduction.md), [continual merging](learning/continual-learning/model-merging/continual-merging.md), [Fisher information](learning/continual-learning/model-merging/fisher-information.md) | placeholders |
-| — | [time-series/datasets/](time-series/datasets/README.md) | one file per dataset, added when datasets are chosen | placeholder |
+| 1 | [signals/](signals/) | [signals](signals/signals.md), [sampling](signals/sampling.md), [Fourier transform](signals/fourier-transform.md) | 3 written |
+| 2 | [time-series/](time-series/README.md) | what a series is, its structure, the tasks, data preparation; the time-series side of evaluation, change over time and models; datasets | 12 written, 8 placeholders |
+| 3 | [evaluation/](evaluation/) | [regression errors](evaluation/regression-errors.md), [precision, recall and F1](evaluation/precision-recall-f1.md); [AUROC](evaluation/auroc.md), [AUPRC](evaluation/auprc.md), [comparing results](evaluation/comparing-results.md) | 2 written, 3 placeholders |
+| 4 | [change-over-time/](change-over-time/) | [distribution shift](change-over-time/distribution-shift.md), [kinds of drift](change-over-time/kinds-of-drift.md), [drift detection](change-over-time/drift-detection.md), [responding to drift](change-over-time/responding-to-drift.md) | 4 placeholders |
+| 5 | [models/](models/) | [transformers](models/transformers.md), [masked autoencoder](models/masked-autoencoder.md) | 2 placeholders |
+| 6 | [learning/](learning/README.md) | pretraining and fine-tuning, joint training, continual learning, model merging | 18 placeholders |
+
+The generic areas (3 to 5) come before the time-series docs that build on them; the [time-series README](time-series/README.md) says where.
 
 ## How the docs are written
 

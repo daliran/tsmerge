@@ -38,8 +38,80 @@ Decomposition is useful in itself, to see what drives a series.
 
 It can also help the [tasks](../tasks/tasks.md), with a caveat on unusual values:
 
-- a **robust** method such as STL can be set so that "occasional unusual observations will not affect the estimates of the trend-cycle and seasonal components. They will, however, affect the remainder component" ([FPP3, 3.6][fpp-stl]): unusual values tend to show up in the remainder;
-- the simpler classical decomposition "is not robust to these kinds of unusual values" ([FPP3, 3.4][fpp-classical]): they can leak into the trend-cycle and seasonal estimates.
+- a **robust** method such as [STL](#stl-in-brief) can be set so that "occasional unusual observations will not affect the estimates of the trend-cycle and seasonal components. They will, however, affect the remainder component" ([FPP3, 3.6][fpp-stl]): unusual values tend to show up in the remainder;
+- the simpler [classical decomposition](#classical-decomposition) "is not robust to these kinds of unusual values" ([FPP3, 3.4][fpp-classical]): they can leak into the trend-cycle and seasonal estimates.
+
+## Moving averages
+
+A **moving average** replaces each value with the average of the values around it. Neighboring values tend to be close, so averaging them "eliminates some of the randomness in the data, leaving a smooth trend-cycle component" ([FPP3, 3.3][fpp-ma]).
+
+A moving average of order $m$ (an **m-MA**), with $m = 2k + 1$ ([FPP3, 3.3][fpp-ma]):
+
+$$\hat{T}_t = \frac{1}{m} \sum_{j=-k}^{k} y_{t+j}$$
+
+In words: the value at step $t$ is the average of the value at $t$ and of the $k$ values on each side.
+
+### A small example
+
+A 3-MA ($k = 1$) on seven values: each smoothed value is the average of the value and its two neighbors.
+
+| Step $t$ | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|---|---|---|---|---|---|---|---|
+| Value $y_t$ | 3 | 5 | 4 | 6 | 8 | 7 | 9 |
+| 3-MA $\hat{T}_t$ | — | 4 | 5 | 6 | 7 | 8 | — |
+
+- **Step 2:** $(3 + 5 + 4)/3 = 4$; **step 3:** $(5 + 4 + 6)/3 = 5$; and so on.
+- **The result:** the values zigzag (5, 4, 6, 8, 7), but the moving average rises steadily, 4, 5, 6, 7, 8: it keeps the trend and drops the wiggles.
+- **The ends are missing:** step 1 has no value before it and step 7 none after, so the average can't be computed there. A larger $m$ loses more steps at each end.
+
+### Even orders: centering
+
+With an even order the average isn't centered on a step: a 4-MA of steps 1 to 4 falls between steps 2 and 3. The fix is to average two consecutive 4-MAs, a **2×4-MA**, which is "symmetric" again ([FPP3, 3.3][fpp-ma]).
+
+- A 2×m-MA "is equivalent to a weighted moving average of order m + 1 where all observations take the weight 1/m, except for the first and last terms which take weights 1/(2m)" ([FPP3, 3.3][fpp-ma]).
+- For example, a 2×4-MA weighs five steps by $\tfrac{1}{8}, \tfrac{1}{4}, \tfrac{1}{4}, \tfrac{1}{4}, \tfrac{1}{8}$.
+
+### Canceling the seasonality
+
+An average over one full seasonal period includes every season once, so the seasonal ups and downs cancel out and the trend-cycle remains. That's why "a 2×12-MA can be used to estimate the trend-cycle of monthly data with annual seasonality and a 7-MA can be used to estimate the trend-cycle of daily data with a weekly seasonality" ([FPP3, 3.3][fpp-ma]).
+
+## Classical decomposition
+
+"The classical decomposition method originated in the 1920s. It is a relatively simple procedure, and forms the starting point for most other methods of time series decomposition" ([FPP3, 3.4][fpp-classical]).
+
+With $m$ the seasonal period, the additive version takes four steps ([FPP3, 3.4][fpp-classical]):
+
+1. **Trend-cycle:** smooth the series with a 2×m-MA if $m$ is even, an m-MA if $m$ is odd ([canceling the seasonality](#canceling-the-seasonality)).
+2. **Detrend:** subtract it, $y_t - \hat{T}_t$.
+3. **Seasonality:** average the detrended values of each season; for example, "the seasonal component for March is the average of all the detrended March values in the data". Adjust these averages to add to zero, then repeat the same pattern for every year.
+4. **Remainder:** what's left, $\hat{R}_t = y_t - \hat{T}_t - \hat{S}_t$.
+
+The multiplicative version divides instead of subtracting.
+
+FPP3 doesn't recommend it today: "While classical decomposition is still widely used, it is not recommended, as there are now several much better methods" ([FPP3, 3.4][fpp-classical]). Its problems:
+
+- **Missing ends:** "The estimate of the trend-cycle is unavailable for the first few and last few observations", as in the example above.
+- **Over-smoothing:** it "tends to over-smooth rapid rises and falls in the data".
+- **Fixed seasonality:** it assumes "the seasonal component repeats from year to year", so it can't follow a pattern that shifts, like electricity demand moving its peak from winter (heating) to summer (air conditioning).
+- **Not robust:** it "is not robust to these kinds of unusual values".
+
+[STL](#stl-in-brief) addresses each of these.
+
+## STL in brief
+
+**STL** is a widely used decomposition method. "STL is an acronym for 'Seasonal and Trend decomposition using Loess', while loess is a method for estimating nonlinear relationships" ([FPP3, 3.6][fpp-stl]). It "was developed by Cleveland et al. (1990), and later extended to handle multiple seasonal patterns by Bandara et al." ([FPP3, 3.6][fpp-stl]).
+
+Its advantages over the simpler classical decomposition ([FPP3, 3.6][fpp-stl]):
+
+- **any kind of seasonality:** it "will handle any type of seasonality, not only monthly and quarterly data", including several at once ([several seasonalities](#several-seasonalities));
+- **seasonality can change:** "The seasonal component is allowed to change over time, and the rate of change can be controlled by the user";
+- **adjustable smoothness:** "The smoothness of the trend-cycle can also be controlled by the user" ([trend or cycle](#trend-or-cycle-it-depends-on-the-smoothing));
+- **a robust option:** unusual observations stay out of the trend-cycle and seasonal estimates, and show up in the remainder.
+
+Its limits ([FPP3, 3.6][fpp-stl]):
+
+- it "does not handle trading day or calendar variation automatically";
+- it "only provides facilities for additive decompositions"; for a multiplicative one, take the logarithm of the data first, then back-transform the components.
 
 ## Trend or cycle? It depends on the smoothing
 
@@ -79,15 +151,18 @@ A series can have irregular ups and downs at several scales at once, for example
 
 - **Decomposition** takes a series apart: **additive** when swings stay the same size, **multiplicative** when they grow with the level.
 - A series with **several seasonalities** (e.g. daily and weekly) gets **one seasonal part per period**.
+- A **moving average** replaces each value with the average of its neighbors: it keeps the trend-cycle and drops the wiggles; over one full seasonal period it also cancels the seasonality.
+- **Classical decomposition** (1920s): trend-cycle by moving average, seasonality by averaging each season; simple, but no longer recommended.
+- **STL** (Seasonal and Trend decomposition using Loess) is the usual method: any kind and number of seasonalities, adjustable smoothness, a robust option; additive only.
 - With a robust decomposition, unusual values tend to show up in the remainder; classical decomposition isn't robust to them.
 - The **trend-cycle** is estimated by **smoothing**: whatever slow movement survives it. A larger window keeps only slower movements; faster cycles end up in the remainder.
 
 ## Sources
 
 - Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 3.2, Time series components][fpp-components]: decomposition, additive and multiplicative, trend-cycle, remainder, the log transform. Read on 2026-11-09.
-- Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 3.4, Classical decomposition][fpp-classical]: not robust to unusual values. Read on 2026-11-09.
-- Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 3.6, STL decomposition][fpp-stl]: robust decomposition, unusual values in the remainder, the trend window. Read on 2026-11-09.
-- Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 3.3, Moving averages][fpp-ma]: estimating the trend-cycle by smoothing, window size and smoothness. Read on 2026-11-09.
+- Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 3.4, Classical decomposition][fpp-classical]: its origin, the four steps, why it is no longer recommended. Read on 2026-11-09.
+- Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 3.6, STL decomposition][fpp-stl]: what STL is, its advantages and limits, robust decomposition, unusual values in the remainder, the trend window. Read on 2026-11-09.
+- Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 3.3, Moving averages][fpp-ma]: the m-MA formula, centering even orders, canceling seasonality, window size and smoothness. Read on 2026-11-09.
 - Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 2.3, Time series patterns][fpp-patterns]: the length of cycles; trend or cycle depending on how much is seen. Read on 2026-11-09.
 - Hyndman, R. J., & Athanasopoulos, G., *Forecasting: Principles and Practice*, 3rd edition, OTexts, [Section 12.1, Complex seasonality][fpp-complex]: several seasonal patterns, STL with several seasonal components. Read on 2026-11-09.
 

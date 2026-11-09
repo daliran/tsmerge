@@ -23,17 +23,20 @@ One line per term, grouped by the area it belongs to, with a link to the doc tha
 
 - **Autocorrelation:** how strongly a series is linearly related to its own past, at each lag ([autocorrelation](time-series/structure/autocorrelation.md)).
 - **Channel:** one of the values recorded at each step of a multivariate series; also called variable, variate or feature ([time series](time-series/time-series.md#univariate-and-multivariate)).
+- **Classical decomposition:** the 1920s decomposition method: trend-cycle by moving average, seasonality by averaging each season; no longer recommended ([decomposition](time-series/structure/decomposition.md#classical-decomposition)).
 - **Cycle:** rises and falls of no fixed length, unlike seasonality ([patterns](time-series/structure/patterns.md#seasonality-vs-cycles)).
 - **Decomposition:** taking a series apart into trend-cycle, seasonality and remainder, additively or multiplicatively ([decomposition](time-series/structure/decomposition.md)).
 - **Differencing:** looking at the changes between consecutive values instead of the values ([stationarity](time-series/structure/stationarity.md)).
 - **Drift:** an unexpected change in a series' statistical properties over time ([stationarity](time-series/structure/stationarity.md)).
 - **Feature:** in machine learning, an individual measurable property of the data; for a multivariate series, a channel ([time series](time-series/time-series.md#univariate-and-multivariate)).
+- **Moving average (m-MA):** each value replaced by the average of itself and its $k$ neighbors on each side, $m = 2k + 1$ ([decomposition](time-series/structure/decomposition.md#moving-averages)).
 - **Multivariate series:** a series with several channels sharing the same clock ([time series](time-series/time-series.md#univariate-and-multivariate)).
 - **One-hot encoding:** turning symbols into numbers with one channel per symbol, set to 1 for the symbol present ([time series](time-series/time-series.md)).
 - **Period:** the number of steps before a seasonal pattern repeats ([patterns](time-series/structure/patterns.md#seasonality)).
 - **Random walk:** a series where each value is the previous one plus a random step, wandering with no fixed level ([stationarity](time-series/structure/stationarity.md)).
 - **Remainder:** what is left of a series after removing trend-cycle and seasonality: noise and anything unusual ([patterns](time-series/structure/patterns.md)).
 - **Seasonality:** repetition at a fixed, known period, tied to a calendar or a clock ([patterns](time-series/structure/patterns.md#seasonality)).
+- **STL:** "Seasonal and Trend decomposition using Loess", a widely used method to decompose a series into trend-cycle, seasonal parts and remainder ([decomposition](time-series/structure/decomposition.md#stl-in-brief)).
 - **Stationary series:** a series whose statistical properties don't depend on when it is observed ([stationarity](time-series/structure/stationarity.md)).
 - **Time series:** a list of values in time order, usually equally spaced: a sampled, time-based signal ([time series](time-series/time-series.md)).
 - **Trend:** "a long-term increase or decrease in the data" ([patterns](time-series/structure/patterns.md)).

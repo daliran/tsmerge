@@ -28,25 +28,15 @@ Each has its own doc: [forecasting](forecasting.md), [imputation](imputation.md)
 
 ## One family
 
-The TSLib (Time-Series-Library) benchmark treats the tasks as one problem: it unifies them "as a representation learning task with domain-specific heads", a backbone shared across tasks with a small task-specific part on top ([wang2026deep](../../../literature/wang2026deep.md), p. 11).
+One way to see the four tasks: they share one skill, **understanding how the series normally behaves**. Forecasting uses it to continue the series, imputation to fill it in, anomaly detection to spot what departs from it, and classification to tell kinds of behavior apart.
 
-Not every model is evaluated on every task, though: TiDE, which needs timestamps, is tested on long-term forecasting only ([wang2026deep](../../../literature/wang2026deep.md), p. 13).
-
-One way to see why a shared backbone can work: the four tasks look different, but each draws on the same skill, **understanding how the series normally behaves**.
-
-- **Forecasting** uses it to continue the series.
-- **Imputation** uses it to fill the series in.
-- **Anomaly detection** uses it to measure how far the data are from normal.
-- **Classification** uses it to tell kinds of behavior apart.
-
-The data are prepared in a similar way too: [windows](../data-preparation/windows.md) describes one common way, with small differences per task.
+That's why one model can serve all four: the TSLib (Time-Series-Library) benchmark uses a shared backbone with a small task-specific part on top ([wang2026deep](../../../literature/wang2026deep.md), p. 11).
 
 ## Key points
 
 - **Forecasting:** past → future values. **Imputation:** a series with gaps → the missing values.
 - **Anomaly detection:** series → normal or abnormal, step by step. **Classification:** whole series → one label.
-- The TSLib benchmark treats all four as one representation-learning problem: a shared backbone with task-specific heads.
-- One way to see the link: all four draw on modeling **normal behavior**.
+- All four draw on understanding **normal behavior**, so one model with a shared backbone can serve them all.
 
 ## Sources
 

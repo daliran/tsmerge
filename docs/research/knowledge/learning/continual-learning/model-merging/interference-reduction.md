@@ -4,7 +4,7 @@
 
 **Will cover:** the rules that reduce interference between merged updates (TIES, DARE, Iso-C, TSV).
 
-- **Builds on:** [Task arithmetic](task-arithmetic.md), [Interference](interference.md), [Model merging](model-merging.md).
+- **Builds on:** [Interference](../interference.md), [Task arithmetic](task-arithmetic.md), [Model merging](model-merging.md).
 - **Used by:** [Continual merging](continual-merging.md).
 
 ## Sources to use

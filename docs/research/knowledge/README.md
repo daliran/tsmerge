@@ -4,6 +4,8 @@ General theory for people, one concept per doc: what a signal and a time series 
 
 **Nothing here is specific to this work.** A knowledge doc explains a concept for any reader: no statements about this project, its data, its choices or its results. What this work uses, chooses or finds belongs in [method/](../method/README.md) or in a [research decision](../decisions/README.md).
 
+Unsure what a term means? The [glossary](glossary.md) gives each one in a line, with a link to its doc.
+
 ## How it's organized
 
 - **Generic at the top, specific below:** a concept that applies to any data sits in a top-level folder (`evaluation/`, `anomaly-detection/`, `drift/`, `models/`, `learning/`); the same topic specific to time series sits under `time-series/`.
@@ -22,7 +24,7 @@ Read top-down the first time; the numbers are a suggested path, not a requiremen
 | 4 | [anomaly-detection/](anomaly-detection/) | [anomaly detection](anomaly-detection/anomaly-detection.md), [kinds of anomalies](anomaly-detection/kinds-of-anomalies.md), [methods](anomaly-detection/methods.md) | 3 written |
 | 5 | [drift/](drift/) | [distribution shift](drift/distribution-shift.md), [kinds of drift](drift/kinds-of-drift.md), [drift detection](drift/drift-detection.md), [responding to drift](drift/responding-to-drift.md) | 4 placeholders |
 | 6 | [models/](models/) | [transformers](models/transformers.md), [masked autoencoder](models/masked-autoencoder.md) | 2 placeholders |
-| 7 | [learning/](learning/README.md) | pretraining and fine-tuning, joint training, foundation models, continual learning, model merging | 24 placeholders |
+| 7 | [learning/](learning/README.md) | pretraining and fine-tuning, joint training, foundation models, continual learning, model merging | 25 placeholders |
 
 The generic areas (3 to 6) come before the time-series docs that build on them; the [time-series README](time-series/README.md) says where.
 

@@ -1,4 +1,4 @@
-# Anomaly detection
+# Anomaly detection in time series
 
 **In one sentence:** anomaly detection flags the steps, or stretches, of a series that don't behave as normal.
 

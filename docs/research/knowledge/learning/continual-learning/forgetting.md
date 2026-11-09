@@ -7,14 +7,14 @@
 - **Builds on:** [Continual learning](continual-learning.md).
 - **Used by:**
   - [Plasticity](plasticity.md)
+  - [Interference](interference.md)
   - [Sequential fine-tuning](sequential-fine-tuning.md)
   - [Replay](replay.md)
   - [Regularization](regularization.md)
   - [Forward and backward transfer](forward-and-backward-transfer.md)
-  - [Interference](model-merging/interference.md)
 
 ## Sources to use
 
 - [li2025became](../../../literature/li2025became.md): forgetting against plasticity, with two kinds of training.
 - [tang2025merging](../../../literature/tang2025merging.md): forgetting measured as backward transfer in continual merging.
-- The paper that named catastrophic forgetting. Not in the bibliography yet: to find, verify and add to [references.bib](../../../literature/references.bib).
+- McCloskey and Cohen (1989), "Catastrophic Interference in Connectionist Networks: The Sequential Learning Problem", which first described it ([Catastrophic interference (Wikipedia)](https://en.wikipedia.org/wiki/Catastrophic_interference)). Not in the bibliography yet: to verify and add to [references.bib](../../../literature/references.bib).

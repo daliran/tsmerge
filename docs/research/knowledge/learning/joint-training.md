@@ -5,7 +5,7 @@
 **Will cover:** training one model on all the data at once, and why it's the reference every continual strategy is compared with.
 
 - **Builds on:** [Pretraining and fine-tuning](pretraining-and-fine-tuning.md).
-- **Used by:** [Continual learning](continual-learning/continual-learning.md), [Co-observation](continual-learning/co-observation.md).
+- **Used by:** [Continual learning](continual-learning/continual-learning.md), [Headroom](continual-learning/headroom.md), [Co-observation](continual-learning/co-observation.md).
 
 ## Sources to use
 

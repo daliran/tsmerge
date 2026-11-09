@@ -5,7 +5,7 @@
 **Will cover:** the table of performances in continual learning: row $i$ is the model after learning task $i$, column $j$ its performance on task $j$; reading forgetting below the diagonal and forward transfer above it; computing average accuracy and backward and forward transfer from it.
 
 - **Builds on:** [Continual learning](continual-learning.md).
-- **Used by:** [Forward and backward transfer](forward-and-backward-transfer.md).
+- **Used by:** [Forward and backward transfer](forward-and-backward-transfer.md), [Headroom](headroom.md).
 
 ## Sources to use
 

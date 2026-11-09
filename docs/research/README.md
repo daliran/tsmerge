@@ -9,7 +9,7 @@ The area is built step by step, and every part is checked against its sources be
 | Folder | What it holds | Status |
 |---|---|---|
 | [literature/](literature/README.md) | What others published: one note per paper, the bibliography ([references.bib](literature/references.bib)), and code references | 17 papers verified, 1 code reference |
-| [knowledge/](knowledge/README.md) | General theory, one concept per doc, independent of this thesis: signals, time series, evaluation, anomaly detection, drift, models, learning | 20 docs written, 41 placeholders |
+| [knowledge/](knowledge/README.md) | General theory, one concept per doc, independent of this thesis: signals, time series, evaluation, anomaly detection, drift, models, learning | 20 docs written, 42 placeholders |
 | [method/](method/README.md) | Everything specific to this work: the protocol, experiments, findings | planned |
 | [decisions/](decisions/README.md) | Research decisions (`RD-`): why the research and its docs work the way they do | 2 accepted |
 | [questions/](questions/README.md) | Open research questions (`RQ-`) | none yet |

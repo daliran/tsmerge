@@ -6,7 +6,7 @@
 
 - **Builds on:** [Pretraining and fine-tuning](../../pretraining-and-fine-tuning.md), [Parameter-efficient fine-tuning](../../parameter-efficient-fine-tuning.md), [Weight-space geometry](weight-space-geometry.md).
 - **Used by:**
-  - [Interference](interference.md)
+  - [Interference](../interference.md)
   - [Model merging](model-merging.md)
   - [Interference reduction](interference-reduction.md)
   - [Continual merging](continual-merging.md)

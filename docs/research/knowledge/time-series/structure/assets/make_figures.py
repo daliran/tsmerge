@@ -195,6 +195,62 @@ def autocorrelation() -> None:
     save(fig, "autocorrelation")
 
 
+def smoothing_window() -> None:
+    """One series, its trend-cycle estimated with a small and a large moving average:
+    the small window keeps the cycle, the large one leaves it in the remainder."""
+    t = np.arange(24 * 14)
+    trend = 0.02 * t
+    cycle = np.concatenate(
+        [
+            sign * 1.5 * np.sin(np.pi * np.arange(n) / n)
+            for sign, n in zip((1, -1, 1, -1, 1), (70, 60, 80, 56, 70), strict=True)
+        ]
+    )
+    seasonal = 2 * np.sin(2 * np.pi * t / 24)
+    noise = 0.4 * RNG.standard_normal(t.size)
+    y = trend + cycle + seasonal + noise
+
+    def centered_ma(x, m):
+        """2xm moving average: cancels a seasonality of period m (m even)."""
+        w = np.ones(m + 1)
+        w[0] = w[-1] = 0.5
+        out = np.full(x.size, np.nan)
+        out[m // 2 : x.size - m // 2] = np.convolve(x, w / m, mode="valid")
+        return out
+
+    fig = plt.figure(figsize=(11, 7), layout="constrained")
+    grid = fig.add_gridspec(3, 2, height_ratios=[1, 1, 1])
+    top = fig.add_subplot(grid[0, :])
+    top.plot(t, y, color=GRAY, lw=1)
+    top.set_title(
+        "the series: trend + cycle + daily seasonality + noise", loc="left", fontsize=10
+    )
+    for col, (m, name) in enumerate(
+        (
+            (24, "small window: 2x24 moving average"),
+            (168, "large window: 2x168 moving average"),
+        )
+    ):
+        tc = centered_ma(y, m)
+        ax = fig.add_subplot(grid[1, col])
+        ax.plot(t, trend + cycle, color=GRAY, ls="--", lw=1, label="true trend + cycle")
+        ax.plot(t, tc, color=BLUE, lw=1.6, label="estimated trend-cycle")
+        ax.set_title(f"{name}\ntrend-cycle", loc="left", fontsize=10)
+        ax.legend(loc="upper left", fontsize=7)
+        ax2 = fig.add_subplot(grid[2, col], sharex=ax)
+        ax2.plot(t, y - tc - seasonal, color=ORANGE, lw=1)
+        ax2.set_ylim(-3, 3)
+        verdict = "only noise" if m == 24 else "the cycle is here, with the noise"
+        ax2.set_title(f"remainder: {verdict}", loc="left", fontsize=10)
+        ax2.set_xlabel("time step (hours, 14 days)")
+        for a in (ax, ax2):
+            a.set_yticks([])
+    top.set_yticks([])
+    fig.savefig(OUT / "smoothing-window.png", bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+    print("wrote smoothing-window.png")
+
+
 if __name__ == "__main__":
     decomposition()
     additive_multiplicative()
@@ -202,3 +258,4 @@ if __name__ == "__main__":
     multiple_seasonality()
     stationarity()
     autocorrelation()
+    smoothing_window()

@@ -2,7 +2,7 @@
 
 **In one sentence:** most time series are a mix of a few simple patterns (a long-term direction, regular repetitions, slower irregular waves, and a remainder with everything else), and recognizing them is the first step to understanding, predicting or checking a series.
 
-- **Builds on:** [Fourier transform](../../signals/fourier-transform.md), [Time series in time series](../time-series.md).
+- **Builds on:** [Fourier transform](../../signals/fourier-transform.md), [Time series](../time-series.md).
 - **Used by:**
   - [Decomposition](decomposition.md)
   - [Stationarity](stationarity.md)
@@ -20,14 +20,22 @@ Look at almost any real series (electricity use, temperature, sales) and you'll 
 | **Trend** | "a long-term increase or decrease in the data" | a city's electricity use growing year after year |
 | **Seasonality** | a pattern caused by "seasonal factors", "always of a fixed and known period" | higher electricity use every evening; lower every weekend |
 | **Cycle** | "rises and falls that are not of a fixed frequency" | economic booms and recessions |
+| **Remainder** (also called residual) | "anything else in the time series" ([FPP3, chapter 3][fpp-decomposition]): noise, and anything unusual | a one-off outage, measurement noise |
 
-What's left after these is the **remainder** (also called residual): everything else, including noise and anything unusual.
-In the textbook's words, the remainder contains "anything else in the time series" ([FPP3, chapter 3][fpp-decomposition]).
+## How they fit together
 
-![A series built by adding a rising trend, a 24-step seasonal pattern and a random remainder, shown together and separately](assets/decomposition.png)
+In the simplest case the ingredients add up: the series is trend + cycle + seasonality + remainder.
+
+- **Trend and cycle are usually merged.** A slow cycle is hard to tell apart from a trend, so "we usually combine the trend and cycle into a single trend-cycle component (often just called the trend for simplicity)" ([FPP3, chapter 3][fpp-decomposition]).
+- **So there are three parts:** trend-cycle, seasonality and remainder.
+- **The remainder is defined by subtraction:** it is what's left once the trend-cycle and the seasonality are taken out. That's why anything unusual ends up there.
+
+Putting the parts back together by adding them, or by multiplying them, is explained in [decomposition](decomposition.md).
+
+![A series built by adding a trend-cycle (a rising trend with slow irregular waves around it), a 24-step seasonal pattern and a random remainder, shown together and separately](assets/decomposition.png)
 
 The figure shows a series built by adding its parts: the top panel is the sum, the kind of series you'd actually record.
-The three panels below are the parts it was built from.
+The three panels below are the parts it was built from: in the trend-cycle panel, the dashed line is the trend alone, and the solid line adds the cycle's slow waves of irregular length.
 Going the other way, from a recorded series to its parts, is called [decomposition](decomposition.md).
 
 ## Seasonality
@@ -71,6 +79,7 @@ When a series is taken apart, "we usually combine the trend and cycle into a sin
 
 - Most series combine a **trend**, one or more **seasonalities**, **cycles** and a **remainder** (everything else, including noise and anything unusual).
 - **Seasonality** repeats at a fixed, known period; **cycles** rise and fall irregularly and are usually slower.
+- Trend and cycle are usually merged into one **trend-cycle**, so a series has three parts: trend-cycle, seasonality and remainder.
 - As a rule of thumb, a window should cover at least one full period of the slowest seasonality the model must learn from the window alone.
 
 ## Sources

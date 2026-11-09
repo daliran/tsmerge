@@ -3,7 +3,7 @@
 **In one sentence:** a series is split by time into a training part and later evaluation parts, and nothing from the later parts may reach training: not a window, not a statistic.
 
 - **Builds on:**
-  - [Time series in time series](../time-series.md)
+  - [Time series](../time-series.md)
   - [Forecasting](../tasks/forecasting.md)
   - [Anomaly detection in time series](../tasks/anomaly-detection.md)
   - [Windows](windows.md)

@@ -3,7 +3,7 @@
 **In one sentence:** models don't read a whole time series at once; they read short, fixed-length pieces of it, called windows, cut by sliding along the series.
 
 - **Builds on:**
-  - [Time series in time series](../time-series.md)
+  - [Time series](../time-series.md)
   - [Patterns](../structure/patterns.md)
   - [Autocorrelation](../structure/autocorrelation.md)
   - [Tasks](../tasks/tasks.md)

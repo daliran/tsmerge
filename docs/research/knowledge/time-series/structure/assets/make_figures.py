@@ -41,25 +41,42 @@ def save(fig, name: str) -> None:
 
 
 def decomposition() -> None:
-    """A series built as trend + seasonality + noise, and its three parts."""
+    """A series built as trend-cycle + seasonality + remainder, and its parts. The
+    trend-cycle panel shows the smooth trend (dashed) and the cycle around it."""
     t = np.arange(24 * 14)
     trend = 0.02 * t
+    # The cycle: rises and falls of irregular length (80, 120, 60, 76 steps).
+    cycle = np.concatenate(
+        [
+            sign * 1.5 * np.sin(np.pi * np.arange(n) / n)
+            for sign, n in zip((1, -1, 1, -1), (80, 120, 60, 76), strict=True)
+        ]
+    )
     seasonal = 2 * np.sin(2 * np.pi * t / 24)
     noise = 0.5 * RNG.standard_normal(t.size)
-    parts = [
-        (
-            trend + seasonal + noise,
-            "the series = trend + seasonality + remainder",
-            GRAY,
-        ),
-        (trend, "trend: the long-term direction", BLUE),
-        (seasonal, "seasonality: a pattern repeating every 24 steps", GREEN),
-        (noise, "remainder: what's left (here, pure noise)", ORANGE),
-    ]
-    fig, axes = plt.subplots(4, 1, figsize=(10, 7), sharex=True)
-    for ax, (y, label, color) in zip(axes, parts, strict=True):
-        ax.plot(t, y, color=color, lw=1.2)
-        ax.set_title(label, loc="left", fontsize=10)
+    fig, axes = plt.subplots(4, 1, figsize=(10, 7.5), sharex=True)
+    axes[0].plot(t, trend + cycle + seasonal + noise, color=GRAY, lw=1.2)
+    axes[0].set_title(
+        "the series = trend-cycle + seasonality + remainder", loc="left", fontsize=10
+    )
+    axes[1].plot(t, trend, color=BLUE, lw=1.2, ls="--", label="trend")
+    axes[1].plot(t, trend + cycle, color=BLUE, lw=1.6, label="trend + cycle")
+    axes[1].set_title(
+        "trend-cycle: the long-term direction (dashed), plus slow waves of irregular "
+        "length (the cycle)",
+        loc="left",
+        fontsize=10,
+    )
+    axes[1].legend(loc="upper left", fontsize=8)
+    axes[2].plot(t, seasonal, color=GREEN, lw=1.2)
+    axes[2].set_title(
+        "seasonality: a pattern repeating every 24 steps", loc="left", fontsize=10
+    )
+    axes[3].plot(t, noise, color=ORANGE, lw=1.2)
+    axes[3].set_title(
+        "remainder: what's left (here, pure noise)", loc="left", fontsize=10
+    )
+    for ax in axes:
         ax.set_yticks([])
     axes[-1].set_xlabel("time step (hours, 14 days)")
     save(fig, "decomposition")

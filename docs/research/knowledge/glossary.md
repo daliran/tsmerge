@@ -37,6 +37,7 @@ One line per term, grouped by the area it belongs to, with a link to the doc tha
 - **Stationary series:** a series whose statistical properties don't depend on when it is observed ([stationarity](time-series/structure/stationarity.md)).
 - **Time series:** a list of values in time order, usually equally spaced: a sampled, time-based signal ([time series](time-series/time-series.md)).
 - **Trend:** "a long-term increase or decrease in the data" ([patterns](time-series/structure/patterns.md)).
+- **Trend-cycle:** the trend and the cycle merged into one component, as decompositions usually do ([patterns](time-series/structure/patterns.md#how-they-fit-together)).
 - **Univariate series:** a series with one value per step ([time series](time-series/time-series.md#univariate-and-multivariate)).
 - **White noise:** a series with no autocorrelation: every autocorrelation close to zero ([autocorrelation](time-series/structure/autocorrelation.md)).
 

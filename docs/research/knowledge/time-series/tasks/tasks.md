@@ -2,7 +2,7 @@
 
 **In one sentence:** the same time series can be asked four different questions (what comes next, what's missing, what's abnormal, what kind is it), and each question is a different task with its own purpose, inputs, outputs and way of being judged.
 
-- **Builds on:** [Time series in time series](../time-series.md), [Patterns](../structure/patterns.md).
+- **Builds on:** [Time series](../time-series.md), [Patterns](../structure/patterns.md).
 - **Used by:**
   - [Forecasting](forecasting.md)
   - [Imputation](imputation.md)

@@ -123,7 +123,7 @@ def multiple_seasonality() -> None:
     for d in range(0, t.size, 24 * 7):
         ax.axvspan(d + 24 * 5, d + 24 * 7, color=GRAY, alpha=0.15)
     ax.set(
-        title="Two seasonalities: a daily cycle, and lower weekends (shaded)",
+        title="Two seasonalities: a daily pattern, and lower weekends (shaded)",
         xlabel="time step (hours, 3 weeks)",
     )
     ax.set_yticks([])
@@ -171,7 +171,7 @@ def autocorrelation() -> None:
         )
     ax.axhline(0, color="black", lw=0.6)
     ax.set(
-        title="Autocorrelation of a series with a daily cycle: peaks every 24 lags",
+        title="Autocorrelation of a series with daily seasonality: peaks every 24 lags",
         xlabel="lag (steps between the two values compared)",
         ylabel="autocorrelation",
     )

@@ -15,11 +15,15 @@ In plain words:
 - we **measure** it, and write down how it changes;
 - that record is the signal: **input** "where or when" → **output** "how much".
 
-"Any quantity that can vary over space or time can be used as a signal" ([Signal][signal]). The "where or when" part is called the signal's **independent variable**, or its **domain**. The "how much" part is its **value**.
+"Any quantity that can vary over space or time can be used as a signal" ([Signal][signal]).
+
+- The "where or when" part is the signal's **independent variable**.
+- The set of values it can take is the signal's **domain**: the domain of a function is "the set of inputs accepted by the function" ([Domain of a function][domain]).
+- The "how much" part is its **value**.
 
 ![Four signals, each a function of something different: time, space, frequency, position](assets/signal-examples.png)
 
-The four examples above have something in common: each one maps an input (time, a position in an image, a frequency, a place in a molecule) to a value.
+The four examples above have something in common: each one maps an input (time, a position in an image, a frequency, a position in a DNA sequence) to a value.
 
 ## Kinds of signals
 
@@ -41,7 +45,7 @@ Signals can be grouped in several ways. Two questions sort most of them.
 |---|---|---|
 | **Time** | a moment | a sound, a temperature over the day |
 | **Space** | a position | an image (2D), a scan of a terrain |
-| **Frequency** | a rate of repetition | a spectrum: how much of each pitch a sound contains |
+| **Frequency** | a rate of repetition | a spectrum: how strong each frequency is in a sound |
 | **Sequence position** | an index in an ordered list | DNA: which letter is at position 1, 2, 3… |
 
 **The same thing can be seen in more than one domain.** The sound and the spectrum in the figure above are two views of the same tone:
@@ -49,36 +53,54 @@ Signals can be grouped in several ways. Two questions sort most of them.
 - the first says how the pressure changes over time;
 - the second how strong each frequency is (440 Hz and 880 Hz).
 
-Neither view has more information; they make different things easy to see.
+The full spectrum gives each frequency both a strength and a **phase** (where the wave starts). With both, it holds the same information as the sound, and the sound can be rebuilt from it: "the phase portion is required to uniquely define the signal" ([Frequency domain][freq]).
+
+The figure shows only the strengths, so it holds less. The two views make different things easy to see.
 
 ## Time-based vs not time-based
 
-A signal is **time-based** when its independent variable is time. Most signals in this project are. But many useful signals aren't.
+A signal is **time-based** when its independent variable is time. Many useful signals aren't.
 
 | | Time-based | Not time-based |
 |---|---|---|
 | **Independent variable** | time | space, frequency, position in a sequence |
 | **Examples** | sound, temperature, a plant's sensors | an image, a spectrum, a DNA sequence |
-| **Has a direction?** | **yes:** the past comes before the future | **usually not:** left and right in an image are equivalent |
-| **What you can know** | at any moment, only the past | the whole signal at once |
+| **Has a past and a future?** | **yes:** the past comes before the future | **no:** left and right in an image are equivalent; a DNA sequence has an order, but no past and future |
+| **What you can know** | while it is recorded, only the past; once recorded, all of it | the whole signal at once |
 
 The key difference is **direction**:
 
-- **Time flows one way.** At any moment you know the past, never the future. A model that predicts what comes next must only use what came before. Using later values, even by accident, is cheating, and it makes results look better than they are.
-- **Space and other domains have no such arrow.** An image can be read left to right or right to left. Every pixel is available at once.
+- **Time flows one way.** At any moment you know the past, never the future.
+  - A model that predicts what comes next must only use what came before: it must be **causal**. A causal system is one "where the output depends on past and current inputs but not future inputs"; one that also uses future values is non-causal ([Causal system][causal]).
+  - When predicting what comes next, using later values, even by accident, is cheating, and it makes results look better than they are.
+  - Working in real time also requires it: real-time systems "must be causal because such systems cannot act on a future input" ([Causal filter][causalfilter]).
+- **Not every task predicts what comes next.** Filling a gap, or judging a stretch of a recording after the fact, may legitimately use values on both sides of it.
+  - For example, a moving average centered on each step uses later values: it is non-causal, which is fine when the whole recording is already available ([Causal filter][causalfilter]).
+  - [Imputation](../time-series/tasks/imputation.md) is such a task.
+- **Space has no past and future.** An image can be read left to right or right to left. Every pixel is available at once.
 
-Some non-time signals still have a natural **order**. DNA has no "past" and "future", but its letters come in a fixed sequence.
+Some non-time signals still have a natural **order**. DNA has no "past" and "future", but its letters come in a fixed sequence, and that sequence has a direction: a DNA strand has a 5′ end and a 3′ end, and sequences are written from 5′ to 3′ by convention ([Directionality][direction]). Every position is still known at once.
 
 Ordered signals like these can be treated with the same tools as time-based ones, which is the idea behind [time series](../time-series/time-series.md).
 
 ## Key points
 
 - A **signal** is a function: "where or when" → "how much".
-- Its **domain** is what it's a function of: time, space, frequency, or position in a sequence. The same thing can be viewed in more than one domain.
-- **Time-based** signals have a direction: a model must never use the future to explain the past.
+- Its **independent variable** is what it's a function of: time, space, frequency, or position in a sequence; its **domain** is the set of values that variable can take. The same thing can be viewed in more than one domain.
+- **Time-based** signals have a past and a future: a model that predicts what comes next must be **causal**, using only what came before. Tasks that don't predict what comes next, such as filling a gap, may use values on both sides.
 
 ## Sources
 
 - [Signal (Wikipedia)][signal]: definition, kinds of signals. Read on 2026-11-08.
+- [Causal system (Wikipedia)][causal]: causal and non-causal systems. Read on 2026-11-09.
+- [Causal filter (Wikipedia)][causalfilter]: real-time systems must be causal; a centered moving average is non-causal. Read on 2026-11-09.
+- [Domain of a function (Wikipedia)][domain]: the domain as the set of inputs. Read on 2026-11-09.
+- [Frequency domain (Wikipedia)][freq]: magnitude and phase of a spectrum. Read on 2026-11-09.
+- [Directionality (molecular biology) (Wikipedia)][direction]: the 5′ and 3′ ends of a DNA strand. Read on 2026-11-09.
 
 [signal]: https://en.wikipedia.org/wiki/Signal
+[causal]: https://en.wikipedia.org/wiki/Causal_system
+[causalfilter]: https://en.wikipedia.org/wiki/Causal_filter
+[domain]: https://en.wikipedia.org/wiki/Domain_of_a_function
+[freq]: https://en.wikipedia.org/wiki/Frequency_domain
+[direction]: https://en.wikipedia.org/wiki/Directionality_(molecular_biology)

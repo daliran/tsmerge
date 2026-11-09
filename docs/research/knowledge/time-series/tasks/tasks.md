@@ -3,11 +3,17 @@
 **In one sentence:** the same time series can be asked four different questions (what comes next, what's missing, what's abnormal, what kind is it), and each question is a different task with its own purpose, inputs, outputs and way of being judged.
 
 - **Builds on:** [Time series](../time-series.md), [Patterns](../structure/patterns.md).
-- **Used by:** [Forecasting](forecasting.md), [Imputation](imputation.md), [Anomaly detection](anomaly-detection.md), [Classification](classification.md).
+- **Used by:**
+  - [Forecasting](forecasting.md)
+  - [Imputation](imputation.md)
+  - [Anomaly detection](anomaly-detection.md)
+  - [Classification](classification.md)
+  - [Windows](../data-preparation/windows.md)
+  - [Datasets](../datasets/README.md)
 
 ## The four tasks at a glance
 
-The time-series survey we read groups the main tasks into four ([wang2026deep](../../../literature/wang2026deep.md), p. 3):
+A survey of deep time-series models groups the main tasks into four ([wang2026deep](../../../literature/wang2026deep.md), p. 3):
 
 | Task | The question | Given | Produce |
 |---|---|---|---|
@@ -18,30 +24,30 @@ The time-series survey we read groups the main tasks into four ([wang2026deep](.
 
 ![The four tasks: forecast the future, fill the gaps, flag the abnormal value, label the whole series](assets/tasks.png)
 
-This project works on two of them, **[forecasting](forecasting.md)** and **[anomaly detection](anomaly-detection.md)**.
-
-The other two, [imputation](imputation.md) and [classification](classification.md), are described for completeness: they share the same ideas, and they explain why many methods treat all four as one family.
+Each has its own doc: [forecasting](forecasting.md), [imputation](imputation.md), [anomaly detection](anomaly-detection.md) and [classification](classification.md).
 
 ## One family
 
-The four tasks look different, but they rest on the same skill: **understanding how the series normally behaves**.
+The TSLib benchmark treats the tasks as one problem: it unifies them "as a representation learning task with domain-specific heads", a backbone shared across tasks with a small task-specific part on top ([wang2026deep](../../../literature/wang2026deep.md), p. 11).
+
+Not every model is evaluated on every task, though: TiDE, which needs timestamps, is tested on long-term forecasting only ([wang2026deep](../../../literature/wang2026deep.md), p. 13).
+
+One way to see why a shared backbone can work: the four tasks look different, but each draws on the same skill, **understanding how the series normally behaves**.
 
 - **Forecasting** uses it to continue the series.
 - **Imputation** uses it to fill the series in.
 - **Anomaly detection** uses it to measure how far the data are from normal.
 - **Classification** uses it to tell kinds of behavior apart.
 
-That's why:
-
-- the survey and benchmark we read evaluates its models across all four tasks ([wang2026deep](../../../literature/wang2026deep.md)),
-- and why [windows](../data-preparation/windows.md) can describe one common way of preparing the data, with small differences per task.
+The data are prepared in a similar way too: [windows](../data-preparation/windows.md) describes one common way, with small differences per task.
 
 ## Key points
 
 - **Forecasting:** past → future values. **Imputation:** a series with gaps → the missing values.
 - **Anomaly detection:** series → normal or abnormal, step by step. **Classification:** whole series → one label.
-- All four rest on modeling **normal behavior**; this project works on forecasting and anomaly detection.
+- The TSLib benchmark treats all four as one representation-learning problem: a shared backbone with task-specific heads.
+- One way to see the link: all four draw on modeling **normal behavior**.
 
 ## Sources
 
-- [wang2026deep](../../../literature/wang2026deep.md): the four tasks, and the benchmark across them.
+- [wang2026deep](../../../literature/wang2026deep.md): the four tasks, and the benchmark's shared backbone with task-specific heads.

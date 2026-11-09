@@ -5,7 +5,7 @@
 **Will cover:** Fisher information and curvature: how sensitive the loss is to each weight, and how merging and regularization use it.
 
 - **Builds on:** nothing: a starting point.
-- **Used by:** [Model merging](model-merging.md), [Regularization](../regularization.md).
+- **Used by:** [Regularization](../regularization.md), [Model merging](model-merging.md).
 
 ## Sources to use
 

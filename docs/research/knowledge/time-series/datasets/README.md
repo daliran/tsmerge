@@ -2,7 +2,7 @@
 
 **Status:** placeholder, not written yet.
 
-**Will cover:** one file per dataset used in this research: what it measures, its size, channels and sampling, its labels, its known issues, and a link to how this thesis uses it.
+**Will cover:** one file per dataset: what it measures, its size, channels and sampling, its labels and its known issues. How this work uses a dataset belongs in the [method](../../../method/README.md) docs, not here.
 
 - **Builds on:** [Time series](../time-series.md), [Tasks](../tasks/tasks.md).
 - **Used by:** the [method](../../../method/README.md).

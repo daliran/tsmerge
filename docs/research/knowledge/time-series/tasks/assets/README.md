@@ -5,4 +5,4 @@ The figures shown in the task docs of this folder, all drawn by [make_figures.py
 | Figure | What it shows | Shown in |
 |---|---|---|
 | tasks.png | The four tasks: forecasting, imputation, anomaly detection, classification | [tasks.md](../tasks.md) |
-| anomaly-types.png | Point, contextual and collective anomalies | [anomaly-detection.md](../anomaly-detection.md) |
+| anomaly-types.png | Point, contextual (one peak-level value in a trough) and collective (the rhythm stops) anomalies | [anomaly-detection.md](../anomaly-detection.md) |

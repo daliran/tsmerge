@@ -80,7 +80,7 @@ def signal_examples() -> None:
         xlim=(-1, len(bases)),
         ylim=(-1, 1),
         title="DNA: a letter at each position",
-        xlabel="position along the molecule",
+        xlabel="position in the sequence",
     )
     ax.set_yticks([])
     ax.spines["left"].set_visible(False)
@@ -103,13 +103,18 @@ def analog_to_digital() -> None:
 
     axes[1].plot(t, x, color=GRAY, alpha=0.35)
     axes[1].stem(n, xn, linefmt=BLUE, markerfmt="o", basefmt=" ")
-    axes[1].set(title="2. Sampled: discrete time", xlabel="sample n (every 0.04 s)")
+    axes[1].set(
+        title="2. Sampled: discrete time", xlabel="time (s), one sample every 0.04 s"
+    )
 
     axes[2].plot(t, x, color=GRAY, alpha=0.35)
     for q in np.arange(-1.5, 1.51, levels):
         axes[2].axhline(q, color=GRAY, lw=0.4, alpha=0.5)
     axes[2].stem(n, xq, linefmt=ORANGE, markerfmt="o", basefmt=" ")
-    axes[2].set(title="3. Sampled + quantized: digital", xlabel="sample n")
+    axes[2].set(
+        title="3. Sampled + quantized: digital",
+        xlabel="time (s), one sample every 0.04 s",
+    )
     save(fig, "analog-to-digital")
 
 

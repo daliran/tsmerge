@@ -2,14 +2,14 @@
 
 **In one sentence:** classification gives a whole series one label out of a fixed set.
 
-- **Builds on:** [Tasks](tasks.md).
-- **Used by:** [Precision, recall and F1](../../evaluation/precision-recall-f1.md).
+- **Builds on:** [Tasks](tasks.md), [Precision, recall and F1](../../evaluation/precision-recall-f1.md).
+- **Used by:** the [method](../../../method/README.md).
 
 ## The task
 
 **Purpose:** classification "assigns a label or category to a given time series based on its characteristics" ([wang2026deep](../../../literature/wang2026deep.md), p. 3).
 
-**Examples:** heartbeat diagnosis and action recognition ([wang2026deep](../../../literature/wang2026deep.md)), e.g. telling a normal heartbeat recording from an abnormal one, or recognizing walking or running from a phone's motion sensors.
+**Examples:** heartbeat diagnosis and action recognition ([wang2026deep](../../../literature/wang2026deep.md)), e.g. telling which kind of arrhythmia a heartbeat recording shows, or whether a phone's motion sensors record walking, running or cycling.
 
 **Input and output:**
 

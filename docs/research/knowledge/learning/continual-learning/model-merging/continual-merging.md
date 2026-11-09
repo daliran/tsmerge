@@ -4,7 +4,12 @@
 
 **Will cover:** merging models one by one as they arrive, without keeping all of them or their data.
 
-- **Builds on:** [Model merging](model-merging.md), [Weight-space geometry](weight-space-geometry.md), [Continual learning](../continual-learning.md).
+- **Builds on:**
+  - [Continual learning](../continual-learning.md)
+  - [Weight-space geometry](weight-space-geometry.md)
+  - [Task arithmetic](task-arithmetic.md)
+  - [Model merging](model-merging.md)
+  - [Interference reduction](interference-reduction.md)
 - **Used by:** the [method](../../../../method/README.md).
 
 ## Sources to use

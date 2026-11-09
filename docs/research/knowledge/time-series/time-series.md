@@ -3,7 +3,14 @@
 **In one sentence:** a time series is a signal recorded as a list of values in time order, usually at equal intervals, and many kinds of data can be read as one.
 
 - **Builds on:** [Signals](../signals/signals.md), [Sampling](../signals/sampling.md).
-- **Used by:** [Patterns](structure/patterns.md), [Tasks](tasks/tasks.md), [Windows](data-preparation/windows.md).
+- **Used by:**
+  - [Patterns](structure/patterns.md)
+  - [Tasks](tasks/tasks.md)
+  - [Windows](data-preparation/windows.md)
+  - [Splitting](data-preparation/splitting.md)
+  - [Normalization](data-preparation/normalization.md)
+  - [Tokens and patching](models/tokens-and-patching.md)
+  - [Datasets](datasets/README.md)
 
 ## What a time series is
 
@@ -14,7 +21,7 @@ Connecting it to [signals](../signals/signals.md) and [sampling](../signals/samp
 - a time series is a **sampled, time-based signal**: "it represents a form of discrete-time data" ([Time series][ts]);
 - the two names often mean the same thing: "discrete-time signals are often referred to as time series in other fields" ([Signal][signal]).
 
-We write a series of length $T$ as
+A series of length $T$ is written
 
 $$x_1, x_2, x_3, \dots, x_T$$
 
@@ -30,7 +37,9 @@ Three consequences follow, and they matter for everything later:
 
 1. **Order carries information.** A value only makes sense next to its neighbors: is it rising, falling, repeating? Shuffle the steps and the pattern is gone.
 2. **Neighboring values are related.** The temperature at 10:00 says a lot about the temperature at 11:00. Steps are not independent samples, and methods that assume independent samples need care.
-3. **The future is unknown.** As for every [time-based signal](../signals/signals.md#time-based-vs-not-time-based): at any step, only the past is available. A model must never peek ahead.
+3. **The future is unknown.** As for every [time-based signal](../signals/signals.md#time-based-vs-not-time-based): while a series is being recorded, only the past is available.
+   - A model that predicts what comes next must never peek ahead: it must be causal.
+   - Tasks that don't predict what comes next, such as filling a gap or judging a stretch after the fact, may legitimately use values on both sides.
 
 ## Univariate and multivariate
 
@@ -49,9 +58,9 @@ In a multivariate series all channels **share the same clock**: row $t$ holds ev
 
 The channels often influence each other (the power load follows the temperature), and that relation is information a model can use.
 
-Real benchmark datasets range from a handful of channels to hundreds. These counts come from the TimesNet paper's dataset table ([wu2023timesnet](../../literature/wu2023timesnet.md), Table 6, p. 14):
+Real benchmark datasets range from a handful of channels to hundreds. These counts come from the TimesNet paper's dataset table ([wu2023timesnet](../../literature/wu2023timesnet.md), Table 6, p. 14); the domains are described in words, from the paper's text and Table 6:
 
-| Dataset | Domain, as labeled in the table | Channels $C$ | Sampled every |
+| Dataset | Domain | Channels $C$ | Sampled every |
 |---|---|---|---|
 | ETTh1, ETTh2 | electricity | 7 | hour |
 | Exchange | currency exchange rates | 8 | day |
@@ -61,11 +70,13 @@ Real benchmark datasets range from a handful of channels to hundreds. These coun
 | Electricity | electricity | 321 | hour |
 | Traffic | transportation | 862 | hour |
 
-(The TimesNet paper's table labels ETTh1 and ETTh2 as "15 mins", while its text calls them hourly; our note on the paper records the mismatch.)
+(The TimesNet paper's table labels ETTh1 and ETTh2 as "15 mins", while its text calls them hourly; the [note on the paper](../../literature/wu2023timesnet.md) records the mismatch.)
 
-## Many things are time series
+## Many things can be treated as time series
 
-The same idea, an ordered list of values, with one or more channels, fits a surprising range of data. Seeing them all as time series lets the same tools work on each.
+The same idea, an ordered list of values, with one or more channels, fits a surprising range of data.
+
+Strictly, a time series is ordered by time. DNA and text are not: they are **ordered sequences** that borrow time-series tools, because the same tools work on any ordered list.
 
 | Data | The index $t$ is… | Channels | Values |
 |---|---|---|---|
@@ -73,7 +84,7 @@ The same idea, an ordered list of values, with one or more channels, fits a surp
 | **Heartbeat (ECG)** | time | one per electrode | voltage |
 | **Industrial plant** | time | one per sensor or actuator (51 for SWaT, table above) | flows, levels, on/off states |
 | **Stock price** | time (each trading day or minute) | 1 per stock, or several (open, high, low, close) | prices |
-| **DNA** | **position** along the molecule | 4 after encoding (A, C, G, T) | 0 or 1 |
+| **DNA** | **position** in the sequence | 4 after encoding (A, C, G, T) | 0 or 1 |
 | **Text** | position of each word or character | one per symbol, after encoding | 0 or 1 |
 | **Video** | time, one step per frame | one per pixel and color | brightness |
 
@@ -81,15 +92,15 @@ The same idea, an ordered list of values, with one or more channels, fits a surp
 
 Two examples from the figure:
 
-- **Audio** is already a time series: sampled sound is one number per step, 8,000 steps per second in the figure (real recordings use 44,100 or more).
+- **Audio** is already a time series: sampled sound is one number per step, 8,000 steps per second in the figure, the rate used for telephone speech; music is usually recorded at 44,100 or more ([Sampling][sampling]).
 - **DNA** isn't measured in time, but its letters come in a fixed order.
   - To turn letters into numbers, each position gets 4 channels, one per letter, set to 1 for the letter that's there and 0 for the others.
   - This is called **one-hot encoding**.
   - The result is a 4-channel series indexed by position.
 
-**What changes when the index isn't time:** a DNA sequence has an order but no past and future. Every position is known at once, and reading it backwards is just as valid.
+**What changes when the index isn't time:** a DNA sequence has an order but no past and future. Every position is known at once, so a model may look both ways.
 
-The tools carry over; the rule "never use the future" only applies when the index really is time.
+The tools carry over; the rule "never use the future" only applies when the index really is time and the task is to predict what comes next.
 
 ## What the values can be
 
@@ -106,21 +117,21 @@ The tools carry over; the rule "never use the future" only applies when the inde
 Two practical points, which later docs come back to:
 
 - **Missing values:** sensors fail, transmissions get lost; a series can have gaps that must be filled or masked.
-- **Irregular spacing:** some series aren't recorded at equal intervals (e.g. events logged when they happen). Most methods, including those in this project, assume equal spacing, so such series are first resampled onto a regular grid.
+- **Irregular spacing:** some series aren't recorded at equal intervals (e.g. events logged when they happen). Most methods assume equal spacing, so such series are first resampled onto a regular grid.
 
 ## Key points
 
 - A **time series** is a time-ordered list of values, usually equally spaced: a sampled, time-based signal.
-- **Order matters**, neighbors are related, and the future is never available.
+- **Order matters**, neighbors are related, and a model that predicts what comes next must never use the future.
 - **Univariate:** one value per step. **Multivariate:** several channels sharing the same clock, a $T \times C$ table.
-- **Many data types read as time series:** audio, sensors, prices, and even DNA and text, where the index is position rather than time.
+- **Many data types can be treated as time series:** audio, sensors, prices, and even DNA and text, ordered sequences where the index is position rather than time.
 - Values can be **real numbers, counts or symbols**; symbols are encoded as numbers, e.g. one-hot.
 
 ## Sources
 
 - [Time series (Wikipedia)][ts]: definition, equal spacing, temporal ordering, types of values. Read on 2026-11-08.
 - [Signal (Wikipedia)][signal]: discrete-time signals as time series. Read on 2026-11-08.
-- [Sampling (signal processing) (Wikipedia)][sampling]: audio sampling rates. Read on 2026-11-08.
+- [Sampling (signal processing) (Wikipedia)][sampling]: audio sampling rates. Read on 2026-11-08; telephone rate read on 2026-11-09.
 - [wu2023timesnet](../../literature/wu2023timesnet.md): channel counts and sampling intervals of benchmark datasets.
 
 [ts]: https://en.wikipedia.org/wiki/Time_series

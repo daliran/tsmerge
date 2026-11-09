@@ -4,8 +4,12 @@
 
 **Will cover:** volume under the surface (VUS-ROC, VUS-PR): threshold-free measures that tolerate small misalignments around anomalous stretches.
 
-- **Builds on:** [AUROC](../../evaluation/auroc.md), [AUPRC](../../evaluation/auprc.md), [Point adjustment](point-adjustment.md).
-- **Used by:** [Anomaly detection](../tasks/anomaly-detection.md).
+- **Builds on:**
+  - [Anomaly detection](../tasks/anomaly-detection.md)
+  - [AUROC](../../evaluation/auroc.md)
+  - [AUPRC](../../evaluation/auprc.md)
+  - [Point adjustment](point-adjustment.md)
+- **Used by:** the [method](../../../method/README.md).
 
 ## Sources to use
 

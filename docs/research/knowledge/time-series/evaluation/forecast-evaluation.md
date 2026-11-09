@@ -4,7 +4,7 @@
 
 **Will cover:** how forecasting benchmarks score a model: errors averaged over horizon steps and channels, computed on normalized data, reported per horizon.
 
-- **Builds on:** [Forecasting](../tasks/forecasting.md), [Regression errors](../../evaluation/regression-errors.md), [Normalization](../data-preparation/normalization.md).
+- **Builds on:** [Forecasting](../tasks/forecasting.md), [Normalization](../data-preparation/normalization.md), [Regression errors](../../evaluation/regression-errors.md).
 - **Used by:** [Comparing results](../../evaluation/comparing-results.md).
 
 ## Sources to use

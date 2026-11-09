@@ -7,13 +7,16 @@
 
 ## Continuous vs discrete
 
-This is about how the signal is **recorded**, not about what it is.
+A signal can be continuous or discrete:
+
+- **physical quantities** (pressure, temperature, voltage) are continuous, and **recording** them on a computer makes them discrete;
+- **some signals are discrete by nature:** a DNA sequence, a daily closing price, a monthly count. There is nothing between two steps to record.
 
 | | Continuous | Discrete |
 |---|---|---|
 | **Defined** | at every instant: "defined at every time t in an interval" ([Signal][signal]) | only at separate points, numbered 0, 1, 2, … |
 | **Written** | $x(t)$, with $t$ a real number | $x[n]$, with $n$ an integer |
-| **Typical source** | the physical world | a measuring device or a computer |
+| **Typical source** | the physical world | a measuring device or a computer, or data that comes in steps by nature |
 
 You turn a continuous signal into a discrete one by **sampling**: measuring it at regular intervals. "Sampling is the reduction of a continuous-time signal to a discrete-time signal" ([Sampling][sampling]).
 
@@ -36,7 +39,7 @@ What the three panels show:
 2. **Sampled:** only the values every 0.04 seconds remain (25 samples per second); the gray curve is what was lost between them.
 3. **Sampled and quantized:** each sample is also rounded to the nearest gray line (steps of 0.25). The small rounding error is called **quantization error** ([Quantization][quantization]).
 
-Everything a computer stores, and everything this project works with, is digital.
+Everything a computer stores is digital.
 
 ## Sampling fast enough
 
@@ -50,25 +53,29 @@ Sample too slowly, and fast changes don't just disappear: they **disguise themse
 
 This is called **aliasing**: "any frequency component above $f_s/2$ is indistinguishable from a lower-frequency component" ([Nyquist–Shannon][nyquist]).
 
+So what matters is the **highest frequency present in the signal**, not just the fastest one you care about: a fast component you don't care about still folds down into the slower range you do care about, and corrupts it.
+
+When the sampling rate is fixed, the signal "is usually filtered to reduce its high frequencies to acceptable levels before it is sampled", with an **anti-aliasing filter** ([Nyquist–Shannon][nyquist]).
+
 ![A 9 Hz wave sampled 10 times per second looks exactly like a 1 Hz wave](assets/aliasing.png)
 
 The blue dots are 10 samples per second of a wave that repeats 9 times per second. Looking only at the dots, you'd draw the red dashed wave, which repeats once per second. The samples can't tell the two apart.
 
-**Why it matters for us:** the sampling rate of a dataset limits what a model can ever see in it. A series sampled once an hour can't show a pattern that repeats every 30 minutes.
+**Why it matters:** the sampling rate of a dataset limits what a model can ever see in it. A series sampled once an hour can't show a pattern that repeats every 30 minutes.
 
 That pattern either vanishes or shows up disguised as a slower one. So choosing, or changing, the sampling rate is a real modeling choice.
 
 ## Key points
 
 - **Sampling** makes time discrete; **quantization** makes values discrete; a **digital** signal has both.
-- Sample at **more than twice** the fastest frequency you care about, or fast patterns turn into fake slow ones (**aliasing**).
+- Sample at **more than twice** the highest frequency present in the signal, or filter out the faster parts before sampling; otherwise fast components turn into fake slow ones (**aliasing**).
 
 ## Sources
 
 - [Signal (Wikipedia)][signal]: analog and digital, continuous and discrete time. Read on 2026-11-08.
 - [Sampling (signal processing) (Wikipedia)][sampling]: sampling, sampling period and rate, audio rates. Read on 2026-11-08.
 - [Quantization (signal processing) (Wikipedia)][quantization]: quantization, quantization error. Read on 2026-11-08.
-- [Nyquist–Shannon sampling theorem (Wikipedia)][nyquist]: the theorem, the Nyquist frequency, aliasing. Read on 2026-11-08.
+- [Nyquist–Shannon sampling theorem (Wikipedia)][nyquist]: the theorem, the Nyquist frequency, aliasing, anti-aliasing filters. Read on 2026-11-08; anti-aliasing filters read on 2026-11-09.
 
 [signal]: https://en.wikipedia.org/wiki/Signal
 [sampling]: https://en.wikipedia.org/wiki/Sampling_(signal_processing)

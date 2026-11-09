@@ -2,7 +2,7 @@
 
 General theory for people, one concept per doc: what a signal and a time series are, how series change over time, how results are judged, the models, and how models learn and are combined.
 
-Nothing here is specific to our experiments: it's the shared vocabulary they rely on ([method/](../method/README.md) holds what's specific).
+**Nothing here is specific to this work.** A knowledge doc explains a concept for any reader: no statements about this project, its data, its choices or its results. What this work uses, chooses or finds belongs in [method/](../method/README.md) or in a [research decision](../decisions/README.md).
 
 ## How it's organized
 
@@ -35,7 +35,7 @@ Read top-down the first time; the numbers are a suggested path, not a requiremen
 ## How the docs are written
 
 - **Simple first:** each idea in plain words before any formula; formulas only where they save words.
-- **Every fact has a source:** general concepts come from reference pages and textbooks, listed at the end of each doc with the date they were read; numbers from published papers come from our verified [literature notes](../literature/README.md).
+- **Every fact has a source:** general concepts come from reference pages and textbooks, listed at the end of each doc with the date they were read; numbers from published papers come from the verified [literature notes](../literature/README.md).
 - **Theory only:** no code, and models are described as ideas, not implementations.
 
 ## Figures

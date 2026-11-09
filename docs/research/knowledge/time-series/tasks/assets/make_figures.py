@@ -99,11 +99,15 @@ def anomaly_types() -> None:
     base = np.sin(2 * np.pi * t / 48) + 0.1 * RNG.standard_normal(t.size)
     point, contextual, collective = base.copy(), base.copy(), base.copy()
     point[100] += 2.5
-    contextual[80:89] = 0.95  # a peak-like value where a trough is due (steps 80-88)
+    contextual[84] = 0.95  # one peak-level value at the bottom of a trough (step 84)
     collective[130:160] = 0.05 * RNG.standard_normal(30)  # the rhythm stops
     cases = [
         (point, "Point: one value far from all the others", (100, 101)),
-        (contextual, "Contextual: a normal value, at the wrong moment", (80, 89)),
+        (
+            contextual,
+            "Contextual: a peak-level value, in the middle of a trough",
+            (84, 85),
+        ),
         (
             collective,
             "Collective: each value looks fine, together they don't",

@@ -2,8 +2,8 @@
 
 **In one sentence:** imputation fills the gaps of a series with estimates of the missing values.
 
-- **Builds on:** [Tasks](tasks.md).
-- **Used by:** [Regression errors](../../evaluation/regression-errors.md).
+- **Builds on:** [Tasks](tasks.md), [Regression errors](../../evaluation/regression-errors.md).
+- **Used by:** the [method](../../../method/README.md).
 
 ## The task
 
@@ -22,8 +22,8 @@ Unlike forecasting, the model can usually use what comes **both before and after
 
 **How it's judged:** in benchmarks:
 
-- values are hidden on purpose from a complete series ("time steps masked at random"),
-- then the estimates are compared with the hidden truth, with MSE and MAE ([regression errors](../../evaluation/regression-errors.md); [wang2026deep](../../../literature/wang2026deep.md), pp. 11–12).
+- values are hidden on purpose from a complete series: in the TSLib benchmark, time points are masked at random, with ratios of 12.5%, 25%, 37.5% and 50% ([wang2026deep](../../../literature/wang2026deep.md), p. 12),
+- then the estimates are compared with the hidden truth, with MSE and MAE ([regression errors](../../evaluation/regression-errors.md); [wang2026deep](../../../literature/wang2026deep.md), p. 11).
 
 **What makes it hard:** long gaps, and gaps that aren't random (a sensor that fails exactly when conditions are extreme).
 
@@ -34,7 +34,7 @@ Unlike forecasting, the model can usually use what comes **both before and after
 
 ## Sources
 
-- [wang2026deep](../../../literature/wang2026deep.md): definition, benchmark protocol.
+- [wang2026deep](../../../literature/wang2026deep.md): definition, benchmark protocol and masking ratios.
 - [Imputation (Wikipedia)][imputation]: general definition. Read on 2026-11-08.
 
 [imputation]: https://en.wikipedia.org/wiki/Imputation_(statistics)

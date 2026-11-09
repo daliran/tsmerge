@@ -4,10 +4,11 @@
 
 **Will cover:** training a general model first, then adapting it to a task or a period by fine-tuning.
 
-- **Builds on:** [Self-supervised learning](self-supervised-learning.md).
+- **Builds on:** [Masked autoencoder](../models/masked-autoencoder.md), [Self-supervised learning](self-supervised-learning.md).
 - **Used by:**
   - [Parameter-efficient fine-tuning](parameter-efficient-fine-tuning.md)
   - [Joint training](joint-training.md)
+  - [Continual learning](continual-learning/continual-learning.md)
   - [Sequential fine-tuning](continual-learning/sequential-fine-tuning.md)
   - [Task arithmetic](continual-learning/model-merging/task-arithmetic.md)
 

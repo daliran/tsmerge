@@ -4,8 +4,8 @@
 
 **Will cover:** the simplest continual strategy: fine-tune the current model on each new chunk, in order.
 
-- **Builds on:** [Continual learning](continual-learning.md), [Pretraining and fine-tuning](../pretraining-and-fine-tuning.md).
-- **Used by:** [Forgetting and plasticity](forgetting-and-plasticity.md).
+- **Builds on:** [Pretraining and fine-tuning](../pretraining-and-fine-tuning.md), [Continual learning](continual-learning.md), [Forgetting and plasticity](forgetting-and-plasticity.md).
+- **Used by:** the [method](../../../method/README.md).
 
 ## Sources to use
 

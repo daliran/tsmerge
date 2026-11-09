@@ -4,7 +4,11 @@
 
 **Will cover:** the main families of deep forecasting models, the long-horizon lineage, and the simple linear baselines they are compared with.
 
-- **Builds on:** [Forecasting](../tasks/forecasting.md), [Tokens and patching](tokens-and-patching.md), [Transformers](../../models/transformers.md).
+- **Builds on:**
+  - [Forecasting](../tasks/forecasting.md)
+  - [Normalization](../data-preparation/normalization.md)
+  - [Transformers](../../models/transformers.md)
+  - [Tokens and patching](tokens-and-patching.md)
 - **Used by:** the [method](../../../method/README.md).
 
 ## Sources to use

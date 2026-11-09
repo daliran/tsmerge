@@ -4,8 +4,12 @@
 
 **Will cover:** combining several models into one in weight space, and the families of merging rules.
 
-- **Builds on:** [Task arithmetic](task-arithmetic.md), [Loss landscape](loss-landscape.md).
-- **Used by:** [Interference reduction](interference-reduction.md), [Continual merging](continual-merging.md), [Fisher information](fisher-information.md).
+- **Builds on:**
+  - [Parameter isolation](../parameter-isolation.md)
+  - [Loss landscape](loss-landscape.md)
+  - [Task arithmetic](task-arithmetic.md)
+  - [Fisher information](fisher-information.md)
+- **Used by:** [Co-observation](../co-observation.md), [Interference reduction](interference-reduction.md), [Continual merging](continual-merging.md).
 
 ## Sources to use
 

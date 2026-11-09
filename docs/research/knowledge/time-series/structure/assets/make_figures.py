@@ -289,6 +289,34 @@ def to_stationary() -> None:
     save(fig, "to-stationary")
 
 
+def acf_example() -> None:
+    """A six-value series alternating 2, 4, 2, 4, 2, 4 and its ACF: negative at odd
+    lags, positive at even ones."""
+    y = np.array([2, 4, 2, 4, 2, 4], dtype=float)
+    d = y - y.mean()
+    lags = np.arange(1, 6)
+    r = [np.sum(d[k:] * d[:-k]) / np.sum(d**2) for k in lags]
+    fig, axes = plt.subplots(1, 2, figsize=(10, 3.2))
+    axes[0].plot(np.arange(1, 7), y, "o-", color=BLUE)
+    axes[0].axhline(y.mean(), color=GRAY, ls="--", lw=1, label="mean = 3")
+    axes[0].set(xlabel="step $t$", ylabel="$y_t$", title="The series: 2, 4, 2, 4, 2, 4")
+    axes[0].legend(loc="upper center", fontsize=8)
+    axes[1].bar(lags, r, color=[RED if v < 0 else GREEN for v in r], width=0.5)
+    axes[1].axhline(0, color="black", lw=0.8)
+    for k, v in zip(lags, r, strict=True):
+        axes[1].annotate(
+            f"{v:+.2f}",
+            (k, v),
+            ha="center",
+            va="bottom" if v > 0 else "top",
+            xytext=(0, 3 if v > 0 else -3),
+            textcoords="offset points",
+            fontsize=9,
+        )
+    axes[1].set(xlabel="lag $k$", ylabel="$r_k$", ylim=(-1.1, 1.1), title="Its ACF")
+    save(fig, "acf-example")
+
+
 if __name__ == "__main__":
     decomposition()
     additive_multiplicative()
@@ -298,3 +326,4 @@ if __name__ == "__main__":
     autocorrelation()
     smoothing_window()
     to_stationary()
+    acf_example()

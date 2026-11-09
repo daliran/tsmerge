@@ -6,6 +6,9 @@
   - [Precision, recall and F1](../../evaluation/precision-recall-f1.md)
   - [AUROC](../../evaluation/auroc.md)
   - [AUPRC](../../evaluation/auprc.md)
+  - [Anomaly detection](../../anomaly-detection/anomaly-detection.md)
+  - [Kinds of anomalies](../../anomaly-detection/kinds-of-anomalies.md)
+  - [Methods](../../anomaly-detection/methods.md)
   - [Patterns](../structure/patterns.md)
   - [Tasks](tasks.md)
 - **Used by:**
@@ -30,33 +33,16 @@ In general, anomalies are observations that "deviate significantly from the majo
 
 ### Kinds of anomalies
 
-A survey of deep anomaly detection distinguishes three kinds ([pang2021deep](../../../literature/pang2021deep.md), p. 4):
+Anomalies can be **point**, **contextual** or **collective** ([kinds of anomalies](../../anomaly-detection/kinds-of-anomalies.md)). In a time series:
 
-| Kind | What it is | Example |
-|---|---|---|
-| **Point** | a single value far from the rest | a sensor suddenly reading ten times its usual value |
-| **Contextual** (conditional) | a single value that is normal in general, but not at that moment, e.g. a "sudden temperature drop/increase in a particular temporal context" | heating at full power on a summer afternoon |
-| **Collective** (group) | a stretch that is abnormal as a whole, even if each value alone looks normal | a machine's regular rhythm stopping for an hour |
-
-![A point anomaly, a contextual anomaly (one peak-level value in the middle of a trough) and a collective one (the rhythm stops)](assets/anomaly-types.png)
+- the context of a contextual anomaly is usually the **moment**: the time of day, the day of the week, the season;
+- a collective anomaly is a **stretch** of steps, abnormal as a whole.
 
 ### Labels: usually there are none
 
-Anomalies are rare, and labeled anomaly data are hard or impossible to collect at scale ([pang2021deep](../../../literature/pang2021deep.md), p. 4). So most methods learn **what normal looks like**, then flag what doesn't fit.
+Labeled anomalies are rare, so most methods learn **what normal looks like**, then flag what doesn't fit ([learning settings](../../anomaly-detection/anomaly-detection.md#learning-settings-labels-are-usually-missing)).
 
-Three settings, as Wikipedia describes them ([Anomaly detection][anomaly]):
-
-| Setting | Training data | How often it's used |
-|---|---|---|
-| **Unsupervised** | unlabeled data | "by far the most commonly used" |
-| **Semi-supervised** | some labeled data; more often than not, data known to be normal, from which a model of "normal behavior" is built | not stated |
-| **Supervised** | data labeled normal and abnormal | "rarely used", because labels are unavailable |
-
-pang2021deep adds a fourth, **weakly supervised**: some anomaly labels, but partial, inexact or inaccurate ([pang2021deep](../../../literature/pang2021deep.md), p. 5).
-
-**The names clash.** pang2021deep calls training on normal data only "semi-supervised", and notes that it is sometimes called unsupervised elsewhere ([pang2021deep](../../../literature/pang2021deep.md), p. 5, footnote 1).
-
-Time-series work may use "unsupervised" instead: the TSLib survey, for one, calls reconstruction "a classical task for unsupervised point-wise representation learning" ([wang2026deep](../../../literature/wang2026deep.md), p. 12).
+The settings have clashing names. Time-series work may call training on normal data only "unsupervised": the TSLib survey, for one, calls reconstruction "a classical task for unsupervised point-wise representation learning" ([wang2026deep](../../../literature/wang2026deep.md), p. 12).
 
 ### How it's judged
 
@@ -86,8 +72,8 @@ The TSLib benchmark reports F1, "a balanced combination of precision and recall"
 ## Sources
 
 - [wang2026deep](../../../literature/wang2026deep.md): definition, examples, benchmark metric, the unstated anomaly threshold.
-- [pang2021deep](../../../literature/pang2021deep.md): kinds of anomalies, rarity of labels, the weakly supervised setting and its naming of the semi-supervised one, false positives.
+- [pang2021deep](../../../literature/pang2021deep.md): false positives on real-world datasets.
 - [wu2023timesnet](../../../literature/wu2023timesnet.md): the unstated anomaly threshold.
-- [Anomaly detection (Wikipedia)][anomaly]: general definition, labeling settings. Read on 2026-11-08.
+- [Anomaly detection (Wikipedia)][anomaly]: general definition. Read on 2026-11-08.
 
 [anomaly]: https://en.wikipedia.org/wiki/Anomaly_detection

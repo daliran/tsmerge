@@ -5,7 +5,7 @@
 **Will cover:** the area under the precision-recall curve, and why it says more than AUROC when positives are rare.
 
 - **Builds on:** [Precision, recall and F1](precision-recall-f1.md), [AUROC](auroc.md).
-- **Used by:** [Anomaly detection](../time-series/tasks/anomaly-detection.md), [VUS](../time-series/evaluation/vus.md).
+- **Used by:** [Anomaly detection in time series](../time-series/tasks/anomaly-detection.md), [VUS](../time-series/evaluation/vus.md).
 
 ## Sources to use
 

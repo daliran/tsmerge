@@ -2,10 +2,14 @@
 
 **Status:** placeholder, not written yet.
 
-**Will cover:** a model as a point and an update as a direction in weight space: norms, angles, orthogonality, subspaces and projections.
+**Will cover:** a model as a point and an update as a direction in weight space: norms, angles (cosine similarity), subspaces and projections. Orthogonality has its own doc.
 
 - **Builds on:** nothing: a starting point.
-- **Used by:** [Loss landscape](loss-landscape.md), [Task arithmetic](task-arithmetic.md), [Continual merging](continual-merging.md).
+- **Used by:**
+  - [Orthogonality](orthogonality.md)
+  - [Loss landscape](loss-landscape.md)
+  - [Task arithmetic](task-arithmetic.md)
+  - [Continual merging](continual-merging.md)
 
 ## Sources to use
 

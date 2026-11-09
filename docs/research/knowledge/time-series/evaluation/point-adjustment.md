@@ -4,7 +4,7 @@
 
 **Will cover:** point adjustment: counting a whole anomalous stretch as found when one of its steps is flagged, and why it inflates scores.
 
-- **Builds on:** [Precision, recall and F1](../../evaluation/precision-recall-f1.md), [Anomaly detection](../tasks/anomaly-detection.md).
+- **Builds on:** [Precision, recall and F1](../../evaluation/precision-recall-f1.md), [Anomaly detection in time series](../tasks/anomaly-detection.md).
 - **Used by:** [VUS](vus.md).
 
 ## Sources to use

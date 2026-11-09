@@ -5,7 +5,11 @@
 **Will cover:** the transformer: attention, self-attention, and the encoder that most recent time-series models build on.
 
 - **Builds on:** nothing: a starting point.
-- **Used by:** [Masked autoencoder](masked-autoencoder.md), [Tokens and patching](../time-series/models/tokens-and-patching.md), [Forecasting models](../time-series/models/forecasting-models.md).
+- **Used by:**
+  - [Masked autoencoder](masked-autoencoder.md)
+  - [Tokens and patching](../time-series/models/tokens-and-patching.md)
+  - [Forecasting models](../time-series/models/forecasting-models.md)
+  - [Foundation models](../learning/foundation-models.md)
 
 ## Sources to use
 

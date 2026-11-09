@@ -4,7 +4,7 @@
 
 **Will cover:** penalizing changes to the weights that mattered for earlier data (e.g. elastic weight consolidation).
 
-- **Builds on:** [Continual learning](continual-learning.md), [Forgetting and plasticity](forgetting-and-plasticity.md), [Fisher information](model-merging/fisher-information.md).
+- **Builds on:** [Continual learning](continual-learning.md), [Forgetting](forgetting.md), [Fisher information](model-merging/fisher-information.md).
 - **Used by:** the [method](../../../method/README.md).
 
 ## Sources to use

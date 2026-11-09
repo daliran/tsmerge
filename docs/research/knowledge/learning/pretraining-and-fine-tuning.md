@@ -8,6 +8,7 @@
 - **Used by:**
   - [Parameter-efficient fine-tuning](parameter-efficient-fine-tuning.md)
   - [Joint training](joint-training.md)
+  - [Foundation models](foundation-models.md)
   - [Continual learning](continual-learning/continual-learning.md)
   - [Sequential fine-tuning](continual-learning/sequential-fine-tuning.md)
   - [Task arithmetic](continual-learning/model-merging/task-arithmetic.md)

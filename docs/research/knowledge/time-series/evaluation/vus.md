@@ -7,7 +7,7 @@
 - **Builds on:**
   - [AUROC](../../evaluation/auroc.md)
   - [AUPRC](../../evaluation/auprc.md)
-  - [Anomaly detection](../tasks/anomaly-detection.md)
+  - [Anomaly detection in time series](../tasks/anomaly-detection.md)
   - [Point adjustment](point-adjustment.md)
 - **Used by:** the [method](../../../method/README.md).
 

@@ -2,13 +2,13 @@
 
 **In one sentence:** most time series are a mix of a few simple patterns (a long-term direction, regular repetitions, slower irregular waves, and a remainder with everything else), and recognizing them is the first step to understanding, predicting or checking a series.
 
-- **Builds on:** [Fourier transform](../../signals/fourier-transform.md), [Time series](../time-series.md).
+- **Builds on:** [Fourier transform](../../signals/fourier-transform.md), [Time series in time series](../time-series.md).
 - **Used by:**
   - [Decomposition](decomposition.md)
   - [Stationarity](stationarity.md)
   - [Autocorrelation](autocorrelation.md)
   - [Tasks](../tasks/tasks.md)
-  - [Anomaly detection](../tasks/anomaly-detection.md)
+  - [Anomaly detection in time series](../tasks/anomaly-detection.md)
   - [Windows](../data-preparation/windows.md)
 
 ## The building blocks

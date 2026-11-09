@@ -7,6 +7,7 @@
 - **Builds on:**
   - [Continual learning](../continual-learning.md)
   - [Weight-space geometry](weight-space-geometry.md)
+  - [Orthogonality](orthogonality.md)
   - [Task arithmetic](task-arithmetic.md)
   - [Model merging](model-merging.md)
   - [Interference reduction](interference-reduction.md)

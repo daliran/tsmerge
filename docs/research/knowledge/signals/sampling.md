@@ -3,7 +3,7 @@
 **In one sentence:** a computer can only store a signal as numbers taken at separate moments and rounded to a set of levels, and how fast those numbers are taken decides what the signal can still show.
 
 - **Builds on:** [Signals](signals.md).
-- **Used by:** [Fourier transform](fourier-transform.md), [Time series](../time-series/time-series.md).
+- **Used by:** [Fourier transform](fourier-transform.md), [Time series in time series](../time-series/time-series.md).
 
 ## Continuous vs discrete
 

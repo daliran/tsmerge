@@ -93,37 +93,5 @@ def tasks() -> None:
     save(fig, "tasks")
 
 
-def anomaly_types() -> None:
-    """Point, contextual and collective anomalies."""
-    t = np.arange(240)
-    base = np.sin(2 * np.pi * t / 48) + 0.1 * RNG.standard_normal(t.size)
-    point, contextual, collective = base.copy(), base.copy(), base.copy()
-    point[100] += 2.5
-    contextual[84] = 0.95  # one peak-level value at the bottom of a trough (step 84)
-    collective[130:160] = 0.05 * RNG.standard_normal(30)  # the rhythm stops
-    cases = [
-        (point, "Point: one value far from all the others", (100, 101)),
-        (
-            contextual,
-            "Contextual: a peak-level value, in the middle of a trough",
-            (84, 85),
-        ),
-        (
-            collective,
-            "Collective: each value looks fine, together they don't",
-            (130, 160),
-        ),
-    ]
-    fig, axes = plt.subplots(3, 1, figsize=(10, 6.2), sharex=True)
-    for ax, (y, label, (a, b)) in zip(axes, cases, strict=True):
-        ax.plot(t, y, color=BLUE, lw=1)
-        ax.axvspan(a - 1, b, color=RED, alpha=0.2)
-        ax.set_title(label, loc="left", fontsize=10)
-        ax.set_yticks([])
-    axes[-1].set_xlabel("time step")
-    save(fig, "anomaly-types")
-
-
 if __name__ == "__main__":
     tasks()
-    anomaly_types()

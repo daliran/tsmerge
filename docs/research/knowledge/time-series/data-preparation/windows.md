@@ -3,12 +3,12 @@
 **In one sentence:** models don't read a whole time series at once; they read short, fixed-length pieces of it, called windows, cut by sliding along the series.
 
 - **Builds on:**
-  - [Time series](../time-series.md)
+  - [Time series in time series](../time-series.md)
   - [Patterns](../structure/patterns.md)
   - [Autocorrelation](../structure/autocorrelation.md)
   - [Tasks](../tasks/tasks.md)
   - [Forecasting](../tasks/forecasting.md)
-  - [Anomaly detection](../tasks/anomaly-detection.md)
+  - [Anomaly detection in time series](../tasks/anomaly-detection.md)
 - **Used by:** [Splitting](splitting.md).
 
 ## Why cut a series into windows

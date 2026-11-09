@@ -4,7 +4,7 @@
 
 **Will cover:** keeping some old data and mixing it into each new round of training.
 
-- **Builds on:** [Continual learning](continual-learning.md), [Forgetting and plasticity](forgetting-and-plasticity.md).
+- **Builds on:** [Continual learning](continual-learning.md), [Forgetting](forgetting.md).
 - **Used by:** [Co-observation](co-observation.md).
 
 ## Sources to use

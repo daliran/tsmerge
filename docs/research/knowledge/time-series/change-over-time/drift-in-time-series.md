@@ -9,7 +9,7 @@
   - [Kinds of drift](../../change-over-time/kinds-of-drift.md)
   - [Stationarity](../structure/stationarity.md)
   - [Forecasting](../tasks/forecasting.md)
-  - [Anomaly detection](../tasks/anomaly-detection.md)
+  - [Anomaly detection in time series](../tasks/anomaly-detection.md)
 - **Used by:** the [method](../../../method/README.md).
 
 ## Sources to use

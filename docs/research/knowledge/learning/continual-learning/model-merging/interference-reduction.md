@@ -2,9 +2,9 @@
 
 **Status:** placeholder, not written yet.
 
-**Will cover:** why merged updates interfere, and the rules that reduce it (TIES, DARE, Iso-C, TSV).
+**Will cover:** the rules that reduce interference between merged updates (TIES, DARE, Iso-C, TSV).
 
-- **Builds on:** [Task arithmetic](task-arithmetic.md), [Model merging](model-merging.md).
+- **Builds on:** [Task arithmetic](task-arithmetic.md), [Interference](interference.md), [Model merging](model-merging.md).
 - **Used by:** [Continual merging](continual-merging.md).
 
 ## Sources to use

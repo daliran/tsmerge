@@ -3,7 +3,7 @@
 **In one sentence:** an anomaly can be a single item far from the rest, an item that is wrong only in its context, or a group that is wrong only as a whole, in any kind of data.
 
 - **Builds on:** [Anomaly detection](anomaly-detection.md).
-- **Used by:** [Methods](methods.md), [Anomaly detection in time series](../time-series/tasks/anomaly-detection.md).
+- **Used by:** [Methods](methods.md), [Anomaly detection in time series](../time-series/tasks/anomaly-detection.md), [Normalization in time series](../time-series/data-preparation/normalization.md).
 
 ## Three kinds
 

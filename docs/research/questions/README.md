@@ -18,7 +18,6 @@ By id.
 
 | Id | Question | Status | Opened |
 |---|---|---|---|
+| [RQ-0001](RQ-0001-normalization-and-drift.md) | Should the experiments normalize once, per window, or both? | open | 2026-11-10 |
 
-None yet.
-
-**Highest id used:** none yet. The first question takes number 0001.
+**Highest id used:** RQ-0001.

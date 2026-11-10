@@ -8,7 +8,7 @@
   - [Tasks](tasks/tasks.md)
   - [Windows](data-preparation/windows.md)
   - [Splitting](data-preparation/splitting.md)
-  - [Normalization](data-preparation/normalization.md)
+  - [Normalization in time series](data-preparation/normalization.md)
   - [Tokens and patching](models/tokens-and-patching.md)
   - [Datasets](datasets/README.md)
 

@@ -58,6 +58,13 @@ One line per term, grouped by the area it belongs to, with a link to the doc tha
 - **Stride:** how many steps a window moves forward each time ([windows](time-series/data-preparation/windows.md)).
 - **Window:** a short, fixed-length piece of a series, cut by sliding along it ([windows](time-series/data-preparation/windows.md)).
 
+## Preparing features
+
+- **Min-max scaling:** rescaling a feature to lie between 0 and 1, using its minimum and maximum ([normalization](data-preparation/normalization.md)).
+- **Normalization (feature scaling):** putting features on comparable scales ([normalization](data-preparation/normalization.md)).
+- **Robust scaling:** centering on the median and dividing by the interquartile range, so outliers matter less ([normalization](data-preparation/normalization.md)).
+- **Standard scaling (z-score):** subtracting the mean and dividing by the standard deviation ([normalization](data-preparation/normalization.md)).
+
 ## Evaluation
 
 - **Accuracy:** the share of all calls, positive and negative, that were right: $(tp+tn)/(tp+tn+fp+fn)$ ([precision, recall and F1](evaluation/precision-recall-f1.md#accuracy)).

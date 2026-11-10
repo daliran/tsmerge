@@ -7,7 +7,7 @@
   - [Distribution shift](../../drift/distribution-shift.md)
   - [Autocorrelation](autocorrelation.md)
   - [Forecasting](../tasks/forecasting.md)
-  - [Normalization](../data-preparation/normalization.md)
+  - [Normalization in time series](../data-preparation/normalization.md)
   - [Drift in time series](../drift/drift-in-time-series.md)
 
 ## The idea
